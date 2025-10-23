@@ -5,6 +5,7 @@ import { api } from '../convex/_generated/api';
 import Link from 'next/link';
 import { useAuth } from '@workos-inc/authkit-nextjs/components';
 import type { User } from '@workos-inc/node';
+import { Button } from '@heroui/react';
 
 export default function Home() {
   const { user, signOut } = useAuth();
@@ -61,14 +62,13 @@ function Content() {
         database!
       </p>
       <p>
-        <button
-          className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
+        <Button
           onClick={() => {
             void addNumber({ value: Math.floor(Math.random() * 10) });
           }}
         >
           Add a random number
-        </button>
+        </Button>
       </p>
       <p>Numbers: {numbers?.length === 0 ? 'Click the button!' : (numbers?.join(', ') ?? '...')}</p>
       <p>
