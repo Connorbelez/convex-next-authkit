@@ -19,7 +19,10 @@
 
 # production
 /build
-
+/convex/_generated
+/convex/_generated/
+convex/_generated/*
+convex/_generated/**
 # misc
 .DS_Store
 *.pem
@@ -44,3 +47,4 @@ next-env.d.ts
 # Ignored for the template, you probably want to remove it:
 package-lock.json
 pnpm-lock.yaml
+
