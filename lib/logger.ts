@@ -17,12 +17,12 @@ export type Logger = {
 let adapter: Logger | null = null;
 
 const consoleAdapter: Logger = {
-    trace: (m, meta) => console.debug('[trace]', m, meta),
-    debug: (m, meta) => console.debug('\u001b[36m🐞 [debug]\u001b[0m', m, meta),
-    info: (m, meta) => console.info('\u001b[32mℹ️ [info]\u001b[0m', m, meta),
-    warn: (m, meta) => console.warn('\u001b[33m⚠️ [warn]\u001b[0m', m, meta),
-    error: (m, meta) => console.error('\u001b[31m🔥 [error]\u001b[0m', m, meta),
-    child: () => consoleAdapter,
+    trace: (m: string | Error, meta?: LogMeta) => console.debug('[trace]', m, meta),
+    debug: (m: string | Error, meta?: LogMeta) => console.debug('\u001b[36m🐞 [debug]\u001b[0m', m, meta),
+    info: (m: string | Error, meta?: LogMeta) => console.info('\u001b[32mℹ️ [info]\u001b[0m', m, meta),
+    warn: (m: string | Error, meta?: LogMeta) => console.warn('\u001b[33m⚠️ [warn]\u001b[0m', m, meta),
+    error: (m: string | Error, meta?: LogMeta) => console.error('\u001b[31m🔥 [error]\u001b[0m', m, meta),
+    child: (ctx: Record<string, any>) => consoleAdapter,
 };
 
 export function setLoggerAdapter(a: Logger) {

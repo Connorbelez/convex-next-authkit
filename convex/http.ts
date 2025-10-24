@@ -1,18 +1,15 @@
 import { httpRouter } from 'convex/server';
 import { internal } from './_generated/api';
 import { httpAction } from './_generated/server';
+import { logger } from '../lib/logger';
 
 const http = httpRouter();
 
 const normalizeNullToUndefined = <T extends Record<string, unknown>>(obj: T): T => {
-  Object.keys(obj).forEach((key) => {
-    const k = key as keyof T;
-    if (obj[k] === null) {
-      obj[k] = undefined as any;
-    }
-  });
-  return obj;
-}
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, value === null ? undefined : value])
+  ) as T;
+};
 
 // Health check endpoint for webhook testing
 http.route({
@@ -51,11 +48,10 @@ http.route({
     const sigHeader = String(sigHeaderRaw);
 
     // Add additional debugging info
-    console.log('HTTP Request debug:', {
+    logger.debug('HTTP Request debug:', {
       bodyLength: bodyBuffer.byteLength,
       contentType: request.headers.get('content-type'),
       userAgent: request.headers.get('user-agent'),
-      signature: sigHeader,
     });
 
     try {
@@ -70,7 +66,7 @@ http.route({
       // Normalize null values to undefined for Convex compatibility
       const normalizedData = normalizeNullToUndefined(data);
 
-      console.log('Processing WorkOS webhook event:', {
+      logger.info('Processing WorkOS webhook event:', {
         eventId: event.id,
         eventType,
         userId: data.id,
@@ -80,7 +76,7 @@ http.route({
       // Handle different webhook events
       switch (eventType) {
         case 'user.created': {
-          console.log('Processing user.created event');
+          logger.info('Processing user.created event');
           const res = await ctx.runMutation(internal.users.create, {
             idp_id: data.id,
             email: data.email,
@@ -97,14 +93,14 @@ http.route({
           });
 
           if (!res) {
-            console.error('Failed to upsert user:', {
+            logger.error('Failed to upsert user:', {
               userId: data.id,
               email: data.email,
             });
             throw new Error(`Failed to upsert user: ${data.idp_id} RES: ${res}`);
           }
 
-          console.log('Successfully processed user.created event:', {
+          logger.info('Successfully processed user.created event:', {
             userId: res._id,
             workosId: data.id,
             email: data.email,
@@ -114,7 +110,7 @@ http.route({
         }
 
         case 'role.updated': {
-          console.log('Processing role.updated event');
+          logger.info('Processing role.updated event');
           const res = await ctx.runMutation(internal.roles.createOrUpdateRole, {
             slug: data.slug,
             name: data.name || data.slug, // Use slug as name if not provided
@@ -123,7 +119,7 @@ http.route({
             updated_at: data.updated_at,
           });
 
-          console.log('Successfully processed role.updated event:', {
+          logger.info('Successfully processed role.updated event:', {
             roleId: res,
             slug: data.slug,
             permissions: data.permissions,
@@ -133,17 +129,17 @@ http.route({
         }
 
         case 'role.deleted': {
-          console.log('Processing role.deleted event');
+          logger.info('Processing role.deleted event');
           const res = await ctx.runMutation(internal.roles.deleteRole, {
             slug: data.slug,
           });
 
           if (res.success) {
-            console.log('Successfully processed role.deleted event:', {
+            logger.info('Successfully processed role.deleted event:', {
               slug: data.slug,
             });
           } else {
-            console.error('Failed to process role.deleted event:', {
+            logger.error('Failed to process role.deleted event:', {
               slug: data.slug,
               error: res.message,
             });
@@ -153,7 +149,7 @@ http.route({
         }
 
         case 'organization.created': {
-          console.log('Processing organization.created event');
+          logger.info('Processing organization.created event');
           const res = await ctx.runMutation(internal.organizations.createOrUpdateOrganization, {
             id: normalizedData.id,
             name: normalizedData.name,
@@ -164,7 +160,7 @@ http.route({
             domains: normalizedData.domains,
           });
 
-          console.log('Successfully processed organization.created event:', {
+          logger.info('Successfully processed organization.created event:', {
             organizationId: res,
             workosId: normalizedData.id,
             name: normalizedData.name,
@@ -175,7 +171,7 @@ http.route({
         }
 
         case 'organization.updated': {
-          console.log('Processing organization.updated event');
+          logger.info('Processing organization.updated event');
           const res = await ctx.runMutation(internal.organizations.createOrUpdateOrganization, {
             id: normalizedData.id,
             name: normalizedData.name,
@@ -186,7 +182,7 @@ http.route({
             domains: normalizedData.domains,
           });
 
-          console.log('Successfully processed organization.updated event:', {
+          logger.info('Successfully processed organization.updated event:', {
             organizationId: res,
             workosId: normalizedData.id,
             name: normalizedData.name,
@@ -197,18 +193,18 @@ http.route({
         }
 
         case 'organization.deleted': {
-          console.log('Processing organization.deleted event');
+          logger.info('Processing organization.deleted event');
           const res = await ctx.runMutation(internal.organizations.deleteOrganization, {
             id: normalizedData.id,
           });
 
           if (res.success) {
-            console.log('Successfully processed organization.deleted event:', {
+            logger.info('Successfully processed organization.deleted event:', {
               workosId: normalizedData.id,
               name: normalizedData.name,
             });
           } else {
-            console.error('Failed to process organization.deleted event:', {
+            logger.error('Failed to process organization.deleted event:', {
               workosId: normalizedData.id,
               name: normalizedData.name,
               error: res.message,
@@ -219,7 +215,7 @@ http.route({
         }
 
         case 'organization_membership.created': {
-          console.log('Processing organization_membership.created event');
+          logger.info('Processing organization_membership.created event');
           const res = await ctx.runMutation(internal.organizations.createOrUpdateMembership, {
             id: normalizedData.id,
             user_id: normalizedData.user_id,
@@ -232,7 +228,7 @@ http.route({
             updated_at: normalizedData.updated_at,
           });
 
-          console.log('Successfully processed organization_membership.created event:', {
+          logger.info('Successfully processed organization_membership.created event:', {
             membershipId: res,
             workosId: normalizedData.id,
             userId: normalizedData.user_id,
@@ -244,7 +240,7 @@ http.route({
         }
 
         case 'organization_membership.updated': {
-          console.log('Processing organization_membership.updated event');
+          logger.info('Processing organization_membership.updated event');
           const res = await ctx.runMutation(internal.organizations.createOrUpdateMembership, {
             id: normalizedData.id,
             user_id: normalizedData.user_id,
@@ -257,7 +253,7 @@ http.route({
             updated_at: normalizedData.updated_at,
           });
 
-          console.log('Successfully processed organization_membership.updated event:', {
+          logger.info('Successfully processed organization_membership.updated event:', {
             membershipId: res,
             workosId: normalizedData.id,
             userId: normalizedData.user_id,
@@ -269,18 +265,18 @@ http.route({
         }
 
         case 'organization_membership.deleted': {
-          console.log('Processing organization_membership.deleted event');
+          logger.info('Processing organization_membership.deleted event');
           const res = await ctx.runMutation(internal.organizations.deleteMembership, {
             id: normalizedData.id,
           });
 
           if (res.success) {
-            console.log('Successfully processed organization_membership.deleted event:', {
+            logger.info('Successfully processed organization_membership.deleted event:', {
               workosId: normalizedData.id,
               membershipId: normalizedData.id,
             });
           } else {
-            console.error('Failed to process organization_membership.deleted event:', {
+            logger.error('Failed to process organization_membership.deleted event:', {
               workosId: normalizedData.id,
               error: res.message,
             });
@@ -290,7 +286,7 @@ http.route({
         }
 
         default: {
-          console.log('Received unhandled webhook event:', {
+          logger.info('Received unhandled webhook event:', {
             eventType,
             eventId: event.id,
           });
@@ -319,7 +315,7 @@ http.route({
       );
 
     } catch (error) {
-      console.error('Webhook processing failed:', {
+      logger.error('Webhook processing failed:', {
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
         bodyLength: bodyBuffer.byteLength,

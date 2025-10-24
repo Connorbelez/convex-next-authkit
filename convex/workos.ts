@@ -69,7 +69,7 @@ export const getUserRoleFromWorkOS = internalAction({
     const workos = new WorkOS(process.env.WORKOS_API_KEY);
     try {
       const user = await workos.userManagement.getUser(userId);
-      const role = (user?.metadata as Record<string, string> | undefined)?.role || 'investor';
+      const role = (user?.metadata as Record<string, string> | undefined)?.role || 'member';
       return { role };
     } catch (_err) {
       return { role: 'member' };
