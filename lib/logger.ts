@@ -65,12 +65,12 @@ function ensureAdapter(): Logger {
 }
 
 export const logger = {
-    trace: (m, meta) => ensureAdapter().trace(m, meta),
-    debug: (m, meta) => ensureAdapter().debug(m, meta),
-    info: (m, meta) => ensureAdapter().info(m, meta),
-    warn: (m, meta) => ensureAdapter().warn(m, meta),
-    error: (m, meta) => ensureAdapter().error(m, meta),
-    child: (ctx) => ensureAdapter().child(ctx),
+    trace: (m: string | Error, meta?: LogMeta) => ensureAdapter().trace(m, meta),
+    debug: (m: string | Error, meta?: LogMeta) => ensureAdapter().debug(m, meta),
+    info: (m: string | Error, meta?: LogMeta) => ensureAdapter().info(m, meta),
+    warn: (m: string | Error, meta?: LogMeta) => ensureAdapter().warn(m, meta),
+    error: (m: string | Error, meta?: LogMeta) => ensureAdapter().error(m, meta),
+    child: (ctx: Record<string, any>) => ensureAdapter().child(ctx),
 };
 
 export default logger;
