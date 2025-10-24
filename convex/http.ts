@@ -67,6 +67,9 @@ http.route({
 
       const { data, event: eventType } = JSON.parse(bodyText);
 
+      // Normalize null values to undefined for Convex compatibility
+      const normalizedData = normalizeNullToUndefined(data);
+
       console.log('Processing WorkOS webhook event:', {
         eventId: event.id,
         eventType,
@@ -106,6 +109,182 @@ http.route({
             workosId: data.id,
             email: data.email,
           });
+
+          break;
+        }
+
+        case 'role.updated': {
+          console.log('Processing role.updated event');
+          const res = await ctx.runMutation(internal.roles.createOrUpdateRole, {
+            slug: data.slug,
+            name: data.name || data.slug, // Use slug as name if not provided
+            permissions: data.permissions || [],
+            created_at: data.created_at,
+            updated_at: data.updated_at,
+          });
+
+          console.log('Successfully processed role.updated event:', {
+            roleId: res,
+            slug: data.slug,
+            permissions: data.permissions,
+          });
+
+          break;
+        }
+
+        case 'role.deleted': {
+          console.log('Processing role.deleted event');
+          const res = await ctx.runMutation(internal.roles.deleteRole, {
+            slug: data.slug,
+          });
+
+          if (res.success) {
+            console.log('Successfully processed role.deleted event:', {
+              slug: data.slug,
+            });
+          } else {
+            console.error('Failed to process role.deleted event:', {
+              slug: data.slug,
+              error: res.message,
+            });
+          }
+
+          break;
+        }
+
+        case 'organization.created': {
+          console.log('Processing organization.created event');
+          const res = await ctx.runMutation(internal.organizations.createOrUpdateOrganization, {
+            id: normalizedData.id,
+            name: normalizedData.name,
+            external_id: normalizedData.external_id,
+            metadata: normalizedData.metadata,
+            created_at: normalizedData.created_at,
+            updated_at: normalizedData.updated_at,
+            domains: normalizedData.domains,
+          });
+
+          console.log('Successfully processed organization.created event:', {
+            organizationId: res,
+            workosId: normalizedData.id,
+            name: normalizedData.name,
+            domainsCount: normalizedData.domains?.length || 0,
+          });
+
+          break;
+        }
+
+        case 'organization.updated': {
+          console.log('Processing organization.updated event');
+          const res = await ctx.runMutation(internal.organizations.createOrUpdateOrganization, {
+            id: normalizedData.id,
+            name: normalizedData.name,
+            external_id: normalizedData.external_id,
+            metadata: normalizedData.metadata,
+            created_at: normalizedData.created_at,
+            updated_at: normalizedData.updated_at,
+            domains: normalizedData.domains,
+          });
+
+          console.log('Successfully processed organization.updated event:', {
+            organizationId: res,
+            workosId: normalizedData.id,
+            name: normalizedData.name,
+            domainsCount: normalizedData.domains?.length || 0,
+          });
+
+          break;
+        }
+
+        case 'organization.deleted': {
+          console.log('Processing organization.deleted event');
+          const res = await ctx.runMutation(internal.organizations.deleteOrganization, {
+            id: normalizedData.id,
+          });
+
+          if (res.success) {
+            console.log('Successfully processed organization.deleted event:', {
+              workosId: normalizedData.id,
+              name: normalizedData.name,
+            });
+          } else {
+            console.error('Failed to process organization.deleted event:', {
+              workosId: normalizedData.id,
+              name: normalizedData.name,
+              error: res.message,
+            });
+          }
+
+          break;
+        }
+
+        case 'organization_membership.created': {
+          console.log('Processing organization_membership.created event');
+          const res = await ctx.runMutation(internal.organizations.createOrUpdateMembership, {
+            id: normalizedData.id,
+            user_id: normalizedData.user_id,
+            organization_id: normalizedData.organization_id,
+            status: normalizedData.status,
+            role: normalizedData.role,
+            roles: normalizedData.roles,
+            object: normalizedData.object,
+            created_at: normalizedData.created_at,
+            updated_at: normalizedData.updated_at,
+          });
+
+          console.log('Successfully processed organization_membership.created event:', {
+            membershipId: res,
+            workosId: normalizedData.id,
+            userId: normalizedData.user_id,
+            organizationId: normalizedData.organization_id,
+            status: normalizedData.status,
+          });
+
+          break;
+        }
+
+        case 'organization_membership.updated': {
+          console.log('Processing organization_membership.updated event');
+          const res = await ctx.runMutation(internal.organizations.createOrUpdateMembership, {
+            id: normalizedData.id,
+            user_id: normalizedData.user_id,
+            organization_id: normalizedData.organization_id,
+            status: normalizedData.status,
+            role: normalizedData.role,
+            roles: normalizedData.roles,
+            object: normalizedData.object,
+            created_at: normalizedData.created_at,
+            updated_at: normalizedData.updated_at,
+          });
+
+          console.log('Successfully processed organization_membership.updated event:', {
+            membershipId: res,
+            workosId: normalizedData.id,
+            userId: normalizedData.user_id,
+            organizationId: normalizedData.organization_id,
+            status: normalizedData.status,
+          });
+
+          break;
+        }
+
+        case 'organization_membership.deleted': {
+          console.log('Processing organization_membership.deleted event');
+          const res = await ctx.runMutation(internal.organizations.deleteMembership, {
+            id: normalizedData.id,
+          });
+
+          if (res.success) {
+            console.log('Successfully processed organization_membership.deleted event:', {
+              workosId: normalizedData.id,
+              membershipId: normalizedData.id,
+            });
+          } else {
+            console.error('Failed to process organization_membership.deleted event:', {
+              workosId: normalizedData.id,
+              error: res.message,
+            });
+          }
 
           break;
         }
