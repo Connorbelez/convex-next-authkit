@@ -19,10 +19,10 @@
 
 # production
 /build
-/convex/_generated
-/convex/_generated/
-convex/_generated/*
-convex/_generated/**
+# /convex/_generated
+# /convex/_generated/
+# convex/_generated/*
+# convex/_generated/**
 # misc
 .DS_Store
 *.pem
