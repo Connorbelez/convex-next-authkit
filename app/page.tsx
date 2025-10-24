@@ -34,10 +34,10 @@ function SignInForm() {
     <div className="flex flex-col gap-8 w-96 mx-auto">
       <p>Log in to see the numbers</p>
       <a href="/sign-in">
-        <button className="bg-foreground text-background px-4 py-2 rounded-md">Sign in</button>
+        <button type="button" className="bg-foreground text-background px-4 py-2 rounded-md">Sign in</button>
       </a>
       <a href="/sign-up">
-        <button className="bg-foreground text-background px-4 py-2 rounded-md">Sign up</button>
+        <button type="button" className="bg-foreground text-background px-4 py-2 rounded-md">Sign up</button>
       </a>
     </div>
   );
@@ -142,7 +142,7 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm">{user.email}</span>
-      <button onClick={onSignOut} className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600">
+      <button type="button" onClick={onSignOut} className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600">
         Sign out
       </button>
     </div>
