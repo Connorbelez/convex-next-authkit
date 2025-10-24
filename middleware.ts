@@ -1,4 +1,5 @@
 import { authkitMiddleware } from '@workos-inc/authkit-nextjs';
+import { NextResponse, type NextRequest } from 'next/server';
 
 const redirectUri = process.env.NEXT_PUBLIC_WORKOS_REDIRECT_URI;
 if (!redirectUri) {
@@ -8,7 +9,7 @@ if (!redirectUri) {
   );
 }
 
-export default authkitMiddleware({
+const base = authkitMiddleware({
   eagerAuth: true,
   redirectUri,
   middlewareAuth: {
@@ -16,6 +17,31 @@ export default authkitMiddleware({
     unauthenticatedPaths: ['/', '/sign-in', '/sign-up'],
   },
 });
+
+function generateRequestId() {
+  try {
+    // Prefer Web Crypto API when available (Edge-safe)
+    // @ts-ignore
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  } catch (e) {
+    // ignore
+  }
+  // fallback small random id
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+export default async function middleware(req: NextRequest) {
+  // call the authkit middleware first
+  const res = (await base(req)) as NextResponse;
+  try {
+    const existing = req.headers.get('x-request-id');
+    const requestId = existing ?? generateRequestId();
+    res.headers.set('x-request-id', requestId);
+  } catch (e) {
+    // swallow - logging should not break middleware
+  }
+  return res;
+}
 
 export const config = {
   matcher: [

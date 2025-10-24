@@ -4,6 +4,7 @@ import { ReactNode, useCallback, useState } from 'react';
 import { ConvexReactClient } from 'convex/react';
 import { ConvexProviderWithAuth } from 'convex/react';
 import { AuthKitProvider, useAuth, useAccessToken } from '@workos-inc/authkit-nextjs/components';
+import { logger } from '../lib/logger';
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   const [convex] = useState(() => {
@@ -34,10 +35,9 @@ function useAuthFromAuthKit() {
         if (forceRefreshToken) {
           return (await refresh()) ?? null;
         }
-
         return (await getAccessToken()) ?? null;
       } catch (error) {
-        console.error('Failed to get access token:', error);
+        logger.error('Failed to get access token:', { error });
         return null;
       }
     },

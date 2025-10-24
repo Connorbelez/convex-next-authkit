@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { query, mutation, action } from './_generated/server';
 import { api } from './_generated/api';
+import { logger } from './logger';
 
 // Write your Convex functions in any file inside this directory (`convex`).
 // See https://docs.convex.dev/functions for more.
@@ -43,7 +44,7 @@ export const addNumber = mutation({
 
     const id = await ctx.db.insert('numbers', { value: args.value });
 
-    console.log('Added new document with id:', id);
+    logger.info('Added new document with id', { id });
     // Optionally, return a value from your mutation.
     // return id;
   },
@@ -68,7 +69,7 @@ export const myAction = action({
     const data = await ctx.runQuery(api.myFunctions.listNumbers, {
       count: 10,
     });
-    console.log(data);
+    logger.debug('Fetched numbers for action', { data });
 
     //// Write data by running Convex mutations.
     await ctx.runMutation(api.myFunctions.addNumber, {
