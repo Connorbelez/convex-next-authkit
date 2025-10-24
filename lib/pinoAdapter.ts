@@ -1,8 +1,15 @@
-import pino from 'pino';
+// Use runtime require for pino to avoid TypeScript/compile-time dependency when pino isn't installed.
+let pino: any = null;
+try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    pino = require('pino');
+} catch (e) {
+    pino = null;
+}
 
 const DEFAULT_SERVICE = process.env.LOG_SERVICE_NAME || 'convex-next-authkit';
 const LOG_PRETTY = process.env.LOG_PRETTY === 'true' || process.env.NODE_ENV !== 'production';
-const LOG_LEVEL = (process.env.LOG_LEVEL || 'info') as pino.Level;
+const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 
 function levelToEmoji(levelNum: number) {
     switch (levelNum) {
@@ -23,14 +30,25 @@ function levelToEmoji(levelNum: number) {
     }
 }
 
-export function createPinoAdapter() {
-    let instance: pino.Logger;
+function createConsoleAdapter() {
+    const make = (prefix?: string) => ({
+        trace: (m: string | Error, meta?: Record<string, any>) => console.debug(prefix ?? '', m, meta),
+        debug: (m: string | Error, meta?: Record<string, any>) => console.debug(prefix ?? '', m, meta),
+        info: (m: string | Error, meta?: Record<string, any>) => console.info(prefix ?? '', m, meta),
+        warn: (m: string | Error, meta?: Record<string, any>) => console.warn(prefix ?? '', m, meta),
+        error: (m: string | Error, meta?: Record<string, any>) => console.error(prefix ?? '', m, meta),
+        child: (ctx: Record<string, any>) => make(`${JSON.stringify(ctx)}`),
+    });
+    return make();
+}
 
+export function createPinoAdapter() {
+    // If pino isn't available, return a console-based adapter compatible with expected methods.
+    if (!pino) return createConsoleAdapter();
+
+    let instance: any;
     try {
-        if (LOG_PRETTY) {
-            // Use a transport with pino-pretty for developer-friendly console output.
-            // pino.transport is available in pino v7+; if unavailable this will throw and we'll fall back.
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+        if (LOG_PRETTY && typeof pino.transport === 'function') {
             const transport = pino.transport({
                 target: 'pino-pretty',
                 options: {
@@ -41,9 +59,7 @@ export function createPinoAdapter() {
                     messageFormat: (log: any, messageKey: string) => {
                         const emoji = levelToEmoji(log.level);
                         const msg = log[messageKey] ?? '';
-                        // include error stack if present
                         const maybeErr = log.err ? `\n${log.err.stack || JSON.stringify(log.err)}` : '';
-                        // include additional fields excluding msg and level
                         const meta = Object.keys(log).filter(k => ![messageKey, 'level', 'time', 'err'].includes(k)).length
                             ? ` ${JSON.stringify(Object.fromEntries(Object.entries(log).filter(([k]) => ![messageKey, 'level', 'time', 'err'].includes(k))))}`
                             : '';
@@ -56,8 +72,8 @@ export function createPinoAdapter() {
             instance = pino({ level: LOG_LEVEL, base: { service: DEFAULT_SERVICE }, timestamp: pino.stdTimeFunctions.isoTime });
         }
     } catch (err) {
-        // If transport or pino-pretty isn't available for some reason, fall back to a plain pino instance.
-        instance = pino({ level: LOG_LEVEL, base: { service: DEFAULT_SERVICE }, timestamp: pino.stdTimeFunctions.isoTime });
+        // On any error while configuring pino, fall back to console adapter
+        return createConsoleAdapter();
     }
 
     const adapter = {

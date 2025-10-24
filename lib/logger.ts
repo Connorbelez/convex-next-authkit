@@ -64,7 +64,7 @@ function ensureAdapter(): Logger {
     }
 }
 
-export const logger: Logger = {
+export const logger = {
     trace: (m, meta) => ensureAdapter().trace(m, meta),
     debug: (m, meta) => ensureAdapter().debug(m, meta),
     info: (m, meta) => ensureAdapter().info(m, meta),

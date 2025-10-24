@@ -32,7 +32,7 @@ function generateRequestId() {
 
 export default async function middleware(req: NextRequest) {
   // call the authkit middleware first
-  const res = (await base(req)) as NextResponse;
+  const res = (await base(req, {} as any)) as NextResponse;
   try {
     const existing = req.headers.get('x-request-id');
     const requestId = existing ?? generateRequestId();
