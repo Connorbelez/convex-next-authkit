@@ -1,3 +1,155 @@
+# Logging and Telemetry (local-first)
+
+This project uses a single centralized logging abstraction exported from `lib/logger.ts`.
+The goal: keep logging calls uniform across server, client, and Convex functions so
+you can enable remote shipping or telemetry in one place later.
+
+Summary
+- Server: `lib/pinoAdapter.ts` wires `pino` and uses `pino-pretty` in dev for colorful, emoji-prefixed output.
+- Client: `lib/clientAdapter.ts` batches browser logs and POSTs to `app/api/logs/route.ts` which forwards to the server logger.
+- Convex: `convex/logger.ts` is a small shim that writes to stdout now but implements the same logger contract.
+
+Environment variables
+- `LOG_LEVEL` — default `info`. Controls the minimum level emitted by pino.
+- `LOG_PRETTY` — `true`/`false`. When `true` the server prints colorized, emoji-prefixed logs via `pino-pretty`. Default: `true` in local dev.
+- `LOG_SERVICE_NAME` — optional service name included in JSON logs (default: `convex-next-authkit`).
+- `REMOTE_LOGGING_URL` — placeholder for future remote HTTP ingestion endpoint. Not used by default.
+
+Logger contract
+- Methods: `trace/debug/info/warn/error(message|Error, meta?)`
+- `child(ctx)` returns a logger instance with extra context attached (e.g., `{ requestId, userId }`).
+- Logging calls are best-effort and never throw.
+
+Quick usage examples
+
+Server-side (Node / Next.js server components and API routes)
+```ts
+import { logger } from '@/lib/logger';
+
+const log = logger.child({ requestId: 'r1' });
+log.info('handling request', { path: '/api/foo' });
+log.error(new Error('boom'), { code: 123 });
+```
+
+Client-side (browser)
+```ts
+import { logger } from '@/lib/logger';
+
+logger.debug('button clicked', { id: 'save-btn' });
+// client logs are batched and sent to /api/logs (best-effort)
+```
+
+Convex functions
+```ts
+import { logger } from './logger'; // convex/logger.ts shim
+
+logger.info('Convex mutation processed', { id });
+```
+
+How client logs are ingested
+- The browser adapter posts logs to `POST /api/logs` implemented at `app/api/logs/route.ts`.
+- The ingestion route forwards logs into the server `logger` so shipping/processing remains centralized.
+
+Migration path to remote logging or telemetry
+1. Remote logs (simplest): add `REMOTE_LOGGING_URL` and modify `lib/pinoAdapter.ts` to attach a transport that POSTs logs to your collector.
+2. Add tracing/metrics: implement `lib/telemetry.ts` and initialize OpenTelemetry or a hosted tracing provider at server startup. Keep correlation IDs (`x-request-id`) and attach trace IDs to logs via `logger.child({ traceId })`.
+3. Errors & sessions: optionally enable Sentry (or similar) in `lib/telemetry.ts` and call `logger.error(...)` alongside `Sentry.captureException(...)` inside the same centralized place.
+
+Notes & best practices
+- Prefer structured metadata (objects) over string-interpolated messages for easier querying.
+- Use `logger.child({ requestId })` in request handlers to attach correlation IDs automatically.
+- Keep `LOG_PRETTY=false` in production so logs are machine-readable JSON by default.
+
+If you want, I can add a ready-to-use `lib/telemetry.ts` stub (no providers enabled) to simplify future wiring.
+# Logging and Telemetry (local-first)
+
+This project uses a centralized logging abstraction at `lib/logger.ts`. The goal is:
+
+- Keep logging calls small and consistent across server, client, and Convex functions.
+- Print beautiful, colorized, emoji-prefixed logs locally (developer experience).
+- Emit structured JSON in production so logs can be shipped to any provider later.
+- Provide a single place to add remote logging/telemetry in the future.
+
+## Where to import
+
+- Server and client code: import `logger` from `lib/logger`
+  - Example: `import { logger } from '@/lib/logger';` or `import logger from '../lib/logger';`
+- Convex server functions: import the shim at `convex/logger.ts` (`import { logger } from './logger'`).
+
+## API contract
+
+- Methods: `trace/debug/info/warn/error(messageOrError, meta?)`
+- `child(ctx)` returns a child logger that includes `ctx` on every call.
+- Calls are non-blocking and should never throw.
+
+## Environment variables
+
+- `LOG_LEVEL` — default: `info`. Controls the minimum level logged.
+- `LOG_PRETTY` — `true` or `false`. When `true` the server uses `pino-pretty` for colorful, emoji-prefixed console output. Recommended: `true` locally, `false` in production.
+- `LOG_SERVICE_NAME` — optional service name attached to logs (default: `convex-next-authkit`).
+- `REMOTE_LOGGING_URL` — optional future endpoint for shipping structured logs remotely.
+
+Set local defaults in `.env.local` for development:
+
+```
+LOG_LEVEL=debug
+LOG_PRETTY=true
+LOG_SERVICE_NAME=convex-next-authkit
+```
+
+## How it works (short)
+
+- `lib/logger.ts` exports a single `logger` object. It lazily initializes an adapter:
+  - Server (Node): `lib/pinoAdapter.ts` that creates a `pino` logger. When `LOG_PRETTY=true` the adapter uses `pino-pretty` and a custom message formatter to prefix emojis and colorize output. In production (`LOG_PRETTY=false`) it emits JSON.
+  - Client (browser): `lib/clientAdapter.ts` batches logs and POSTs them to `app/api/logs/route.ts`. The server route forwards client logs to the same server logger.
+  - Convex: `convex/logger.ts` is a tiny shim that writes to stdout (preserving your requirement that Convex logs go to stdout), but exposes the same API so later changes can be centralized.
+
+## Usage examples
+
+Server-side (Node / Next.js server components / API routes):
+
+```ts
+import { logger } from '@/lib/logger';
+
+const log = logger.child({ requestId: 'abc' });
+log.info('User signed in', { userId });
+```
+
+Client-side (React components):
+
+```tsx
+import { logger } from '@/lib/logger';
+
+logger.debug('Clicked signup button', { screen: 'home' });
+```
+
+Convex function:
+
+```ts
+import { logger } from './logger'; // convex/logger.ts shim
+
+logger.info('Inserted document', { id });
+```
+
+## Forwarding client logs
+
+- Client adapter uses `/api/logs` (app router: `app/api/logs/route.ts`). The server endpoint ingests arrays of log entries, and forwards them to the server `logger`. This keeps ingestion and shipping logic in one place.
+
+## Shipping to a remote provider later
+
+To add remote shipping (one place to change):
+
+1. Edit `lib/pinoAdapter.ts` and add a transport or stream that forwards logs to your remote endpoint (e.g., HTTP to `REMOTE_LOGGING_URL` or a provider SDK).
+2. Optionally add `lib/telemetry.ts` to initialize tracing/error-reporting SDKs (Sentry/OTel) and call it early from your server entrypoint.
+3. If you want Convex logs to also be shipped, either update `convex/logger.ts` to call the remote endpoint, or proxy Convex logs through your Next.js ingestion endpoint.
+
+## Notes and best-practices
+
+- Keep log messages short and use `meta` for structured fields. Example: `logger.info('Created user', { userId, plan: 'pro' })`.
+- Use `logger.child({ requestId })` to attach correlation identifiers to a request's logs.
+- Avoid logging secrets; use instrumentation to scrub or redact sensitive fields before sending to remote providers.
+
+If you want, I can add a short example that wires `LOG_PRETTY=false` for production in `next.config.js` or show a sample `pino` transport to ship to an HTTP collector.
 # Logging in this project
 
 This project uses a single centralized logging abstraction so you can change the underlying

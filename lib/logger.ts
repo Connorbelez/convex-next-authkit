@@ -40,7 +40,7 @@ function ensureAdapter(): Logger {
             const { createPinoAdapter } = require('./pinoAdapter');
             const p = createPinoAdapter();
             adapter = p;
-            return adapter;
+            return p;
         } catch (e) {
             // Fall back to console adapter if pino isn't available or fails to initialize
             // (do not throw)
@@ -55,8 +55,9 @@ function ensureAdapter(): Logger {
     try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const { createClientAdapter } = require('./clientAdapter');
-        adapter = createClientAdapter();
-        return adapter;
+        const clientAdapter = createClientAdapter();
+        adapter = clientAdapter;
+        return clientAdapter;
     } catch (e) {
         adapter = consoleAdapter;
         return adapter;
