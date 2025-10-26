@@ -28,6 +28,34 @@ http.route({
 });
 
 http.route({
+  path: "/create-test-user",
+  method: "OPTIONS",
+  handler: httpAction(async (ctx, request) => {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "https://glad-lime-rabbit.twenty.com",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, X-Webhook-Signature",
+        "Access-Control-Max-Age": "86400",
+      },
+    });
+  }),
+});
+
+http.route({
+  path: "/create-test-user",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    logger.info("Creating test user");
+    const body = await request.formData();
+    const ltv = body.get("ltv");
+    logger.info("Request body: ", {body: body, ltv: ltv});
+    return new Response(JSON.stringify({ message: "Test user created" }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  }),
+})
+
+http.route({
   path: '/workos-webhook',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
@@ -106,6 +134,48 @@ http.route({
             email: data.email,
           });
 
+          break;
+        }
+        case 'user.updated': {
+          logger.info('Processing user.updated event');
+          const res = await ctx.runMutation(internal.users.updateFromWorkOS, {
+            idp_id: data.id,
+            email: data.email,
+            email_verified: data.email_verified,
+            first_name: data.first_name ?? undefined,
+            last_name: data.last_name ?? undefined,
+            profile_picture:
+              data.profile_picture_url ?? data.profile_picture ?? undefined,
+            created_at: data.created_at ?? data.createdAt ?? undefined,
+            updated_at: data.updated_at ?? data.updatedAt ?? undefined,
+            last_sign_in_at: data.last_sign_in_at ?? undefined,
+            external_id: data.external_id ?? data.externalId ?? undefined,
+            metadata: data.metadata,
+          });
+
+          break;
+        }
+        case 'user.deleted': {
+          logger.info('Processing user.deleted event');
+          const res = await ctx.runMutation(internal.users.destroy, {
+            id: data.id,
+          });
+
+          if (!res) {
+            logger.error('Failed to delete user:', {
+              userId: data.id,
+              email: data.email,
+            });
+            throw new Error(`Failed to delete user: ${data.idp_id} RES: ${res}`);
+          }
+
+          logger.info('Successfully processed user.deleted event:', {
+            userId: res._id,
+            workosId: data.id,
+            email: data.email,
+          });
+
+          return new Response(JSON.stringify({ message: "Test user deleted" }), { status: 200, headers: { 'Content-Type': 'application/json' } });
           break;
         }
 
