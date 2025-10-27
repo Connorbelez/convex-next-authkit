@@ -11,6 +11,7 @@ if (!redirectUri) {
 
 const base = authkitMiddleware({
   eagerAuth: true,
+
   redirectUri,
   middlewareAuth: {
     enabled: true,
