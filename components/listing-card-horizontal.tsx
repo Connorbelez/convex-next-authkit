@@ -45,39 +45,43 @@ export function Horizontal({
             {propertyType && ` • ${propertyType}`}
           </Card.Description>
         </Card.Header>
-        <Card.Content className="text-muted-foreground text-sm grid grid-cols-3 md:grid-cols-4 84rem:grid-cols-2 gap-2 align-middle justify-center items-center">
-          <span className="flex items-center">
-            <Icon icon="lucide:percent-circle" className="h-5 w-5" />
-            <span className="flex flex-col ml-2 py-1 justify-around align-middle">
-              <p className="text-xs">LTV</p>
-              <p className="text-sm font-bold">{ltv}</p>
+        <Card.Content className="text-muted-foreground text-sm">
+          <div className="flex md:grid md:grid-cols-4 84rem:grid-cols-2 md:gap-2 items-center justify-around">
+            <span className="flex items-center">
+              <Icon icon="lucide:percent-circle" className="h-5 w-5" />
+              <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+                <p className="text-xs">LTV</p>
+                <p className="text-sm font-bold">{ltv}</p>
+              </span>
             </span>
-          </span>
-          <span className="flex items-center">
-            <Icon icon="lucide:percent-circle" className="h-5 w-5" />
-            <span className="flex flex-col ml-2 py-1 justify-around align-middle">
-              <p className="text-xs">APR</p>
-              <p className="text-sm font-bold">{apr}</p>
+            <div className="md:hidden h-8 w-px bg-foreground/30 shrink-0" />
+            <span className="flex items-center">
+              <Icon icon="lucide:percent-circle" className="h-5 w-5" />
+              <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+                <p className="text-xs">APR</p>
+                <p className="text-sm font-bold">{apr}</p>
+              </span>
             </span>
-          </span>
-          <span className="flex items-center">
-            <Icon icon="lucide:circle-dollar-sign" className="h-5 w-5" />
-            <span className="flex flex-col ml-2 py-1 justify-around align-middle">
-              <p className="text-xs">Principal</p>
-              <p className="text-sm font-bold">
-                {(principal / 1000).toFixed(0)}K
-              </p>
+            <div className="md:hidden h-8 w-px bg-foreground/30 shrink-0" />
+            <span className="flex items-center">
+              <Icon icon="lucide:circle-dollar-sign" className="h-5 w-5" />
+              <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+                <p className="text-xs">Principal</p>
+                <p className="text-sm font-bold">
+                  {(principal / 1000).toFixed(0)}K
+                </p>
+              </span>
             </span>
-          </span>
-          <span className="hidden md:flex md:items-center">
-            <Icon icon="lucide:circle-dollar-sign" className="h-5 w-5" />
-            <span className="flex flex-col ml-2 py-1 justify-around align-middle">
-              <p className="text-xs">Market Value</p>
-              <p className="text-sm font-bold">
-                {(principal / 1000).toFixed(0)}K
-              </p>
+            <span className="hidden md:flex md:items-center">
+              <Icon icon="lucide:circle-dollar-sign" className="h-5 w-5" />
+              <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+                <p className="text-xs">Market Value</p>
+                <p className="text-sm font-bold">
+                  {(principal / 1000).toFixed(0)}K
+                </p>
+              </span>
             </span>
-          </span>
+          </div>
         </Card.Content>
         <Card.Footer className="mt-auto flex w-full flex-row items-center justify-between">
           <div className="flex flex-col">

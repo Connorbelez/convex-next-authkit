@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { PercentCircle } from "lucide-react";
 import { Icon } from "@iconify/react";
 
-const meta: Meta<typeof Horizontal> = {
+const meta = {
   title: "Components/ListingCardHorizontal",
   component: Horizontal,
   parameters: {
@@ -25,13 +25,22 @@ const meta: Meta<typeof Horizontal> = {
       </div>
     ),
   ],
-};
+} satisfies Meta<typeof Horizontal>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+  args: undefined as never,
+  render: () => (
+    <Horizontal
+      ariaLabel="Open details"
+      onAction={() => {
+        // eslint-disable-next-line no-console
+        console.log("Horizontal card action clicked");
+      }}
+    />
+  ),
   parameters: {
     docs: {
       description: {
@@ -43,7 +52,7 @@ export const Default: Story = {
 };
 
 export const CustomProduct: Story = {
-  args: {},
+  args: undefined as never,
   render: () => (
     <Card.Root variant="flat" className="w-full items-stretch md:flex-row">
       <img
@@ -101,7 +110,7 @@ export const CustomProduct: Story = {
 };
 
 export const HighPriceItem: Story = {
-  args: {},
+  args: undefined as never,
   render: () => (
     <Card.Root variant="flat" className="w-full items-stretch md:flex-row">
       <img
@@ -147,7 +156,7 @@ export const HighPriceItem: Story = {
 };
 
 export const BlurredCard: Story = {
-  args: {},
+  args: undefined as never,
   render: () => (
     <Card.Root
       variant="flat"
@@ -215,7 +224,7 @@ export const BlurredCard: Story = {
 };
 
 export const MobileGlassCard: Story = {
-  args: {},
+  args: undefined as never,
   render: () => (
     <Card.Root
       variant="flat"
@@ -288,7 +297,7 @@ export const MobileGlassCard: Story = {
 };
 
 export const MobileGlassCardSmall: Story = {
-  args: {},
+  args: undefined as never,
   render: () => (
     <Card.Root
       variant="flat"
@@ -384,7 +393,7 @@ export const MobileGlassCardSmall: Story = {
 };
 
 export const MobileGlassCardLarge: Story = {
-  args: {},
+  args: undefined as never,
   render: () => (
     <Card.Root
       variant="flat"
