@@ -21,6 +21,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DatePicker } from "@/components/ui/date-picker";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 import type { FilterableItem } from "./ListingGridShell";
 
 interface FilterModalProps {
@@ -35,6 +40,27 @@ export default function FilterModal({
   items = [],
 }: FilterModalProps) {
   const [isOpen, setIsOpen] = React.useState(false);
+
+  // Ensure tooltips appear above all other elements when modal is open
+  React.useEffect(() => {
+    if (isOpen) {
+      const style = document.createElement("style");
+      style.textContent = `
+        [data-radix-tooltip-content] {
+          z-index: 9999 !important;
+        }
+      `;
+      style.id = "tooltip-z-index-fix";
+      document.head.appendChild(style);
+
+      return () => {
+        const existingStyle = document.getElementById("tooltip-z-index-fix");
+        if (existingStyle) {
+          existingStyle.remove();
+        }
+      };
+    }
+  }, [isOpen]);
 
   // Calculate histogram data from actual items
   const calculateHistogram = React.useCallback(
@@ -70,7 +96,7 @@ export default function FilterModal({
         "ltv",
         FILTER_BOUNDS.ltvRange[0],
         FILTER_BOUNDS.ltvRange[1],
-        40,
+        20,
       ),
     [calculateHistogram],
   );
@@ -81,7 +107,7 @@ export default function FilterModal({
         "apr",
         FILTER_BOUNDS.interestRateRange[0],
         FILTER_BOUNDS.interestRateRange[1],
-        40,
+        20,
       ),
     [calculateHistogram],
   );
@@ -92,7 +118,7 @@ export default function FilterModal({
         "principal",
         FILTER_BOUNDS.loanAmountRange[0],
         FILTER_BOUNDS.loanAmountRange[1],
-        40,
+        20,
       ),
     [calculateHistogram],
   );
@@ -192,149 +218,163 @@ export default function FilterModal({
           <Icon icon="lucide:filter" className="ml-2" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-center text-2xl font-medium">
-            Filters
-          </DialogTitle>
-        </DialogHeader>
+      <TooltipProvider delayDuration={0}>
+        <DialogContent className="max-h-[80vh] z-101  overflow-y-auto max-w-[calc(100vw-1rem)] w-[calc(100vw-1rem)] min-w-[300px] px-2 sm:px-6">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl font-medium">
+              Filters
+            </DialogTitle>
+          </DialogHeader>
 
-        <div className="flex flex-col gap-6 py-4">
-          <Separator />
+          <div className="flex flex-col gap-3 py-1 px-1 sm:px-0">
+            <Separator />
 
-          <div className="space-y-4">
-            <h2 className="text-foreground/50 text-center text-xl font-medium flex items-center justify-center gap-2">
-              <Icon icon="lucide:percent" className="w-5 h-5" />
-              LTV
-            </h2>
-            <RangeSliderWithHistogram
-              min={FILTER_BOUNDS.ltvRange[0]}
-              max={FILTER_BOUNDS.ltvRange[1]}
-              step={1}
-              defaultValue={safeFilters.ltvRange}
-              formatValue={(value) => `${value}%`}
-              onValueChange={handleLtvChange}
-              variant="compact"
-              targetBarCount={40}
-              showCard={false}
-              showTitle={false}
-              histogramData={ltvHistogram}
-              className="w-full"
-            />
-          </div>
+            <div className="space-y-2">
+              <h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
+                <Icon icon="lucide:percent" className="w-5 h-5" />
+                LTV
+              </h2>
+              <div className="w-full overflow-x-hidden relative z-[105]">
+                <RangeSliderWithHistogram
+                  min={FILTER_BOUNDS.ltvRange[0]}
+                  max={FILTER_BOUNDS.ltvRange[1]}
+                  step={1}
+                  defaultValue={safeFilters.ltvRange}
+                  formatValue={(value) => `${value}%`}
+                  onValueChange={handleLtvChange}
+                  variant="compact"
+                  targetBarCount={20}
+                  showCard={false}
+                  showTitle={false}
+                  histogramData={ltvHistogram}
+                  className="w-full"
+                />
+              </div>
+            </div>
 
-          <Separator />
+            <Separator />
 
-          <div className="space-y-4">
-            <h2 className="text-foreground/50 text-center text-xl font-medium flex items-center justify-center gap-2">
-              <Icon icon="lucide:trending-up" className="w-5 h-5" />
-              Interest Rate
-            </h2>
-            <RangeSliderWithHistogram
-              min={FILTER_BOUNDS.interestRateRange[0]}
-              max={FILTER_BOUNDS.interestRateRange[1]}
-              step={0.1}
-              defaultValue={safeFilters.interestRateRange}
-              formatValue={(value) => `${value}%`}
-              onValueChange={handleInterestRateChange}
-              variant="compact"
-              targetBarCount={40}
-              showCard={false}
-              showTitle={false}
-              histogramData={aprHistogram}
-              className="w-full"
-            />
-          </div>
+            <div className="space-y-2">
+              <h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
+                <Icon icon="lucide:trending-up" className="w-5 h-5" />
+                Interest Rate
+              </h2>
+              <div className="w-full overflow-x-hidden relative z-[105]">
+                <RangeSliderWithHistogram
+                  min={FILTER_BOUNDS.interestRateRange[0]}
+                  max={FILTER_BOUNDS.interestRateRange[1]}
+                  step={0.1}
+                  defaultValue={safeFilters.interestRateRange}
+                  formatValue={(value) => `${value}%`}
+                  onValueChange={handleInterestRateChange}
+                  variant="compact"
+                  targetBarCount={20}
+                  showCard={false}
+                  showTitle={false}
+                  histogramData={aprHistogram}
+                  className="w-full"
+                />
+              </div>
+            </div>
 
-          <Separator />
+            <Separator />
 
-          <div className="space-y-4">
-            <h2 className="text-foreground/50 text-center text-xl font-medium flex items-center justify-center gap-2">
-              <Icon icon="lucide:dollar-sign" className="w-5 h-5" />
-              Loan Amount
-            </h2>
-            <RangeSliderWithHistogram
-              min={FILTER_BOUNDS.loanAmountRange[0]}
-              max={FILTER_BOUNDS.loanAmountRange[1]}
-              step={10000}
-              defaultValue={safeFilters.loanAmountRange}
-              formatValue={(value) => `$${value.toLocaleString()}`}
-              onValueChange={handleLoanAmountChange}
-              variant="compact"
-              targetBarCount={40}
-              showCard={false}
-              showTitle={false}
-              histogramData={principalHistogram}
-              className="w-full"
-            />
-          </div>
+            <div className="space-y-2">
+              <h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
+                <Icon icon="lucide:dollar-sign" className="w-5 h-5" />
+                Loan Amount
+              </h2>
+              <div className="w-full overflow-x-hidden relative z-[105]">
+                <RangeSliderWithHistogram
+                  min={FILTER_BOUNDS.loanAmountRange[0]}
+                  max={FILTER_BOUNDS.loanAmountRange[1]}
+                  step={10000}
+                  defaultValue={safeFilters.loanAmountRange}
+                  formatValue={(value) => `$${value.toLocaleString()}`}
+                  onValueChange={handleLoanAmountChange}
+                  variant="compact"
+                  targetBarCount={20}
+                  showCard={false}
+                  showTitle={false}
+                  histogramData={principalHistogram}
+                  className="w-full"
+                />
+              </div>
+            </div>
 
-          <Separator />
+            <Separator />
 
-          <div className="space-y-4">
-            <h2 className="text-foreground/50 text-center text-xl font-medium flex items-center justify-center gap-2">
-              <Icon icon="lucide:file-text" className="w-5 h-5" />
-              Mortgage Type
-            </h2>
-            <div className="grid grid-cols-3 gap-4 justify-center items-center py-4">
-              {mortgageTypeOptions.map((option) => (
-                <CheckboxPrimitive.Root
-                  key={option.value}
-                  checked={safeFilters.mortgageTypes.includes(option.value)}
-                  onCheckedChange={() => handleMortgageTypeToggle(option.value)}
-                  className="relative ring-[1px] ring-border rounded-lg px-4 py-3 text-center text-muted-foreground data-[state=checked]:ring-2 data-[state=checked]:ring-primary data-[state=checked]:text-primary transition-all"
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="text-2xl font-semibold">
-                      {option.label}
-                    </span>
-                    <span className="text-sm font-medium tracking-tight">
-                      {option.displayLabel}
-                    </span>
-                  </div>
-                  <CheckboxPrimitive.Indicator className="absolute top-2 right-2">
-                    <CircleCheck className="fill-primary text-primary-foreground w-5 h-5" />
-                  </CheckboxPrimitive.Indicator>
-                </CheckboxPrimitive.Root>
-              ))}
+            <div className="space-y-2">
+              <h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
+                <Icon icon="lucide:file-text" className="w-5 h-5" />
+                Mortgage Type
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 justify-center items-center py-4">
+                {mortgageTypeOptions.map((option) => (
+                  <CheckboxPrimitive.Root
+                    key={option.value}
+                    checked={safeFilters.mortgageTypes.includes(option.value)}
+                    onCheckedChange={() =>
+                      handleMortgageTypeToggle(option.value)
+                    }
+                    className="relative ring-[1px] ring-border rounded-lg px-2 py-2 sm:px-4 sm:py-3 text-center text-muted-foreground data-[state=checked]:ring-2 data-[state=checked]:ring-primary data-[state=checked]:text-primary transition-all"
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-2xl font-semibold">
+                        {option.label}
+                      </span>
+                      <span className="text-sm font-medium tracking-tight">
+                        {option.displayLabel}
+                      </span>
+                    </div>
+                    <CheckboxPrimitive.Indicator className="absolute top-2 right-2">
+                      <CircleCheck className="fill-primary text-primary-foreground w-5 h-5" />
+                    </CheckboxPrimitive.Indicator>
+                  </CheckboxPrimitive.Root>
+                ))}
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-2">
+              <h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
+                <Icon icon="lucide:calendar" className="w-5 h-5" />
+                Maturity Date
+              </h2>
+              <div className="flex justify-center">
+                <DatePicker
+                  date={safeFilters.maturityDate}
+                  onDateChange={handleMaturityDateChange}
+                />
+              </div>
             </div>
           </div>
 
-          <Separator />
-
-          <div className="space-y-4">
-            <h2 className="text-foreground/50 text-center text-xl font-medium flex items-center justify-center gap-2">
-              <Icon icon="lucide:calendar" className="w-5 h-5" />
-              Maturity Date
-            </h2>
-            <div className="flex justify-center">
-              <DatePicker
-                date={safeFilters.maturityDate}
-                onDateChange={handleMaturityDateChange}
-              />
-            </div>
-          </div>
-        </div>
-
-        <DialogFooter className="flex justify-between gap-2">
-          <Button variant="outline" size="lg" onClick={() => setIsOpen(false)}>
-            Close
-          </Button>
-          {hasActiveFilters && (
+          <DialogFooter className="flex flex-col sm:flex-row sm:justify-between gap-2">
             <Button
-              variant="destructive"
-              size="lg"
-              onClick={handleClearFilters}
+              variant="outline"
+              size="sm"
+              onClick={() => setIsOpen(false)}
             >
-              <Icon icon="lucide:x" className="mr-2" />
-              Clear Filters
+              Close
             </Button>
-          )}
-          <Button size="lg" onClick={() => setIsOpen(false)}>
-            Apply
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+            {hasActiveFilters && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleClearFilters}
+              >
+                <Icon icon="lucide:x" className="mr-2" />
+                Clear Filters
+              </Button>
+            )}
+            <Button size="sm" onClick={() => setIsOpen(false)}>
+              Apply
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </TooltipProvider>
     </Dialog>
   );
 }

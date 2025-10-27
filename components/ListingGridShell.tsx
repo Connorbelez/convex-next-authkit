@@ -11,7 +11,6 @@ import {
 import type { WithLatLng } from "@/hooks/use-filtered-listings";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useViewportFilteredItems } from "@/hooks/use-filtered-listings";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   MobileListingScroller,
   type MobileListingSection,
@@ -22,6 +21,15 @@ import {
   DEFAULT_FILTERS,
   FILTER_BOUNDS,
 } from "./types/listing-filters";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { Map } from "lucide-react";
 
 type ClassNames = {
   container?: string;
@@ -129,6 +137,55 @@ function applyFilters<T extends FilterableItem>(
   });
 }
 
+// Animation variants from smooth-drawer
+const drawerVariants = {
+  hidden: {
+    y: "100%",
+    opacity: 0,
+    rotateX: 5,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30,
+    },
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    rotateX: 0,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30,
+      mass: 0.8,
+      staggerChildren: 0.07,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    y: 20,
+    opacity: 0,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30,
+    },
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30,
+      mass: 0.8,
+    },
+  },
+};
+
 export function ListingGridShell<T extends WithLatLng>({
   items,
   renderCard,
@@ -144,6 +201,7 @@ export function ListingGridShell<T extends WithLatLng>({
     ViewportBounds | undefined
   >(undefined);
   const [filters, setFilters] = React.useState<FilterState>(DEFAULT_FILTERS);
+  const [isMapDrawerOpen, setIsMapDrawerOpen] = React.useState(false);
 
   // Apply user filters first
   const userFilteredItems = React.useMemo(() => {
@@ -194,28 +252,55 @@ export function ListingGridShell<T extends WithLatLng>({
           />
         )}
         <div className="px-4">
-          <Tabs defaultValue="list" className="flex flex-col gap-2">
-            <TabsList className="flex w-full justify-end">
-              <TabsTrigger value="list">Listings</TabsTrigger>
-              <TabsTrigger value="map">Map</TabsTrigger>
-            </TabsList>
-            <TabsContent value="list" className={classNames?.gridColumn}>
-              <MobileListingScroller
-                sections={mobileSections}
-                renderCard={renderCard}
-              />
-            </TabsContent>
-            <TabsContent value="map" className={classNames?.mapColumn}>
-              <ListingMap
-                items={filteredItems}
-                renderPopup={renderMapPopup}
-                onViewportChange={onViewportChange}
-                className={classNames?.mapWrapper}
-                style={{ height: "60vh" }}
-                {...mapProps}
-              />
-            </TabsContent>
-          </Tabs>
+          {/* Main listing scroller */}
+          <div className={classNames?.gridColumn}>
+            <MobileListingScroller
+              sections={mobileSections}
+              renderCard={renderCard}
+            />
+          </div>
+
+          {/* Floating map button */}
+          <div className="fixed bottom-6 right-6 z-40">
+            <Drawer open={isMapDrawerOpen} onOpenChange={setIsMapDrawerOpen}>
+              <DrawerTrigger asChild>
+                <Button
+                  size="lg"
+                  className="rounded-full shadow-lg h-14 w-14 p-0"
+                >
+                  <Map className="h-6 w-6" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="h-[85vh] rounded-t-2xl">
+                <motion.div
+                  variants={drawerVariants as any}
+                  initial="hidden"
+                  animate="visible"
+                  className="h-full flex flex-col"
+                >
+                  <motion.div variants={itemVariants as any}>
+                    <DrawerHeader>
+                      <DrawerTitle>Map View</DrawerTitle>
+                    </DrawerHeader>
+                  </motion.div>
+                  <motion.div
+                    variants={itemVariants as any}
+                    className="flex-1 px-4 pb-4 min-h-0"
+                  >
+                    <div className="h-full">
+                      <ListingMap
+                        items={filteredItems}
+                        renderPopup={renderMapPopup}
+                        onViewportChange={onViewportChange}
+                        className="h-full w-full rounded-lg"
+                        {...mapProps}
+                      />
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </DrawerContent>
+            </Drawer>
+          </div>
         </div>
       </div>
     );

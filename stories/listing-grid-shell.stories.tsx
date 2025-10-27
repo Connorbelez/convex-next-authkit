@@ -209,8 +209,8 @@ export const DenseGridWithFilters: Story = {
     groupItemsForMobile: groupByMortgageType,
     showFilters: true,
     mapProps: {
-      defaultCenter: { lat: 34.0522, lng: -118.2437 }, // Los Angeles
-      defaultZoom: 10,
+      initialCenter: { lat: 34.0522, lng: -118.2437 }, // Los Angeles
+      initialZoom: 10,
     },
   },
 };

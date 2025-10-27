@@ -127,7 +127,7 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
                       transition={{ duration: 0.3 }}
                     />
                   </TooltipTrigger>
-                  <TooltipContent>
+                  <TooltipContent className="z-200">
                     {renderTooltip ? (
                       renderTooltip(count, currentValue)
                     ) : (
