@@ -2,19 +2,29 @@ import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
 
 import { Horizontal } from "@/components/listing-card-horizontal";
-import { ListingGridShell } from "@/components/ListingGridShell";
-import type { WithLatLng } from "@/hooks/use-filtered-listings";
+import {
+  ListingGridShell,
+  type FilterableItem,
+} from "@/components/ListingGridShell";
+import type { MobileListingSection } from "@/components/mobile-listing-scroller";
+import type {
+  MortgageType,
+  PropertyType,
+} from "@/components/types/listing-filters";
 
-const meta = {
+const meta: Meta<typeof ListingGridShell<MockListing>> = {
   title: "Listings/ListingGridShell",
   component: ListingGridShell,
-} satisfies Meta<typeof ListingGridShell<MockListing>>;
+  parameters: {
+    layout: "fullscreen",
+  },
+};
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-interface MockListing extends WithLatLng {
+interface MockListing extends FilterableItem {
   id: string;
   title: string;
   address: string;
@@ -22,90 +32,206 @@ interface MockListing extends WithLatLng {
   apr: number;
   principal: number;
   imageSrc: string;
+  mortgageType: MortgageType;
+  propertyType: PropertyType;
+  maturityDate?: Date;
 }
 
-const mockListings: MockListing[] = [
-  {
-    id: "1",
-    title: "Malibu Beach Detached",
-    address: "Malibu, CA",
-    ltv: 80,
-    apr: 9.5,
-    principal: 350000,
-    lat: 34.0259,
-    lng: -118.7798,
-    imageSrc: "/house.jpg",
-  },
-  {
-    id: "2",
-    title: "Downtown Loft",
-    address: "Los Angeles, CA",
-    ltv: 75,
-    apr: 8.1,
-    principal: 425000,
-    lat: 34.0407,
-    lng: -118.2468,
-    imageSrc: "/house.jpg",
-  },
-  {
-    id: "3",
-    title: "Santa Monica Townhome",
-    address: "Santa Monica, CA",
-    ltv: 68,
-    apr: 7.9,
-    principal: 515000,
-    lat: 34.0195,
-    lng: -118.4912,
-    imageSrc: "/house.jpg",
-  },
-  {
-    id: "4",
-    title: "Venice Beach Bungalow",
-    address: "Venice, CA",
-    ltv: 72,
-    apr: 8.7,
-    principal: 390000,
-    lat: 33.9851,
-    lng: -118.4695,
-    imageSrc: "/house.jpg",
-  },
-];
+// Procedurally generate 100 mock listings with good spread across all filter dimensions
+const generateMockListings = (count: number): MockListing[] => {
+  const propertyTypes: PropertyType[] = [
+    "Detached Home",
+    "Duplex",
+    "Triplex",
+    "Apartment",
+    "Condo",
+    "Cottage",
+    "Townhouse",
+    "Commercial",
+    "Mixed-Use",
+  ];
 
-const renderCard = (item: WithLatLng) => (
-  <Horizontal key={(item as MockListing).id} />
-);
+  const mortgageTypes: MortgageType[] = ["First", "Second", "Other"];
 
-const renderPopup = (item: WithLatLng) => {
-  const listing = item as MockListing;
+  const neighborhoods = [
+    { name: "Downtown LA", lat: 34.0407, lng: -118.2468 },
+    { name: "Santa Monica", lat: 34.0195, lng: -118.4912 },
+    { name: "Venice", lat: 33.9851, lng: -118.4695 },
+    { name: "Beverly Hills", lat: 34.0736, lng: -118.4004 },
+    { name: "Hollywood", lat: 34.0928, lng: -118.3287 },
+    { name: "Pasadena", lat: 34.1478, lng: -118.1445 },
+    { name: "Long Beach", lat: 33.7701, lng: -118.1937 },
+    { name: "Burbank", lat: 34.1808, lng: -118.309 },
+    { name: "Glendale", lat: 34.1425, lng: -118.255 },
+    { name: "Culver City", lat: 34.0211, lng: -118.3965 },
+    { name: "West Hollywood", lat: 34.09, lng: -118.3617 },
+    { name: "Silver Lake", lat: 34.0869, lng: -118.2706 },
+    { name: "Echo Park", lat: 34.0781, lng: -118.2606 },
+    { name: "Manhattan Beach", lat: 33.8847, lng: -118.4109 },
+    { name: "Redondo Beach", lat: 33.8492, lng: -118.3884 },
+  ];
+
+  const listings: MockListing[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const neighborhood =
+      neighborhoods[Math.floor(Math.random() * neighborhoods.length)];
+
+    // Good spread across LTV: 30-80% (matching filter bounds)
+    const ltv = Math.floor(30 + Math.random() * 50);
+
+    // Good spread across APR: 3-15% (matching filter bounds)
+    const apr = parseFloat((3 + Math.random() * 12).toFixed(2));
+
+    // Good spread across principal: $100k - $5M, with logarithmic distribution for realism
+    const principal = Math.floor(
+      100000 * Math.exp(Math.random() * Math.log(50)),
+    );
+
+    const propertyType =
+      propertyTypes[Math.floor(Math.random() * propertyTypes.length)];
+    const mortgageType =
+      mortgageTypes[Math.floor(Math.random() * mortgageTypes.length)];
+
+    // Random offset from neighborhood center (within ~0.02 degrees, ~2km)
+    const latOffset = (Math.random() - 0.5) * 0.04;
+    const lngOffset = (Math.random() - 0.5) * 0.04;
+
+    // Random maturity date in next 1-3 years
+    const daysToMaturity = Math.floor(365 + Math.random() * 730);
+    const maturityDate = new Date();
+    maturityDate.setDate(maturityDate.getDate() + daysToMaturity);
+
+    listings.push({
+      id: `listing-${i + 1}`,
+      title: `${neighborhood.name} ${propertyType}`,
+      address: `${neighborhood.name}, CA`,
+      ltv,
+      apr,
+      principal,
+      lat: neighborhood.lat + latOffset,
+      lng: neighborhood.lng + lngOffset,
+      imageSrc: "/house.jpg",
+      mortgageType,
+      propertyType,
+      maturityDate,
+    });
+  }
+
+  return listings;
+};
+
+const mockListings = generateMockListings(8); // Keep original 8 for most stories
+
+const renderCard = (item: MockListing) => {
+  return (
+    <Horizontal
+      key={item.id}
+      title={item.title}
+      address={item.address}
+      imageSrc={item.imageSrc}
+      ltv={item.ltv}
+      apr={item.apr}
+      principal={item.principal}
+    />
+  );
+};
+
+const renderPopup = (item: MockListing) => {
   return (
     <div className="space-y-1 text-sm">
-      <div className="font-semibold">{listing.title}</div>
-      <div className="text-muted-foreground">{listing.address}</div>
-      <div>LTV: {listing.ltv}%</div>
-      <div>APR: {listing.apr}%</div>
-      <div>${listing.principal.toLocaleString()} principal</div>
+      <div className="font-semibold">{item.title}</div>
+      <div className="text-muted-foreground">{item.address}</div>
+      <div>LTV: {item.ltv}%</div>
+      <div>APR: {item.apr}%</div>
+      <div>${item.principal.toLocaleString()} principal</div>
+      <div className="text-xs text-muted-foreground">
+        {item.mortgageType} Mortgage • {item.propertyType}
+      </div>
     </div>
   );
 };
 
-export const Default: Story = {
+// Group listings by mortgage type for mobile horizontal scrolling
+const groupByMortgageType = (
+  items: ReadonlyArray<MockListing>,
+): MobileListingSection<MockListing>[] => {
+  const grouped = items.reduce(
+    (acc, item) => {
+      const type = item.mortgageType || "Other";
+      if (!acc[type]) acc[type] = [];
+      acc[type].push(item);
+      return acc;
+    },
+    {} as Record<string, MockListing[]>,
+  );
+
+  const sections: MobileListingSection<MockListing>[] = [];
+
+  if (grouped.First?.length > 0) {
+    sections.push({ title: "First Mortgages", items: grouped.First });
+  }
+  if (grouped.Second?.length > 0) {
+    sections.push({ title: "Second Mortgages", items: grouped.Second });
+  }
+  if (grouped.Other?.length > 0) {
+    sections.push({ title: "Other Mortgages", items: grouped.Other });
+  }
+
+  return sections;
+};
+
+export const WithFilters: Story = {
   args: {
     items: mockListings,
     renderCard,
     renderMapPopup: renderPopup,
+    groupItemsForMobile: groupByMortgageType,
+    showFilters: true,
   },
 };
 
-export const DenseGrid: Story = {
+export const FiltersDisabled: Story = {
   args: {
-    items: [...mockListings, ...mockListings.map((item, index) => ({
-      ...item,
-      id: `${item.id}-copy-${index}`,
-      lat: item.lat + 0.05 * (index + 1),
-      lng: item.lng + 0.05 * (index + 1),
-    }))],
+    items: mockListings,
     renderCard,
     renderMapPopup: renderPopup,
+    groupItemsForMobile: groupByMortgageType,
+    showFilters: false,
+  },
+};
+
+export const DenseGridWithFilters: Story = {
+  args: {
+    items: generateMockListings(100),
+    renderCard,
+    renderMapPopup: renderPopup,
+    groupItemsForMobile: groupByMortgageType,
+    showFilters: true,
+    mapProps: {
+      defaultCenter: { lat: 34.0522, lng: -118.2437 }, // Los Angeles
+      defaultZoom: 10,
+    },
+  },
+};
+
+export const HighValueListings: Story = {
+  args: {
+    items: mockListings.filter((item) => item.principal > 500000),
+    renderCard,
+    renderMapPopup: renderPopup,
+    groupItemsForMobile: groupByMortgageType,
+    showFilters: true,
+  },
+};
+
+export const FirstMortgagesOnly: Story = {
+  args: {
+    items: mockListings.filter((item) => item.mortgageType === "First"),
+    renderCard,
+    renderMapPopup: renderPopup,
+    groupItemsForMobile: groupByMortgageType,
+    showFilters: true,
   },
 };
 
@@ -114,6 +240,8 @@ export const CustomLayout: Story = {
     items: mockListings,
     renderCard,
     renderMapPopup: renderPopup,
+    groupItemsForMobile: groupByMortgageType,
+    showFilters: true,
     classNames: {
       container: "grid gap-2 md:grid-cols-[2fr_1fr]",
       gridColumn: "space-y-2",

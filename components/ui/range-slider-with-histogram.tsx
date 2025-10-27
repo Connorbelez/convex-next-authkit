@@ -26,6 +26,10 @@ interface RangeSliderWithHistogramProps {
   className?: string;
   defaultValue?: [number, number];
   renderTooltip?: (count: number, value: number) => React.ReactNode;
+  variant?: "compact" | "full";
+  targetBarCount?: number;
+  showCard?: boolean;
+  showTitle?: boolean;
 }
 
 const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
@@ -44,17 +48,29 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
   className,
   defaultValue = [min, max],
   renderTooltip,
+  variant = "full",
+  targetBarCount = 20,
+  showCard = true,
+  showTitle = true,
 }) => {
   const [minValue, setMinValue] = useState(defaultValue[0]);
   const [maxValue, setMaxValue] = useState(defaultValue[1]);
 
-  const numBars = Math.ceil((max - min) / step);
-  const defaultHistogramData = useMemo(
-    () =>
-      Array.from({ length: numBars }, () => Math.floor(Math.random() * 6000)),
-    [numBars]
-  );
-  const histogramDataToUse = histogramData ?? defaultHistogramData;
+  // Use fixed bar count instead of step-based calculation
+  const numBars = targetBarCount;
+  const bucketSize = (max - min) / numBars;
+
+  // Use histogram data directly (already bucketed) or generate demo data
+  const histogramDataToUse = useMemo(() => {
+    if (histogramData && histogramData.length === numBars) {
+      // If histogram data is already bucketed to the correct size, use it directly
+      return histogramData;
+    }
+    // Generate random data for demo
+    return Array.from({ length: numBars }, () =>
+      Math.floor(Math.random() * 6000),
+    );
+  }, [histogramData, numBars]);
 
   const maxCount = useMemo(() => {
     const maxVal = Math.max(...histogramDataToUse);
@@ -65,19 +81,35 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
   const viewMin = Math.max(min, minValue - bufferRange);
   const viewMax = Math.min(max, maxValue + bufferRange);
 
-  return (
-    <Card className={`p-8 rounded-lg shadow-lg w-full max-w-lg ${className}`}>
-      <h2 className="text-2xl font-bold mb-4">{title}</h2>
+  // Compact variant styling
+  const isCompact = variant === "compact";
+  const containerClass = isCompact
+    ? `space-y-2 ${className}`
+    : `p-8 rounded-lg shadow-lg w-full max-w-lg ${className}`;
+  const titleClass = isCompact
+    ? "text-sm font-semibold mb-1"
+    : "text-2xl font-bold mb-4";
+  const valueClass = isCompact
+    ? "text-primary text-sm font-medium"
+    : "text-primary text-xl";
+  const histogramHeight = isCompact ? "h-28" : "h-32";
+
+  const content = (
+    <>
+      {showTitle && <h2 className={titleClass}>{title}</h2>}
 
       <div className="flex justify-between mb-2">
-        <span className="text-primary text-xl">{formatValue(minValue)}</span>
-        <span className="text-primary text-xl">{formatValue(maxValue)}</span>
+        <span className={valueClass}>{formatValue(minValue)}</span>
+        <span className={valueClass}>{formatValue(maxValue)}</span>
       </div>
 
-      <div className="relative h-32 overflow-hidden">
+      <div className={`relative ${histogramHeight} overflow-hidden`}>
         <div className="flex items-end h-full">
           {histogramDataToUse.map((count, index) => {
-            const currentValue = min + index * step;
+            // Calculate bucket range for this bar
+            const bucketStart = min + index * bucketSize;
+            const bucketEnd = min + (index + 1) * bucketSize;
+            const currentValue = (bucketStart + bucketEnd) / 2; // Use midpoint for display
             const isInRange =
               currentValue >= minValue && currentValue <= maxValue;
             const isInView = currentValue >= viewMin && currentValue <= viewMax;
@@ -112,7 +144,7 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
         </div>
       </div>
 
-      <div className="relative -mt-5">
+      <div className="relative mt-2">
         <Slider
           defaultValue={[minValue, maxValue]}
           min={min}
@@ -130,7 +162,13 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
           <span className="text-gray-400">{maxLabel}</span>
         </div>
       </div>
-    </Card>
+    </>
+  );
+
+  return showCard ? (
+    <Card className={containerClass}>{content}</Card>
+  ) : (
+    <div className={containerClass}>{content}</div>
   );
 };
 

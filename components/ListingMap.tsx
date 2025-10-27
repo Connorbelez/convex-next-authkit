@@ -69,88 +69,88 @@ export function ListingMap<T extends LatLng>({
   style,
   mapClassName,
 }: ListingMapProps<T>) {
-  const mapContainerRef = useRef<HTMLDivElement>(null)
-  const mapRef = useRef<mapboxgl.Map | null>(null)
-  const markersRef = useRef<ManagedMarker[]>([])
-  const [isMapLoaded, setIsMapLoaded] = useState(false)
-  const hasSetInitialViewRef = useRef(false)
-  const preventFitBoundsRef = useRef(false)
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const markersRef = useRef<ManagedMarker[]>([]);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const hasSetInitialViewRef = useRef(false);
+  const preventFitBoundsRef = useRef(false);
 
   // Initialize map
   useEffect(() => {
-    if (!mapContainerRef.current) return
+    if (!mapContainerRef.current) return;
 
-    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!
+    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v12",
       center: [initialCenter.lng, initialCenter.lat],
       zoom: initialZoom,
-    })
+    });
 
-    mapRef.current = map
+    mapRef.current = map;
 
     // Add navigation controls
-    map.addControl(new mapboxgl.NavigationControl(), "top-right")
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
     map.on("load", () => {
-      setIsMapLoaded(true)
-      
+      setIsMapLoaded(true);
+
       // Notify parent of initial viewport
       if (onViewportChange) {
-        const bounds = toBounds(map)
-        onViewportChange(bounds)
+        const bounds = toBounds(map);
+        onViewportChange(bounds);
       }
-    })
+    });
 
     // Update viewport bounds when map movement ends
     map.on("moveend", () => {
       if (onViewportChange) {
-        const bounds = toBounds(map)
-        onViewportChange(bounds)
+        const bounds = toBounds(map);
+        onViewportChange(bounds);
       }
-    })
+    });
 
     return () => {
       if (mapRef.current) {
-        mapRef.current.remove()
-        mapRef.current = null
+        mapRef.current.remove();
+        mapRef.current = null;
       }
-    }
-  }, [initialCenter.lat, initialCenter.lng, initialZoom, onViewportChange])
+    };
+  }, [initialCenter.lat, initialCenter.lng, initialZoom, onViewportChange]);
 
   // Update markers when items change
   useEffect(() => {
-    if (!mapRef.current || !isMapLoaded) return
+    if (!mapRef.current || !isMapLoaded) return;
 
     // Clear existing markers
     markersRef.current.forEach(({ marker, popup, root }) => {
-      marker.remove()
-      popup?.remove()
-      root?.unmount()
-    })
-    markersRef.current = []
+      marker.remove();
+      popup?.remove();
+      root?.unmount();
+    });
+    markersRef.current = [];
 
     // Add new markers
     items.forEach((item) => {
       // Create popup using React
-      const popupContainer = document.createElement("div")
-      const root = createRoot(popupContainer)
-      root.render(<>{renderPopup(item)}</>)
+      const popupContainer = document.createElement("div");
+      const root = createRoot(popupContainer);
+      root.render(<>{renderPopup(item)}</>);
 
       const popup = new mapboxgl.Popup({
         offset: 25,
         closeButton: true,
         closeOnClick: false,
-      }).setDOMContent(popupContainer)
+      }).setDOMContent(popupContainer);
 
       // Create custom marker element
-      const markerElement = document.createElement("div")
-      markerElement.className = "custom-marker"
-      markerElement.style.cursor = "pointer"
+      const markerElement = document.createElement("div");
+      markerElement.className = "custom-marker";
+      markerElement.style.cursor = "pointer";
 
-      const pinElement = document.createElement("div")
+      const pinElement = document.createElement("div");
       pinElement.style.cssText = `
         width: 24px;
         height: 24px;
@@ -159,55 +159,59 @@ export function ListingMap<T extends LatLng>({
         border-radius: 50%;
         box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         transition: all 0.2s ease;
-      `
-      markerElement.appendChild(pinElement)
+      `;
+      markerElement.appendChild(pinElement);
 
       // Add hover effects
       markerElement.addEventListener("mouseenter", () => {
-        pinElement.style.transform = "scale(1.2)"
-        pinElement.style.backgroundColor = "#1d4ed8"
-      })
+        pinElement.style.transform = "scale(1.2)";
+        pinElement.style.backgroundColor = "#1d4ed8";
+      });
 
       markerElement.addEventListener("mouseleave", () => {
-        pinElement.style.transform = "scale(1)"
-        pinElement.style.backgroundColor = "#3b82f6"
-      })
+        pinElement.style.transform = "scale(1)";
+        pinElement.style.backgroundColor = "#3b82f6";
+      });
 
       const marker = new mapboxgl.Marker(markerElement)
         .setLngLat([item.lng, item.lat])
         .setPopup(popup)
-        .addTo(mapRef.current!)
+        .addTo(mapRef.current!);
 
-      markersRef.current.push({ marker, popup, root })
-    })
+      markersRef.current.push({ marker, popup, root });
+    });
 
     // Fit map to show all markers if there are any (only on initial load)
     if (items.length > 0 && !hasSetInitialViewRef.current) {
       if (preventFitBoundsRef.current) {
-        preventFitBoundsRef.current = false // Reset for next time
+        preventFitBoundsRef.current = false; // Reset for next time
       } else {
-        const bounds = new mapboxgl.LngLatBounds()
+        const bounds = new mapboxgl.LngLatBounds();
         items.forEach((item) => {
           if (Number.isFinite(item.lat) && Number.isFinite(item.lng)) {
-            bounds.extend([item.lng, item.lat])
+            bounds.extend([item.lng, item.lat]);
           }
-        })
+        });
 
         if (!bounds.isEmpty()) {
           mapRef.current.fitBounds(bounds, {
             padding: { top: 80, bottom: 80, left: 80, right: 80 },
             maxZoom: 12,
             duration: 0,
-          })
-          hasSetInitialViewRef.current = true
+          });
+          hasSetInitialViewRef.current = true;
         }
       }
     }
-  }, [items, isMapLoaded, renderPopup])
+  }, [items, isMapLoaded, renderPopup]);
 
   return (
     <div className={cn("relative h-full w-full", containerClassName)}>
-      <div ref={mapContainerRef} className={cn("h-full w-full", mapClassName, className)} style={style} />
+      <div
+        ref={mapContainerRef}
+        className={cn("h-full w-full rounded-xl", mapClassName, className)}
+        style={style}
+      />
     </div>
-  )
+  );
 }

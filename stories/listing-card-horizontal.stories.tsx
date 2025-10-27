@@ -3,7 +3,7 @@ import { Horizontal } from "@/components/listing-card-horizontal";
 import { Card, Chip, Button } from "@heroui/react";
 import { Badge } from "@/components/ui/badge";
 import { PercentCircle } from "lucide-react";
-import { Icon } from "@iconify/react"
+import { Icon } from "@iconify/react";
 
 const meta: Meta<typeof Horizontal> = {
   title: "Components/ListingCardHorizontal",
@@ -12,19 +12,15 @@ const meta: Meta<typeof Horizontal> = {
     layout: "centered",
     docs: {
       description: {
-        component: "A horizontal listing card featuring product image, title, description, pricing, availability, and action button. Perfect for e-commerce product displays, rental listings, or service offerings.",
+        component:
+          "A horizontal listing card featuring product image, title, description, pricing, availability, and action button. Perfect for e-commerce product displays, rental listings, or service offerings.",
       },
     },
   },
-  argTypes: {
-    children: {
-      control: "text",
-      description: "Custom content to override the default card content",
-    },
-  },
+
   decorators: [
     (Story) => (
-      <div className="w-full max-w-2xl p-4">
+      <div className="w-full max-w-4xl p-4 flex justify-center">
         <Story />
       </div>
     ),
@@ -35,16 +31,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  args: {},
   parameters: {
     docs: {
       description: {
-        story: "Default horizontal listing card showing Porsche 911 Golden Edition with all standard features.",
+        story:
+          "Default horizontal listing card showing Porsche 911 Golden Edition with all standard features.",
       },
     },
   },
 };
 
 export const CustomProduct: Story = {
+  args: {},
   render: () => (
     <Card.Root variant="flat" className="w-full items-stretch md:flex-row">
       <img
@@ -84,9 +83,7 @@ export const CustomProduct: Story = {
             >
               Maturity
             </span>
-            <span className="text-foreground/50 text-xs">
-              01/01/2026
-            </span>
+            <span className="text-foreground/50 text-xs">01/01/2026</span>
           </div>
           <Button variant="secondary">View details</Button>
         </Card.Footer>
@@ -96,13 +93,15 @@ export const CustomProduct: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Custom product listing featuring a luxury watch with different pricing and availability.",
+        story:
+          "Custom product listing featuring a luxury watch with different pricing and availability.",
       },
     },
   },
 };
 
 export const HighPriceItem: Story = {
+  args: {},
   render: () => (
     <Card.Root variant="flat" className="w-full items-stretch md:flex-row">
       <img
@@ -119,15 +118,9 @@ export const HighPriceItem: Story = {
           </Card.Description>
         </Card.Header>
         <Card.Content className="text-muted-foreground text-sm grid grid-cols-3 gap-2 align-middle justify-center items-center">
-          <span>
-            LTV: 80%
-          </span>
-          <span>
-            APR: 9.5%
-          </span>
-          <span>
-            APR: 9.5%
-          </span>
+          <span>80% LTV</span>
+          <span>9.5% IR</span>
+          <span>$300k Loan</span>
         </Card.Content>
         <Card.Footer className="mt-auto flex w-full flex-row items-center justify-between">
           <div className="flex flex-col">
@@ -135,8 +128,9 @@ export const HighPriceItem: Story = {
               aria-label="Principal loan: 350,000 US dollars"
               className="text-foreground text-sm font-medium"
             >
-              $350k principal
+              Maturity
             </span>
+            <span className="text-foreground/50 text-xs">01/01/2026</span>
           </div>
           <Button variant="secondary">View details</Button>
         </Card.Footer>
@@ -152,325 +146,345 @@ export const HighPriceItem: Story = {
   },
 };
 
-export const TechProduct: Story = {
+export const BlurredCard: Story = {
+  args: {},
   render: () => (
-    <div className="flex w-full items-stretch md:flex-row">
+    <Card.Root
+      variant="flat"
+      className="w-full items-stretch md:flex-row hover:scale-105 hover:shadow-lg hover:shadow-black/10 transition-all duration-300"
+    >
       <img
-        alt="Laptop Computer"
-        className="rounded-panel pointer-events-none aspect-square w-full select-none object-cover md:max-w-[136px]"
+        alt="Malibu Beach Detached thumbnail"
+        className="rounded-panel pointer-events-none aspect-square w-full select-none object-cover md:max-w-[180px]"
         loading="lazy"
-        src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=400&fit=crop"
+        src="/house.jpg"
       />
       <div className="flex flex-1 flex-col gap-3">
-        <div className="gap-1">
-          <h3 className="text-xl font-semibold">Professional Gaming Laptop</h3>
-          <p className="text-sm text-muted-foreground">
-            Unleash your gaming potential with cutting-edge RTX graphics and Intel Core i9 processor—built for competitive performance.
-          </p>
-        </div>
-        <div className="mt-auto flex w-full flex-row items-center justify-between">
+        <Card.Header className="gap-1">
+          <Card.Title>Malibu Beach Detached</Card.Title>
+          <Card.Description className="text-foreground/70">
+            Malibu, CA • Single Family Detached
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="text-muted-foreground text-sm grid grid-cols-3 gap-2 align-middle justify-center items-center">
+          <span className="flex items-center">
+            <Icon icon="lucide:percent-circle" className="h-4 w-4" />
+            <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+              <p className="text-xs">LTV</p>
+              <p className="text-sm font-bold">80</p>
+            </span>
+          </span>
+          <span className="flex items-center">
+            <Icon icon="lucide:percent-circle" className="h-4 w-4" />
+            <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+              <p className="text-xs">APR</p>
+              <p className="text-sm font-bold">9.5</p>
+            </span>
+          </span>
+          <span className="flex items-center">
+            <Icon icon="lucide:circle-dollar-sign" className="h-4 w-4" />
+            <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+              <p className="text-xs">Principal</p>
+              <p className="text-sm font-bold">350K</p>
+            </span>
+          </span>
+        </Card.Content>
+        <Card.Footer className="mt-auto flex w-full flex-row items-center justify-between">
           <div className="flex flex-col">
             <span
-              aria-label="Price: 2,899 US dollars"
+              aria-label="Principal loan: 350,000 US dollars"
               className="text-foreground text-sm font-medium"
             >
-              $2,899
+              Maturity
             </span>
-            <span aria-label="Available stock: 15 units" className="text-muted text-xs">
-              15 available
-            </span>
+            <span className="text-foreground/50 text-xs">01/01/2026</span>
           </div>
-          <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-3">
-            Configure
-          </button>
-        </div>
+          <Button variant="secondary">View details</Button>
+        </Card.Footer>
       </div>
-    </div>
+    </Card.Root>
   ),
   parameters: {
     docs: {
       description: {
-        story: "Technology product with customizable options and good availability.",
+        story:
+          "Vertical property listing card with blurred header and footer overlays, displaying location, title, and key financial metrics.",
       },
     },
   },
 };
 
-export const ServiceOffering: Story = {
+export const MobileGlassCard: Story = {
+  args: {},
   render: () => (
-    <div className="flex w-full items-stretch md:flex-row">
+    <Card.Root
+      variant="flat"
+      className="relative w-80 min-w-[320px] h-96 min-h-[384px] md:w-96 md:h-[450px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-white/10"
+    >
+      {/* Background Image */}
       <img
-        alt="Interior Design Service"
-        className="rounded-panel pointer-events-none aspect-square w-full select-none object-cover md:max-w-[136px]"
+        alt="Malibu Beach Detached thumbnail"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
         loading="lazy"
-        src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&h=400&fit=crop"
+        src="/house.jpg"
       />
-      <div className="flex flex-1 flex-col gap-3">
-        <div className="gap-1">
-          <h3 className="text-xl font-semibold">Premium Interior Design Package</h3>
-          <p className="text-sm text-muted-foreground">
-            Transform your living space with our complete design solution—professional consultation, 3D renderings, and full project management.
-          </p>
-        </div>
-        <div className="mt-auto flex w-full flex-row items-center justify-between">
-          <div className="flex flex-col">
-            <span
-              aria-label="Price: 5,500 US dollars"
-              className="text-foreground text-sm font-medium"
-            >
-              $5,500
-            </span>
-            <span aria-label="Available slots: 4 openings" className="text-muted text-xs">
-              4 openings
-            </span>
-          </div>
-          <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-3">
-            Book Consultation
-          </button>
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Service offering with different availability metrics and call-to-action.",
-      },
-    },
-  },
-};
 
-export const SoldOutItem: Story = {
-  render: () => (
-    <div className="flex w-full items-stretch md:flex-row">
-      <img
-        alt="Vintage Camera"
-        className="rounded-panel pointer-events-none aspect-square w-full select-none object-cover md:max-w-[136px]"
-        loading="lazy"
-        src="https://images.unsplash.com/photo-1516035069371-29866ddc19a9?w=400&h=400&fit=crop"
-      />
-      <div className="flex flex-1 flex-col gap-3">
-        <div className="gap-1">
-          <h3 className="text-xl font-semibold">Vintage Film Camera Collection</h3>
-          <p className="text-sm text-muted-foreground">
-            Classic photography equipment from the golden age—authentic vintage cameras with original accessories and documentation.
-          </p>
-        </div>
-        <div className="mt-auto flex w-full flex-row items-center justify-between">
-          <div className="flex flex-col">
-            <span
-              aria-label="Price: 3,200 US dollars"
-              className="text-foreground text-sm font-medium"
-            >
-              $3,200
-            </span>
-            <span aria-label="Available stock: 0 units" className="text-red-500 text-xs font-medium">
-              Sold Out
-            </span>
-          </div>
-          <button
-            disabled
-            className="bg-gray-300 text-gray-500 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-3 cursor-not-allowed"
-          >
-            Notify When Available
-          </button>
-        </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Sold out item with disabled purchase button and availability indicator.",
-      },
-    },
-  },
-};
+      {/* Frosted Glass Header - Title & Location */}
+      <Card.Header className="absolute top-0 left-0 right-0 z-10 gap-1 p-4 backdrop-blur-xl bg-black/30 dark:bg-black/30 border-b border-white/10 shadow-lg">
+        <div className="relative w-full">
+          {/* Inner glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent rounded-lg pointer-events-none" />
 
-export const LongDescription: Story = {
-  render: () => (
-    <div className="flex w-full items-stretch md:flex-row">
-      <img
-        alt="Artwork"
-        className="rounded-panel pointer-events-none aspect-square w-full select-none object-cover md:max-w-[136px]"
-        loading="lazy"
-        src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=400&fit=crop"
-      />
-      <div className="flex flex-1 flex-col gap-3">
-        <div className="gap-1">
-          <h3 className="text-xl font-semibold">Abstract Modern Art Canvas</h3>
-          <p className="text-sm text-muted-foreground">
-            This stunning contemporary piece represents the convergence of traditional artistic techniques with modern expression. Created using premium oil paints on gallery-wrapped canvas, the artwork features vibrant color gradients and dynamic brushwork that capture movement and emotion. Perfect for sophisticated living spaces, corporate environments, or art collectors seeking distinctive pieces that command attention while maintaining elegant subtlety.
-          </p>
-        </div>
-        <div className="mt-auto flex w-full flex-row items-center justify-between">
-          <div className="flex flex-col">
-            <span
-              aria-label="Price: 8,750 US dollars"
-              className="text-foreground text-sm font-medium"
-            >
-              $8,750
-            </span>
-            <span aria-label="Available stock: 2 units" className="text-muted text-xs">
-              2 available
-            </span>
+          <div className="relative z-10">
+            <Card.Title className="text-xl font-semibold tracking-tight text-white drop-shadow-lg line-clamp-1">
+              Malibu Beach Detached
+            </Card.Title>
+            <Card.Description className="text-sm text-white/85 drop-shadow-md flex items-center gap-1 line-clamp-1">
+              <Icon icon="lucide:map-pin" className="h-3.5 w-3.5" />
+              Malibu, CA • Single Family Detached
+            </Card.Description>
           </div>
-          <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-3">
-            View Details
-          </button>
         </div>
-      </div>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Item with extended description to test text wrapping and layout behavior.",
-      },
-    },
-  },
-};
+      </Card.Header>
 
-export const SaleItem: Story = {
-  render: () => (
-    <div className="flex w-full items-stretch md:flex-row">
-      <div className="relative">
-        <img
-          alt="Designer Bag"
-          className="rounded-panel pointer-events-none aspect-square w-full select-none object-cover md:max-w-[136px]"
-          loading="lazy"
-          src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop"
-        />
-        <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
-          -40% OFF
-        </div>
-      </div>
-      <div className="flex flex-1 flex-col gap-3">
-        <div className="gap-1">
-          <h3 className="text-xl font-semibold">Designer Leather Handbag</h3>
-          <p className="text-sm text-muted-foreground">
-            Luxury Italian craftsmanship meets contemporary design—premium leather with gold hardware and spacious interior.
-          </p>
-        </div>
-        <div className="mt-auto flex w-full flex-row items-center justify-between">
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span
-                aria-label="Original price: 3,200 US dollars"
-                className="text-gray-400 text-sm line-through"
-              >
-                $3,200
+      {/* Content area with gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none" />
+
+      {/* Frosted Glass Footer - Maturity & Button */}
+      <Card.Footer className="absolute bottom-0 left-0 right-0 z-10 p-4 backdrop-blur-xl bg-black/30 dark:bg-black/30 border-t border-white/10 shadow-lg flex-row items-center justify-between">
+        <div className="relative w-full">
+          {/* Inner glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent rounded-lg pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-between w-full">
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-white drop-shadow-md">
+                Maturity
               </span>
-              <span
-                aria-label="Sale price: 1,920 US dollars"
-                className="text-red-500 text-sm font-bold"
-              >
-                $1,920
+              <span className="text-xs text-white/85 drop-shadow-sm">
+                01/01/2026
               </span>
             </div>
-            <span aria-label="Available stock: 5 units" className="text-muted text-xs">
-              5 available
-            </span>
+
+            <Button
+              variant="secondary"
+              className="h-8 px-3 rounded-lg backdrop-blur-md bg-white/25 dark:bg-white/20 border border-white/30 text-white font-semibold shadow-lg hover:bg-white/35 active:scale-[0.98] transition text-xs"
+            >
+              View details
+            </Button>
           </div>
-          <button className="bg-red-500 text-white hover:bg-red-600 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-3">
-            Buy Now - Limited
-          </button>
         </div>
-      </div>
-    </div>
+      </Card.Footer>
+    </Card.Root>
   ),
   parameters: {
     docs: {
       description: {
-        story: "Sale item with discount badge and original/sale price display.",
+        story:
+          "Mobile-optimized card with frosted glass nu-morphic design. Closer-to-square aspect ratio, absolute header/footer overlays, refined typography and spacing, and improved readability using gradients and glass effects on HeroUI Card components.",
       },
     },
   },
 };
 
-export const MinimalInfo: Story = {
+export const MobileGlassCardSmall: Story = {
+  args: {},
   render: () => (
-    <div className="flex w-full items-stretch md:flex-row">
+    <Card.Root
+      variant="flat"
+      className="relative w-64 min-w-[256px] h-80 min-h-[320px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-white/10"
+    >
+      {/* Background Image */}
       <img
-        alt="Simple Product"
-        className="rounded-panel pointer-events-none aspect-square w-full select-none object-cover md:max-w-[136px]"
+        alt="Malibu Beach Detached thumbnail"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
         loading="lazy"
-        src="https://images.unsplash.com/photo-1574370224976-fc1548d7674e?w=400&h=400&fit=crop"
+        src="/house.jpg"
       />
-      <div className="flex flex-1 flex-col gap-3">
-        <div className="gap-1">
-          <h3 className="text-xl font-semibold">Minimalist Desk Lamp</h3>
-          <p className="text-sm text-muted-foreground">
-            Clean design, warm light.
-          </p>
-        </div>
-        <div className="mt-auto flex w-full flex-row items-center justify-between">
-          <div className="flex flex-col">
-            <span
-              aria-label="Price: 89 US dollars"
-              className="text-foreground text-sm font-medium"
-            >
-              $89
-            </span>
-            <span aria-label="Available stock: 50 units" className="text-muted text-xs">
-              50 available
-            </span>
+
+      {/* Frosted Glass Header - Title & Location */}
+      <Card.Header className="z-10 gap-1 p-3 backdrop-blur rounded-2xl bg-black/20 shadow-lg">
+        <div className="relative w-full">
+          {/* Inner glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-b/30 from-white/10 to-transparent rounded-lg pointer-events-none" />
+
+          <div className="relative z-10">
+            <Card.Title className="text-lg font-semibold tracking-tight text-white drop-shadow-lg line-clamp-1">
+              Malibu Beach Detached
+            </Card.Title>
+            <Card.Description className="text-xs text-white/85 drop-shadow-md flex items-center justify-start ">
+              <Icon icon="lucide:map-pin" className="h-3 w-3" />
+              Malibu, CA • Single Family
+            </Card.Description>
           </div>
-          <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-3">
-            Add to Cart
-          </button>
         </div>
+      </Card.Header>
+
+      {/* Content area with gradient overlay */}
+      {/*<div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none" />*/}
+
+      {/* Frosted Glass Footer - Maturity & Button */}
+      <Card.Footer className="absolute bottom-0 left-0 right-0 z-10 p-3 flex-row items-center justify-between">
+        <div className="relative w-full">
+          {/* Inner glow effect */}
+          <div className="absolute -inset-2 backdrop-blur bg-black/20 rounded-full pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-between w-full">
+            <div className="flex flex-col">
+              <span className="text-xs font-medium text-white drop-shadow-md">
+                Maturity
+              </span>
+              <span className="text-xs text-white/85 drop-shadow-sm">
+                01/01/2026
+              </span>
+            </div>
+
+            <Button
+              variant="secondary"
+              className="h-8 px-3 rounded-lg backdrop-blur-md bg-white/25 dark:bg-white/20 border border-white/30 text-white font-semibold shadow-lg hover:bg-white/35 active:scale-[0.98] transition text-xs"
+            >
+              View details
+            </Button>
+          </div>
+        </div>
+      </Card.Footer>
+      <div className="text-muted-foreground text-sm grid grid-cols-3 gap-2 align-middle justify-center items-center">
+        <span className="flex items-center">
+          <Icon icon="lucide:percent-circle" className="h-4 w-4" />
+          <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+            <p className="text-xs">LTV</p>
+            <p className="text-sm font-bold">80</p>
+          </span>
+        </span>
+        <span className="flex items-center">
+          <Icon icon="lucide:percent-circle" className="h-4 w-4" />
+          <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+            <p className="text-xs">APR</p>
+            <p className="text-sm font-bold">9.5</p>
+          </span>
+        </span>
+        <span className="flex items-center">
+          <Icon icon="lucide:circle-dollar-sign" className="h-4 w-4" />
+          <span className="flex flex-col ml-2 py-1 justify-around align-middle">
+            <p className="text-xs">Principal</p>
+            <p className="text-sm font-bold">350K</p>
+          </span>
+        </span>
       </div>
-    </div>
+    </Card.Root>
   ),
   parameters: {
     docs: {
       description: {
-        story: "Minimal information display with short description and simple pricing.",
+        story:
+          "Smaller mobile glass card variant for compact spaces, maintaining all styling but with reduced dimensions and typography.",
       },
     },
   },
 };
 
-export const RentalProperty: Story = {
+export const MobileGlassCardLarge: Story = {
+  args: {},
   render: () => (
-    <div className="flex w-full items-stretch md:flex-row">
+    <Card.Root
+      variant="flat"
+      className="relative w-[400px] min-w-[400px] h-[500px] min-h-[500px] overflow-hidden rounded-2xl shadow-xl ring-1 ring-white/10"
+    >
+      {/* Background Image */}
       <img
-        alt="Vacation Rental"
-        className="rounded-panel pointer-events-none aspect-square w-full select-none object-cover md:max-w-[136px]"
+        alt="Malibu Beach Detached thumbnail"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
         loading="lazy"
-        src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=400&fit=crop"
+        src="/house.jpg"
       />
-      <div className="flex flex-1 flex-col gap-3">
-        <div className="gap-1">
-          <h3 className="text-xl font-semibold">Oceanview Beach House</h3>
-          <p className="text-sm text-muted-foreground">
-            Stunning beachfront property with panoramic ocean views—perfect for romantic getaways and family vacations.
-          </p>
-        </div>
-        <div className="mt-auto flex w-full flex-row items-center justify-between">
-          <div className="flex flex-col">
-            <span
-              aria-label="Price: 450 US dollars per night"
-              className="text-foreground text-sm font-medium"
-            >
-              $450/night
-            </span>
-            <span aria-label="Available dates: 12 nights" className="text-muted text-xs">
-              12 nights available
-            </span>
+
+      {/* Frosted Glass Header - Title & Location */}
+      <Card.Header className="absolute top-0 left-0 right-0 z-10 gap-1 p-5 backdrop-blur-xl bg-black/30 dark:bg-black/30 border-b border-white/10 shadow-lg">
+        <div className="relative w-full">
+          {/* Inner glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent rounded-lg pointer-events-none" />
+
+          <div className="relative z-10">
+            <Card.Title className="text-2xl font-semibold tracking-tight text-white drop-shadow-lg line-clamp-1">
+              Malibu Beach Detached
+            </Card.Title>
+            <Card.Description className="text-base text-white/85 drop-shadow-md flex items-center gap-1 line-clamp-1">
+              <Icon icon="lucide:map-pin" className="h-4 w-4" />
+              Malibu, CA • Single Family Detached
+            </Card.Description>
           </div>
-          <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-3">
-            Book Now
-          </button>
+        </div>
+      </Card.Header>
+
+      {/* Content area with financial metrics */}
+      <div className="absolute inset-x-4 top-32 z-10">
+        <div className="backdrop-blur-md bg-white/15 dark:bg-white/10 rounded-xl p-4 border border-white/20 shadow-lg">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="text-center">
+              <Icon
+                icon="lucide:percent-circle"
+                className="h-5 w-5 mx-auto text-white/90 mb-1"
+              />
+              <p className="text-xs text-white/70">LTV</p>
+              <p className="text-lg font-bold text-white drop-shadow-md">80</p>
+            </div>
+            <div className="text-center">
+              <Icon
+                icon="lucide:percent-circle"
+                className="h-5 w-5 mx-auto text-white/90 mb-1"
+              />
+              <p className="text-xs text-white/70">APR</p>
+              <p className="text-lg font-bold text-white drop-shadow-md">9.5</p>
+            </div>
+            <div className="text-center">
+              <Icon
+                icon="lucide:circle-dollar-sign"
+                className="h-5 w-5 mx-auto text-white/90 mb-1"
+              />
+              <p className="text-xs text-white/70">Principal</p>
+              <p className="text-lg font-bold text-white drop-shadow-md">
+                350K
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Gradient overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+      {/* Frosted Glass Footer - Maturity & Button */}
+      <Card.Footer className="absolute bottom-0 left-0 right-0 z-10 p-5 backdrop-blur-xl bg-black/30 dark:bg-black/30 border-t border-white/10 shadow-lg flex-row items-center justify-between">
+        <div className="relative w-full">
+          {/* Inner glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent rounded-lg pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-between w-full">
+            <div className="flex flex-col">
+              <span className="text-base font-medium text-white drop-shadow-md">
+                Maturity
+              </span>
+              <span className="text-sm text-white/85 drop-shadow-sm">
+                01/01/2026
+              </span>
+            </div>
+
+            <Button
+              variant="secondary"
+              className="h-10 px-6 rounded-xl backdrop-blur-md bg-white/25 dark:bg-white/20 border border-white/30 text-white font-semibold shadow-lg hover:bg-white/35 active:scale-[0.98] transition"
+            >
+              View details
+            </Button>
+          </div>
+        </div>
+      </Card.Footer>
+    </Card.Root>
   ),
   parameters: {
     docs: {
       description: {
-        story: "Rental property with nightly pricing and availability in nights.",
+        story:
+          "Large mobile glass card variant with expanded content area, financial metrics display, and enhanced typography for premium devices and tablets.",
       },
     },
   },
