@@ -3,8 +3,10 @@
 import { Button, Card, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { Badge, badgeVariants } from "@/components/ui/badge";
+import Link from "next/link";
 
 export interface HorizontalProps {
+  id?: string;
   title?: string;
   address?: string;
   imageSrc?: string;
@@ -16,6 +18,7 @@ export interface HorizontalProps {
 }
 
 export function Horizontal({
+  id,
   title = "Malibu Beach Detached",
   address = "Malibu, CA",
   imageSrc = "/house.jpg",
@@ -25,7 +28,7 @@ export function Horizontal({
   propertyType,
   maturityDate = "01/01/2026",
 }: HorizontalProps = {}) {
-  return (
+  const CardContent = (
     <Card.Root
       variant="flat"
       className="w-full items-stretch md:flex-row hover:scale-105 hover:shadow-lg hover:shadow-black/10 transition-all duration-300"
@@ -103,4 +106,15 @@ export function Horizontal({
       </div>
     </Card.Root>
   );
+
+  // Wrap in Link if id is provided, otherwise return card directly
+  if (id) {
+    return (
+      <Link href={`/listings/${id}`} className="block">
+        {CardContent}
+      </Link>
+    );
+  }
+
+  return CardContent;
 }
