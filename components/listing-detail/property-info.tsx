@@ -1,4 +1,4 @@
-import { Card, Chip } from "@heroui/react";
+import { Card, CardContent, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
 interface PropertyInfoProps {
@@ -49,10 +49,10 @@ export function PropertyInfo({ title, address, investorBrief, status }: Property
 					<Chip
 						color={statusInfo.color}
 						variant="flat"
-						startContent={<Icon icon={statusInfo.icon} className="h-4 w-4" />}
-						className="flex-shrink-0"
+						className="flex-shrink-0 flex items-center gap-1"
 					>
-						{statusInfo.label}
+						<Icon icon={statusInfo.icon} className="h-4 w-4" aria-hidden="true" />
+						<span>{statusInfo.label}</span>
 					</Chip>
 				</div>
 
@@ -68,7 +68,7 @@ export function PropertyInfo({ title, address, investorBrief, status }: Property
 			{/* Investor Brief */}
 			{investorBrief && (
 				<Card.Root>
-					<Card.Body>
+					<CardContent>
 						<div className="space-y-3">
 							<div className="flex items-center gap-2">
 								<Icon icon="lucide:file-text" className="h-5 w-5 text-primary" />
@@ -78,7 +78,7 @@ export function PropertyInfo({ title, address, investorBrief, status }: Property
 								<p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">{investorBrief}</p>
 							</div>
 						</div>
-					</Card.Body>
+					</CardContent>
 				</Card.Root>
 			)}
 		</div>

@@ -1,4 +1,4 @@
-import { Card, CardBody, Chip } from "@heroui/react";
+import { Card, CardContent, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -69,8 +69,8 @@ export function ComparableProperties({ comparables }: ComparablePropertiesProps)
 
 					return (
 						<Link key={comp._id} href={`/listings/${comp._id}`}>
-							<Card className="group cursor-pointer transition-shadow hover:shadow-lg">
-								<CardBody className="p-0">
+							<Card.Root className="group cursor-pointer transition-shadow hover:shadow-lg">
+								<CardContent className="p-0">
 									{/* Image */}
 									<div className="relative aspect-[16/10] w-full overflow-hidden rounded-t-lg">
 										{primaryImage ? (
@@ -127,8 +127,8 @@ export function ComparableProperties({ comparables }: ComparablePropertiesProps)
 											</div>
 										</div>
 									</div>
-								</CardBody>
-							</Card>
+								</CardContent>
+							</Card.Root>
 						</Link>
 					);
 				})}

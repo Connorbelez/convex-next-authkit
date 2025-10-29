@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardContent } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { format, parseISO } from "date-fns";
 
@@ -28,6 +28,26 @@ const methodLabels: Record<string, string> = {
 };
 
 export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
+	// Handle case where appraisal is undefined
+	if (!appraisal) {
+		return (
+			<div className="space-y-4">
+				<div className="flex items-center gap-2">
+					<Icon icon="lucide:file-x" className="h-6 w-6 text-gray-400" />
+					<h2 className="text-2xl font-bold text-gray-500">No Appraisal Data Available</h2>
+				</div>
+				<Card.Root>
+					<CardContent className="p-8 text-center">
+						<p className="text-gray-500">No appraisal information available for this property.</p>
+						<div className="mt-4 text-sm text-gray-400">
+							Current Value: {formatCurrency(currentValue)}
+						</div>
+					</CardContent>
+				</Card.Root>
+			</div>
+		);
+	}
+
 	const appraisalDate = parseISO(appraisal.date);
 	const valueChange = currentValue - appraisal.value;
 	const valueChangePercent = (valueChange / appraisal.value) * 100;
@@ -42,8 +62,8 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 
 			<div className="grid gap-4 md:grid-cols-2">
 				{/* Appraised Value Card */}
-				<Card>
-					<CardBody className="p-4">
+				<Card.Root>
+					<CardContent className="p-4">
 						<div className="flex items-start gap-3">
 							<div className="rounded-lg bg-blue-100 p-2 text-blue-600 dark:bg-blue-900/30">
 								<Icon icon="lucide:clipboard-check" className="h-5 w-5" />
@@ -58,12 +78,12 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 								</p>
 							</div>
 						</div>
-					</CardBody>
-				</Card>
+					</CardContent>
+				</Card.Root>
 
 				{/* Value Change Card */}
-				<Card>
-					<CardBody className="p-4">
+				<Card.Root>
+					<CardContent className="p-4">
 						<div className="flex items-start gap-3">
 							<div
 								className={`rounded-lg p-2 ${isPositiveChange ? "bg-green-100 text-green-600 dark:bg-green-900/30" : "bg-red-100 text-red-600 dark:bg-red-900/30"}`}
@@ -91,12 +111,12 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 								</p>
 							</div>
 						</div>
-					</CardBody>
-				</Card>
+					</CardContent>
+				</Card.Root>
 
 				{/* Appraisal Details Card - Spans full width */}
-				<Card className="md:col-span-2">
-					<CardBody className="p-4">
+				<Card.Root className="md:col-span-2">
+					<CardContent className="p-4">
 						<div className="grid gap-4 sm:grid-cols-2">
 							<div className="flex items-start gap-3">
 								<Icon icon="lucide:user" className="mt-0.5 h-5 w-5 text-gray-500" />
@@ -116,8 +136,8 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 								</div>
 							</div>
 						</div>
-					</CardBody>
-				</Card>
+					</CardContent>
+				</Card.Root>
 			</div>
 		</div>
 	);

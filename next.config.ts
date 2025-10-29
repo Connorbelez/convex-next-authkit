@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
         root: process.cwd(),
     },
     cacheComponents: true,
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'picsum.photos',
+            },
+        ],
+    },
 };
 
 export default nextConfig;

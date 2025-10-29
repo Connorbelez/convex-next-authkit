@@ -33,13 +33,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: undefined as never,
   render: () => (
-    <Horizontal
-      ariaLabel="Open details"
-      onAction={() => {
-        // eslint-disable-next-line no-console
-        console.log("Horizontal card action clicked");
-      }}
-    />
+    <Horizontal />
   ),
   parameters: {
     docs: {

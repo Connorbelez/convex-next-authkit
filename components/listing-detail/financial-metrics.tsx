@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@heroui/react";
+import { Card, CardContent } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { differenceInDays, format, parseISO } from "date-fns";
 
@@ -36,8 +36,8 @@ interface MetricCardProps {
 
 function MetricCard({ icon, label, value, sublabel, colorClass = "text-primary" }: MetricCardProps) {
 	return (
-		<Card>
-			<CardBody className="p-4">
+		<Card.Root>
+			<CardContent className="p-4">
 				<div className="flex items-start gap-3">
 					<div className={`rounded-lg bg-primary/10 p-2 ${colorClass}`}>
 						<Icon icon={icon} className="h-5 w-5" />
@@ -48,8 +48,8 @@ function MetricCard({ icon, label, value, sublabel, colorClass = "text-primary" 
 						{sublabel && <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">{sublabel}</p>}
 					</div>
 				</div>
-			</CardBody>
-		</Card>
+			</CardContent>
+		</Card.Root>
 	);
 }
 
@@ -105,8 +105,8 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 				<MetricCard icon="lucide:clock" label="Loan Term" value={loanTermText} />
 
 				{/* Maturity Date - Takes 2 columns on larger screens */}
-				<Card className="sm:col-span-2 lg:col-span-3 xl:col-span-3">
-					<CardBody className="p-4">
+				<Card.Root className="sm:col-span-2 lg:col-span-3 xl:col-span-3">
+					<CardContent className="p-4">
 						<div className="flex items-start gap-3">
 							<div className="rounded-lg bg-orange-100 p-2 text-orange-600 dark:bg-orange-900/30">
 								<Icon icon="lucide:calendar-check" className="h-5 w-5" />
@@ -132,8 +132,8 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 								</div>
 							</div>
 						</div>
-					</CardBody>
-				</Card>
+					</CardContent>
+				</Card.Root>
 			</div>
 		</div>
 	);

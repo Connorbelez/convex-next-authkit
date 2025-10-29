@@ -128,7 +128,10 @@ export function ListingMap<T extends LatLng>({
     markersRef.current.forEach(({ marker, popup, root }) => {
       marker.remove();
       popup?.remove();
-      root?.unmount();
+      // Defer unmount to avoid race condition with React rendering
+      if (root) {
+        queueMicrotask(() => root.unmount());
+      }
     });
     markersRef.current = [];
 

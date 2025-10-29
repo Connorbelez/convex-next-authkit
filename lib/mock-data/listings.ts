@@ -69,29 +69,30 @@ const PROPERTY_TITLES = [
 ];
 
 const CITIES = [
-	{ name: "Malibu", state: "CA", lat: 34.0259, lng: -118.7798 },
-	{ name: "Miami", state: "FL", lat: 25.7617, lng: -80.1918 },
-	{ name: "Austin", state: "TX", lat: 30.2672, lng: -97.7431 },
-	{ name: "Seattle", state: "WA", lat: 47.6062, lng: -122.3321 },
-	{ name: "Denver", state: "CO", lat: 39.7392, lng: -104.9903 },
-	{ name: "Boston", state: "MA", lat: 42.3601, lng: -71.0589 },
-	{ name: "Portland", state: "OR", lat: 45.5152, lng: -122.6784 },
-	{ name: "Charleston", state: "SC", lat: 32.7765, lng: -79.9311 },
-	{ name: "San Diego", state: "CA", lat: 32.7157, lng: -117.1611 },
-	{ name: "Nashville", state: "TN", lat: 36.1627, lng: -86.7816 },
+	// Toronto and surrounding areas
+	{ name: "Downtown Toronto", state: "ON", lat: 43.6532, lng: -79.3832 },
+	{ name: "North York", state: "ON", lat: 43.7615, lng: -79.4111 },
+	{ name: "Scarborough", state: "ON", lat: 43.7731, lng: -79.2578 },
+	{ name: "Etobicoke", state: "ON", lat: 43.6205, lng: -79.5132 },
+	{ name: "Mississauga", state: "ON", lat: 43.5890, lng: -79.6441 },
+	{ name: "Markham", state: "ON", lat: 43.8561, lng: -79.3370 },
+	{ name: "Vaughan", state: "ON", lat: 43.8361, lng: -79.4983 },
+	{ name: "Richmond Hill", state: "ON", lat: 43.8828, lng: -79.4403 },
+	{ name: "Oakville", state: "ON", lat: 43.4675, lng: -79.6877 },
+	{ name: "Burlington", state: "ON", lat: 43.3255, lng: -79.7990 },
 ];
 
 const STREETS = [
-	"Pacific Coast Highway",
-	"Ocean Drive",
-	"Main Street",
-	"Elm Avenue",
-	"Maple Boulevard",
-	"Park Lane",
-	"Beach Road",
-	"Mountain View Drive",
-	"Lake Shore Boulevard",
-	"Sunset Avenue",
+	"Yonge Street",
+	"Bay Street",
+	"King Street",
+	"Queen Street",
+	"Bloor Street",
+	"Dundas Street",
+	"College Street",
+	"Spadina Avenue",
+	"Avenue Road",
+	"St. Clair Avenue",
 ];
 
 const APPRAISER_NAMES = [
@@ -142,7 +143,7 @@ export function generateListing(id: string): MockListing {
 	const cityData = randomChoice(CITIES, id);
 	const streetNumber = randomInt(100, 9999, `${id}-street`);
 	const streetName = randomChoice(STREETS, `${id}-name`);
-	const purchasePrice = randomInt(500000, 5000000, `${id}-purchase`) * 1000;
+	const purchasePrice = randomInt(500000, 5000000, `${id}-purchase`);
 	const appreciationRate = randomFloat(0.95, 1.15, `${id}-appreciation`);
 	const currentValue = Math.round(purchasePrice * appreciationRate);
 	const loanTermMonths = randomChoice([180, 240, 300, 360], `${id}-term`);
@@ -176,8 +177,8 @@ export function generateListing(id: string): MockListing {
 			street: `${streetNumber} ${streetName}`,
 			city: cityData.name,
 			state: cityData.state,
-			zip: `${randomInt(10000, 99999, `${id}-zip`)}`,
-			country: "USA",
+			zip: `M${randomInt(1, 9, `${id}-zip1`)}${String.fromCharCode(65 + randomInt(0, 25, `${id}-zip2`))} ${randomInt(1, 9, `${id}-zip3`)}${String.fromCharCode(65 + randomInt(0, 25, `${id}-zip4`))}${randomInt(0, 9, `${id}-zip5`)}`,
+			country: "Canada",
 		},
 		location: {
 			// Add slight random offset to base coordinates

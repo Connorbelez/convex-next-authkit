@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
+import Header from "@/components/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -33,7 +35,11 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<Suspense fallback={<div>Loading...</div>}>
-					<ConvexClientProvider>{children}</ConvexClientProvider>
+					<ConvexClientProvider>
+						<Header />
+						<main>{children}</main>
+						<Toaster />
+					</ConvexClientProvider>
 				</Suspense>
 			</body>
 		</html>

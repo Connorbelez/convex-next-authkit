@@ -1,0 +1,138 @@
+import { generateMultipleListings } from "@/lib/mock-data/generate-multiple-listings";
+import type { MockListing } from "@/lib/mock-data/listings";
+import type { FilterableItem } from "@/components/ListingGridShell";
+import { ListingsClient } from "./listings-client";
+import { BreadcrumbNav } from "@/components/breadcrumb-nav";
+import { Metadata } from "next";
+import { headers } from "next/headers";
+
+// Extended type with required fields for rendering
+interface ListingItem extends FilterableItem {
+	id: string;
+	imageSrc: string;
+}
+
+export const metadata: Metadata = {
+	title: "Investment Listings",
+	description: "Browse available real estate investment opportunities",
+};
+
+// Mortgage types for random assignment - must match listing-filters.ts
+const MORTGAGE_TYPES = ["First", "Second", "Other"] as const;
+
+// Property types for random assignment - must match listing-filters.ts
+const PROPERTY_TYPES = [
+	"Detached Home",
+	"Duplex",
+	"Triplex",
+	"Apartment",
+	"Condo",
+	"Cottage",
+	"Townhouse",
+	"Commercial",
+	"Mixed-Use",
+] as const;
+
+/**
+ * Seeded random selection helper
+ */
+function selectFromArray<T>(arr: readonly T[], seed: string): T {
+	let hash = 0;
+	for (let i = 0; i < seed.length; i++) {
+		hash = (hash << 5) - hash + seed.charCodeAt(i);
+		hash = hash & hash;
+	}
+	const x = Math.sin(hash) * 10000;
+	const random = x - Math.floor(x);
+	return arr[Math.floor(random * arr.length)];
+}
+
+/**
+ * Seeded random number generator for consistent results
+ */
+function seededRandomNumber(seed: string, min: number, max: number): number {
+	let hash = 0;
+	for (let i = 0; i < seed.length; i++) {
+		hash = (hash << 5) - hash + seed.charCodeAt(i);
+		hash = hash & hash;
+	}
+	const x = Math.sin(hash) * 10000;
+	const random = x - Math.floor(x);
+	return Math.floor(random * (max - min + 1)) + min;
+}
+
+/**
+ * Transform MockListing to ListingItem for ListingGridShell
+ */
+function transformListing(listing: MockListing): ListingItem {
+	const { financials, location, address, images } = listing;
+
+	// Calculate LTV (Loan-to-Value ratio) within expected bounds (30-80%)
+	// LTV = (Loan Amount / Property Value) * 100
+	// Generate a realistic LTV within filter bounds for better filtering UX
+	const ltv = seededRandomNumber(`${listing._id}-ltv`, 30, 80);
+
+	// Select mortgage and property types based on listing ID for consistency
+	const mortgageType = selectFromArray(MORTGAGE_TYPES, listing._id) as string;
+	const propertyType = selectFromArray(PROPERTY_TYPES, listing._id) as string;
+
+	return {
+		id: listing._id,
+		title: listing.title,
+		address: `${address.city}, ${address.state}`,
+		imageSrc: images.length > 0 ? images[0].url : "/house.jpg",
+		lat: location.lat,
+		lng: location.lng,
+		ltv,
+		apr: financials.interestRate,
+		principal: financials.currentValue,
+		mortgageType,
+		propertyType,
+		maturityDate: new Date(financials.maturityDate),
+	};
+}
+
+/**
+ * Listings page - displays all available investment properties
+ */
+export default async function ListingsPage() {
+	// Access headers to opt-out of static rendering (required for new Date() in mock data)
+	await headers();
+
+	// Generate 50 mock listings for Toronto area
+	const mockListings = generateMultipleListings(50);
+
+	// Transform to ListingItem format
+	const listings = mockListings.map(transformListing);
+
+	console.log(`Generated ${listings.length} listings in Toronto area`);
+	console.log("Sample listing:", JSON.stringify(listings[0], null, 2));
+	console.log("LTV range:", Math.min(...listings.map((l) => l.ltv!)), "-", Math.max(...listings.map((l) => l.ltv!)));
+	console.log("Principal range:", Math.min(...listings.map((l) => l.principal!)), "-", Math.max(...listings.map((l) => l.principal!)));
+	console.log("APR range:", Math.min(...listings.map((l) => l.apr!)), "-", Math.max(...listings.map((l) => l.apr!)));
+
+	return (
+		<div className="min-h-screen">
+			<div className="container mx-auto px-4 py-6">
+				{/* Breadcrumb Navigation */}
+				<BreadcrumbNav
+					items={[{ label: "Listings" }]}
+					className="mb-6"
+				/>
+
+				<div className="mb-6">
+					<h1 className="text-3xl font-bold">Investment Listings</h1>
+					<p className="text-muted-foreground mt-2">
+						Browse and filter available real estate investment opportunities
+					</p>
+					<p className="text-sm text-muted-foreground mt-1">
+						Showing {listings.length} properties in the Greater Toronto Area
+					</p>
+				</div>
+
+				<ListingsClient listings={listings} />
+			</div>
+		</div>
+	);
+}
+

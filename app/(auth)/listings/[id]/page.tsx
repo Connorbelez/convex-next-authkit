@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { generateListing, generatePayments, generateComparables } from "@/lib/mock-data/listings";
+import { BreadcrumbNav } from "@/components/breadcrumb-nav";
 import {
 	ImageCarousel,
 	PropertyMap,
@@ -9,6 +10,7 @@ import {
 	PaymentHistory,
 	AppraisalData,
 	ComparableProperties,
+	RequestListingSection,
 } from "@/components/listing-detail";
 
 interface ListingDetailPageProps {
@@ -52,6 +54,15 @@ export default async function ListingDetailPage({ params }: ListingDetailPagePro
 
 	return (
 		<div className="container mx-auto max-w-7xl px-4 py-8">
+			{/* Breadcrumb Navigation */}
+			<BreadcrumbNav
+				items={[
+					{ label: "Listings", href: "/listings" },
+					{ label: listing.title }
+				]}
+				className="mb-8"
+			/>
+
 			{/* Property Info */}
 			<div className="mb-8">
 				<PropertyInfo
@@ -91,6 +102,9 @@ export default async function ListingDetailPage({ params }: ListingDetailPagePro
 					<ComparableProperties comparables={comparables} />
 				</div>
 			)}
+
+			{/* Request Listing Section */}
+			<RequestListingSection listing={listing} />
 		</div>
 	);
 }

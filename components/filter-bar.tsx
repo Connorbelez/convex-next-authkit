@@ -64,7 +64,7 @@ export function FilterBar({ filters, onFiltersChange, items }: FilterBarProps) {
     safeFilters.maturityDate !== undefined;
 
   return (
-    <div className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-[100] flex flex-col justify-center gap-4 px-4 py-4">
+    <div className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-[10] flex flex-col justify-center gap-4 px-4 py-4">
       <div className="flex flex-wrap items-center justify-start gap-2 md:flex-nowrap">
         <div className="relative w-full md:w-64">
           <Icon

@@ -97,11 +97,11 @@ export function PropertyMap({ location, address }: PropertyMapProps) {
 			setMapError("Failed to initialize map");
 			setIsLoading(false);
 		}
-	}, [location, address, isLoading]);
+	}, [location.lat, location.lng, address.street, address.city, address.state]);
 
 	if (mapError) {
 		return (
-			<div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 lg:aspect-auto lg:h-full">
+			<div className="relative aspect-4/3 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 lg:aspect-auto lg:h-full">
 				<div className="flex h-full flex-col items-center justify-center p-6 text-center">
 					<Icon icon="lucide:map-pin-off" className="h-12 w-12 text-gray-400" />
 					<p className="mt-3 font-medium text-gray-700 dark:text-gray-300">Map Unavailable</p>
@@ -117,7 +117,7 @@ export function PropertyMap({ location, address }: PropertyMapProps) {
 	}
 
 	return (
-		<div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg lg:aspect-auto lg:h-full">
+		<div className="relative aspect-4/3 w-full overflow-hidden rounded-lg lg:aspect-auto lg:h-full">
 			{isLoading && (
 				<div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
 					<div className="flex flex-col items-center">
