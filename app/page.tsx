@@ -1,17 +1,19 @@
 "use client";
 
+import { Button } from "@heroui/react";
+import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import type { User } from "@workos-inc/node";
 import {
 	Authenticated,
 	Unauthenticated,
 	useMutation,
 	useQuery,
 } from "convex/react";
-import { api } from "../convex/_generated/api";
 import Link from "next/link";
-import { useAuth } from "@workos-inc/authkit-nextjs/components";
-import type { User } from "@workos-inc/node";
-import { Button } from "@heroui/react";
+import { ViewTransition } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ResourceLinks } from "../components/ResourceLinks";
+import { api } from "../convex/_generated/api";
 
 export default function Home() {
 	const { user, signOut } = useAuth();
@@ -67,7 +69,16 @@ function Content() {
 	const addNumber = useMutation(api.myFunctions.addNumber);
 
 	if (viewer === undefined || numbers === undefined) {
-		return <div className="mx-auto"></div>;
+		return (
+			<div className="flex flex-col gap-8 max-w-lg mx-auto">
+				<Skeleton className="h-6 w-48" />
+				<Skeleton className="h-6 w-full" />
+				<Skeleton className="h-10 w-40" />
+				<Skeleton className="h-6 w-full" />
+				<Skeleton className="h-6 w-3/4" />
+				<Skeleton className="h-6 w-full" />
+			</div>
+		);
 	}
 
 	return (
@@ -106,13 +117,13 @@ function Content() {
 				</code>{" "}
 				to change your frontend
 			</p>
-			<p>
-				See the{" "}
+			<p>See the </p>
+			<ViewTransition>
 				<Link href="/server" className="underline hover:no-underline">
 					/server route
 				</Link>{" "}
 				for an example of loading data in a server component
-			</p>
+			</ViewTransition>
 			<ResourceLinks />
 		</div>
 	);

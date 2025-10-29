@@ -67,6 +67,35 @@ This app uses WorkOS AuthKit for authentication. Key features:
 - **Middleware protection**: Routes are protected using Next.js middleware
 - **Client and server hooks**: `useAuth()` for client components, `withAuth()` for server components
 
+## Features
+
+### Listing Detail Page
+
+View comprehensive property investment details at `/listings/[id]`:
+
+- **Image carousel** with keyboard navigation and thumbnails
+- **Interactive Mapbox map** centered on property location
+- **Financial metrics** including purchase price, current value, monthly payment, interest rate, loan term, and maturity countdown
+- **Payment history** timeline with status indicators
+- **Appraisal data** with value change comparison
+- **Comparable properties** showing similar investments nearby
+
+**Testing the feature:**
+
+1. Add Mapbox token to `.env.local`:
+   ```bash
+   NEXT_PUBLIC_MAPBOX_TOKEN=pk.your_mapbox_access_token_here
+   ```
+
+2. Seed sample data:
+   ```bash
+   npx convex run seed:seedListingDetailData
+   ```
+
+3. Navigate to one of the created listings (IDs returned by seed function)
+
+For detailed testing instructions, see [docs/listing-detail-testing.md](docs/listing-detail-testing.md)
+
 ## Learn more
 
 To learn more about developing your project with Convex, check out:

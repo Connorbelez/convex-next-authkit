@@ -16,6 +16,7 @@ export type Logger = {
 
 let adapter: Logger | null = null;
 
+
 const consoleAdapter: Logger = {
     trace: (m: string | Error, meta?: LogMeta) => console.debug('[trace]', m, meta),
     debug: (m: string | Error, meta?: LogMeta) => console.debug('\u001b[36m🐞 [debug]\u001b[0m', m, meta),

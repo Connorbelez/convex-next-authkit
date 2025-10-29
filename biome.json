@@ -11,6 +11,7 @@
 			"app",
 			"app/",
 			"app/*",
+
 			"!node_modules/",
 			"!dist/",
 			"!.convex/",
@@ -19,10 +20,7 @@
 			"!convex/_generated/*"
 		]
 	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab"
-	},
+
 	"linter": {
 		"enabled": true,
 		"rules": {

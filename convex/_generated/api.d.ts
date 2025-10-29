@@ -12,6 +12,7 @@ import type * as http from "../http.js";
 import type * as logger from "../logger.js";
 import type * as myFunctions from "../myFunctions.js";
 import type * as organizations from "../organizations.js";
+import type * as profile from "../profile.js";
 import type * as roles from "../roles.js";
 import type * as users from "../users.js";
 import type * as workos from "../workos.js";
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   logger: typeof logger;
   myFunctions: typeof myFunctions;
   organizations: typeof organizations;
+  profile: typeof profile;
   roles: typeof roles;
   users: typeof users;
   workos: typeof workos;

@@ -2,7 +2,8 @@
 
 import { WorkOS } from '@workos-inc/node';
 import { v } from 'convex/values';
-import { internalAction } from './_generated/server';
+import { internalAction, type MutationCtx } from './_generated/server';
+import { internal } from './_generated/api';
 
 export const verifyWebhook = internalAction({
   args: v.object({
@@ -73,6 +74,128 @@ export const getUserRoleFromWorkOS = internalAction({
       return { role };
     } catch (_err) {
       return { role: 'member' };
+    }
+  },
+});
+
+export const updateUserProfile = internalAction({
+  args: v.object({
+    userId: v.string(),
+    firstName: v.optional(v.string()),
+    lastName: v.optional(v.string()),
+    phone: v.optional(v.string()),
+  }),
+  returns: v.null(),
+  handler: async (_ctx, args) => {
+    const workos = new WorkOS(process.env.WORKOS_API_KEY);
+    const update: Record<string, unknown> = {};
+    if (args.firstName !== undefined) update.firstName = args.firstName;
+    if (args.lastName !== undefined) update.lastName = args.lastName;
+    if (args.phone !== undefined) {
+      // WorkOS accepts phoneNumbers as an array of objects
+      update.phoneNumbers = [{ phoneNumber: args.phone }];
+    }
+    try {
+      if (Object.keys(update).length > 0) {
+        await workos.userManagement.updateUser({
+          userId: args.userId,
+          ...(update as Record<string, unknown>),
+        });
+      }
+      return null;
+    } catch (err) {
+      // Propagate error to the caller to decide UX behavior
+      throw err;
+    }
+  },
+});
+
+export const syncUserOrganizations = internalAction({
+  args: v.object({
+    userId: v.string(),
+  }),
+  returns: v.object({
+    success: v.boolean(),
+    message: v.string(),
+    organizationsSynced: v.number(),
+  }),
+  handler: async (ctx, { userId }) => {
+    const workos = new WorkOS(process.env.WORKOS_API_KEY);
+
+    try {
+      console.log('Syncing organizations from WorkOS for user:', userId);
+
+      // Fetch user's organization memberships from WorkOS
+      const memberships = await workos.userManagement.listOrganizationMemberships({
+        userId,
+        limit: 100,
+      });
+
+      let organizationsSynced = 0;
+
+      // Process each membership and sync organization data
+      for (const membership of memberships.data) {
+        // First, sync the organization if it exists
+        if (membership.organizationId) {
+          try {
+            const organization = await workos.organizations.getOrganization(membership.organizationId);
+
+            // Sync organization to local database
+            await ctx.runMutation(internal.organizations.createOrUpdateOrganization, {
+              id: organization.id,
+              name: organization.name,
+              external_id: organization.externalId || undefined,
+              metadata: organization.metadata,
+              created_at: organization.createdAt,
+              updated_at: organization.updatedAt,
+              domains: (organization as any).domains?.map((domain: any) => ({
+                id: domain.id || `${organization.id}-${domain.domain}`,
+                domain: domain.domain,
+                organization_id: organization.id,
+                object: 'organization_domain',
+                created_at: domain.createdAt,
+                updated_at: domain.updatedAt,
+              })) || [],
+            });
+
+            organizationsSynced++;
+          } catch (orgError) {
+            console.warn('Failed to sync organization:', membership.organizationId, orgError);
+          }
+        }
+
+        // Sync the membership
+        try {
+          await ctx.runMutation(internal.organizations.createOrUpdateMembership, {
+            id: membership.id,
+            user_id: membership.userId,
+            organization_id: membership.organizationId,
+            status: membership.status,
+            role: membership.role,
+            roles: membership.roles,
+            object: membership.object,
+            created_at: membership.createdAt,
+            updated_at: membership.updatedAt,
+          });
+        } catch (membershipError) {
+          console.warn('Failed to sync membership:', membership.id, membershipError);
+        }
+      }
+
+      console.log(`Successfully synced ${organizationsSynced} organizations for user ${userId}`);
+
+      return {
+        success: true,
+        message: `Successfully synced ${organizationsSynced} organizations`,
+        organizationsSynced,
+      };
+    } catch (error) {
+      console.error('Failed to sync organizations from WorkOS:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Unknown error occurred',
+        organizationsSynced: 0,
+      };
     }
   },
 });
