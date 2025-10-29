@@ -31,7 +31,6 @@ export function Horizontal({
 }: HorizontalProps = {}) {
   const CardContent = (
     <Card.Root
-      variant="flat"
       className="w-full items-stretch md:flex-row hover:scale-105 hover:shadow-lg hover:shadow-black/10 transition-all duration-300"
     >
       <img

@@ -126,15 +126,12 @@ export default async function ListingsPage() {
 						<h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl">
 							Investment Listings
 						</h1>
-						<p className="text-lg text-muted-foreground">
-							Browse and filter available real estate investment opportunities
-						</p>
 						<p className="text-base text-muted-foreground">
 							Showing {listings.length} properties in the Greater Toronto Area
 						</p>
 					</div>
 
-					<div className="mt-8">
+					<div className="mt-4">
 						<ListingsClient listings={listings} />
 					</div>
 				</div>

@@ -9,80 +9,22 @@ const meta: Meta<typeof DatePicker> = {
     layout: "centered",
     docs: {
       description: {
-        component: "Flexible date picker component with single date, range selection, and various customization options. Perfect for booking forms, scheduling, and date selection interfaces.",
+        component: "Simple date picker component with calendar dropdown. Uses Popover and Calendar components for date selection.",
       },
     },
   },
   argTypes: {
-    selected: {
-      control: { type: "object" },
-      description: "Currently selected date(s)",
+    date: {
+      control: { type: "date" },
+      description: "Currently selected date",
     },
-    onChange: {
-      action: "changed",
+    onDateChange: {
+      action: "dateChanged",
       description: "Callback when date selection changes",
     },
     placeholder: {
       control: { type: "text" },
-      description: "Placeholder text for the input",
-    },
-    format: {
-      control: { type: "text" },
-      description: "Date format string (e.g., 'MM/dd/yyyy', 'yyyy-MM-dd')",
-    },
-    disabled: {
-      control: { type: "boolean" },
-      description: "Disable the date picker",
-    },
-    readonly: {
-      control: { type: "boolean" },
-      description: "Make the input readonly",
-    },
-    required: {
-      control: { type: "boolean" },
-      description: "Mark as required field",
-    },
-    error: {
-      control: { type: "text" },
-      description: "Error message to display",
-    },
-    helperText: {
-      control: { type: "text" },
-      description: "Helper text to display below the input",
-    },
-    label: {
-      control: { type: "text" },
-      description: "Label for the date picker",
-    },
-    size: {
-      control: { type: "select" },
-      options: ["sm", "md", "lg"],
-      description: "Size of the date picker input",
-    },
-    variant: {
-      control: { type: "select" },
-      options: ["default", "filled", "outlined"],
-      description: "Input style variant",
-    },
-    clearable: {
-      control: { type: "boolean" },
-      description: "Show clear button",
-    },
-    calendar: {
-      control: { type: "boolean" },
-      description: "Show calendar dropdown",
-    },
-    minDate: {
-      control: { type: "object" },
-      description: "Minimum selectable date",
-    },
-    maxDate: {
-      control: { type: "object" },
-      description: "Maximum selectable date",
-    },
-    disabledDates: {
-      control: { type: "array" },
-      description: "Array of disabled dates",
+      description: "Placeholder text for the input button",
     },
     className: {
       control: { type: "text" },
@@ -102,384 +44,164 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    placeholder: "Select a date",
-  },
+  args: {},
   parameters: {
     docs: {
       description: {
-        story: "Default date picker with placeholder text.",
+        story: "Default DatePicker with placeholder text.",
       },
     },
   },
 };
 
-export const WithLabel: Story = {
+export const WithCustomPlaceholder: Story = {
   args: {
-    label: "Date of Birth",
-    placeholder: "MM/DD/YYYY",
+    placeholder: "Choose a date",
   },
   parameters: {
     docs: {
       description: {
-        story: "Date picker with form label.",
+        story: "DatePicker with custom placeholder text.",
       },
     },
   },
 };
 
-export const WithHelperText: Story = {
+export const WithCustomStyling: Story = {
   args: {
-    label: "Appointment Date",
-    placeholder: "Select appointment date",
-    helperText: "Please select a date at least 24 hours in advance",
+    placeholder: "Select booking date",
+    className: "w-full max-w-sm",
   },
   parameters: {
     docs: {
       description: {
-        story: "Date picker with helper text providing additional guidance.",
+        story: "DatePicker with custom styling classes.",
       },
     },
   },
 };
 
-export const WithError: Story = {
-  args: {
-    label: "Event Date",
-    placeholder: "Select event date",
-    error: "Please select a valid date",
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker with error state and validation message.",
-      },
-    },
-  },
-};
-
-export const PreselectedDate: Story = {
+export const Interactive: Story = {
   render: () => {
-    const [selected, setSelected] = useState(new Date("2024-12-25"));
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+    const [placeholder, setPlaceholder] = useState("Select a date");
 
-    return (
-      <DatePicker
-        label="Holiday Date"
-        selected={selected}
-        onChange={setSelected}
-        placeholder="Select holiday date"
-      />
-    );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker with preselected date showing default value.",
-      },
-    },
-  },
-};
-
-export const DateRange: Story = {
-  render: () => {
-    const [range, setRange] = useState({
-      start: new Date("2024-12-01"),
-      end: new Date("2024-12-07")
-    });
-
-    return (
-      <DatePicker
-        label="Booking Period"
-        selected={range}
-        onChange={setRange}
-        placeholder="Select date range"
-        range={true}
-      />
-    );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker configured for range selection (start and end dates).",
-      },
-    },
-  },
-};
-
-export const DifferentSizes: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <DatePicker
-        label="Small Size"
-        placeholder="Select date"
-        size="sm"
-      />
-      <DatePicker
-        label="Medium Size"
-        placeholder="Select date"
-        size="md"
-      />
-      <DatePicker
-        label="Large Size"
-        placeholder="Select date"
-        size="lg"
-      />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker in different sizes for various UI contexts.",
-      },
-    },
-  },
-};
-
-export const DifferentVariants: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <DatePicker
-        label="Default Variant"
-        placeholder="Select date"
-        variant="default"
-      />
-      <DatePicker
-        label="Filled Variant"
-        placeholder="Select date"
-        variant="filled"
-      />
-      <DatePicker
-        label="Outlined Variant"
-        placeholder="Select date"
-        variant="outlined"
-      />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker with different visual style variants.",
-      },
-    },
-  },
-};
-
-export const WithValidation: Story = {
-  render: () => {
-    const [selected, setSelected] = useState<Date | null>(null);
-    const [error, setError] = useState("");
-
-    const handleChange = (date: Date | null) => {
-      setSelected(date);
-      if (!date) {
-        setError("Date is required");
-      } else if (date < new Date()) {
-        setError("Date cannot be in the past");
-      } else {
-        setError("");
-      }
+    const handleDateChange = (date?: Date) => {
+      setSelectedDate(date);
+      setPlaceholder(date ? date.toLocaleDateString() : "Select a date");
     };
-
-    return (
-      <DatePicker
-        label="Event Date"
-        placeholder="Select event date"
-        selected={selected}
-        onChange={handleChange}
-        error={error}
-        required={true}
-      />
-    );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker with real-time validation and error handling.",
-      },
-    },
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    label: "Disabled Date Picker",
-    placeholder: "Date selection is disabled",
-    disabled: true,
-    selected: new Date("2024-12-25"),
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Disabled date picker preventing user interaction.",
-      },
-    },
-  },
-};
-
-export const Readonly: Story = {
-  args: {
-    label: "Readonly Date",
-    placeholder: "Cannot change this date",
-    readonly: true,
-    selected: new Date("2024-12-25"),
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Readonly date picker displaying date without allowing changes.",
-      },
-    },
-  },
-};
-
-export const WithMinMaxDates: Story = {
-  render: () => {
-    const [selected, setSelected] = useState<Date | null>(null);
-
-    return (
-      <DatePicker
-        label="Travel Date"
-        placeholder="Select travel date"
-        selected={selected}
-        onChange={setSelected}
-        minDate={new Date()}
-        maxDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)} // 1 year from now
-        helperText="Select a date within the next year"
-      />
-    );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker with minimum and maximum date constraints.",
-      },
-    },
-  },
-};
-
-export const CustomFormat: Story = {
-  args: {
-    label: "International Date",
-    placeholder: "DD/MM/YYYY",
-    format: "dd/MM/yyyy",
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker with custom date format for international users.",
-      },
-    },
-  },
-};
-
-export const Clearable: Story = {
-  render: () => {
-    const [selected, setSelected] = useState(new Date("2024-12-25"));
-
-    return (
-      <DatePicker
-        label="Flexible Date"
-        placeholder="Select or clear date"
-        selected={selected}
-        onChange={setSelected}
-        clearable={true}
-        helperText="Click the clear button to remove selection"
-      />
-    );
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Date picker with clear button for removing selections.",
-      },
-    },
-  },
-};
-
-export const BookingForm: Story = {
-  render: () => {
-    const [checkIn, setCheckIn] = useState<Date | null>(null);
-    const [checkOut, setCheckOut] = useState<Date | null>(null);
 
     return (
       <div className="space-y-4">
         <DatePicker
-          label="Check-in Date"
-          placeholder="Select check-in date"
-          selected={checkIn}
-          onChange={setCheckIn}
-          minDate={new Date()}
-          required={true}
+          date={selectedDate}
+          onDateChange={handleDateChange}
+          placeholder={placeholder}
         />
-        <DatePicker
-          label="Check-out Date"
-          placeholder="Select check-out date"
-          selected={checkOut}
-          onChange={setCheckOut}
-          minDate={checkIn || new Date()}
-          required={true}
-          disabled={!checkIn}
-          helperText={!checkIn ? "Select check-in date first" : ""}
-        />
+        <div className="text-sm text-gray-600">
+          {selectedDate && (
+            <p>Selected: {selectedDate.toLocaleDateString()}</p>
+          )}
+        </div>
       </div>
     );
   },
   parameters: {
     docs: {
       description: {
-        story: "Booking form with interconnected date pickers for hotel reservations.",
+        story: "Interactive DatePicker with state management showing selected date.",
       },
     },
   },
 };
 
-export const MultiDateSelection: Story = {
-  render: () => {
-    const [dates, setDates] = useState<Date[]>([
-      new Date("2024-12-15"),
-      new Date("2024-12-22"),
-      new Date("2024-12-25")
-    ]);
-
-    return (
-      <DatePicker
-        label="Available Dates"
-        placeholder="Select multiple dates"
-        selected={dates}
-        onChange={setDates}
-        multiple={true}
-        helperText="Select all available dates for this event"
-      />
-    );
+export const PreselectedDate: Story = {
+  args: {
+    date: new Date("2024-12-25"),
+    placeholder: "Select a date",
   },
   parameters: {
     docs: {
       description: {
-        story: "Date picker supporting multiple date selection for events.",
+        story: "DatePicker with pre-selected date.",
       },
     },
   },
 };
 
-export const WeekView: Story = {
+export const WithFormLayout: Story = {
   render: () => {
-    const [selected, setSelected] = useState<Date | null>(null);
+    const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
+    const [appointmentDate, setAppointmentDate] = useState<Date | undefined>(undefined);
 
     return (
-      <DatePicker
-        label="Select Week"
-        placeholder="Choose a week"
-        selected={selected}
-        onChange={setSelected}
-        weekView={true}
-        format="'Week' WW, yyyy"
-      />
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-medium mb-2">Personal Information</h3>
+          <DatePicker
+            date={birthDate}
+            onDateChange={setBirthDate}
+            placeholder="Date of birth"
+          />
+        </div>
+
+        <div>
+          <h3 className="text-lg font-medium mb-2">Appointment</h3>
+          <DatePicker
+            date={appointmentDate}
+            onDateChange={setAppointmentDate}
+            placeholder="Select appointment date"
+          />
+        </div>
+      </div>
     );
   },
   parameters: {
     docs: {
       description: {
-        story: "Date picker with week selection view.",
+        story: "DatePickers used in a form layout with different contexts.",
+      },
+    },
+  },
+};
+
+export const CustomWidth: Story = {
+  render: () => (
+    <div className="space-y-4">
+      <div>
+        <p className="text-sm text-gray-600 mb-1">Small width (200px)</p>
+        <DatePicker
+          date={new Date()}
+          onDateChange={() => {}}
+          placeholder="Compact picker"
+          className="w-[200px]"
+        />
+      </div>
+
+      <div>
+        <p className="text-sm text-gray-600 mb-1">Default width (280px)</p>
+        <DatePicker
+          date={new Date()}
+          onDateChange={() => {}}
+          placeholder="Standard picker"
+        />
+      </div>
+
+      <div>
+        <p className="text-sm text-gray-600 mb-1">Full width</p>
+        <DatePicker
+          date={new Date()}
+          onDateChange={() => {}}
+          placeholder="Full width picker"
+          className="w-full"
+        />
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "DatePickers with different width styling.",
       },
     },
   },

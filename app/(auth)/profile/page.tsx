@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -138,7 +139,7 @@ export default function ProfilePage() {
         body: file,
       });
       const json = await res.json();
-      const storageId = json.storageId as string;
+      const storageId = json.storageId as Id<"_storage">;
       await saveProfilePicture({ storageId });
       toast.success("Profile picture updated");
     } catch (e: any) {

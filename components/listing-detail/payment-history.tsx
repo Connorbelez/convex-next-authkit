@@ -152,7 +152,7 @@ export function PaymentHistory({ payments, itemsPerPage = 5 }: PaymentHistoryPro
 			<div className="flex items-center gap-2">
 				<Icon icon="lucide:receipt" className="h-6 w-6 text-primary" />
 				<h2 className="text-2xl font-bold">Payment History</h2>
-				<Chip size="sm" variant="flat">
+				<Chip>
 					{payments.length} payments
 				</Chip>
 			</div>
@@ -190,7 +190,7 @@ export function PaymentHistory({ payments, itemsPerPage = 5 }: PaymentHistoryPro
 												<p className="font-semibold text-gray-900 dark:text-white">
 													{format(paymentDate, "MMMM d, yyyy")}
 												</p>
-												<Chip size="sm" color={statusInfo.color} variant="flat">
+												<Chip color={statusInfo.color}>
 													{statusInfo.label}
 												</Chip>
 											</div>

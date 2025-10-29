@@ -28,7 +28,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     comparables: generateComparables("reference-property", 6),
-    currentPropertyValue: 1250000,
   },
   parameters: {
     docs: {
@@ -42,7 +41,6 @@ export const Default: Story = {
 export const ManyComparables: Story = {
   args: {
     comparables: generateComparables("busy-market", 10),
-    currentPropertyValue: 980000,
   },
   parameters: {
     docs: {
@@ -56,7 +54,6 @@ export const ManyComparables: Story = {
 export const FewComparables: Story = {
   args: {
     comparables: generateComparables("unique-property", 3),
-    currentPropertyValue: 2100000,
   },
   parameters: {
     docs: {
@@ -70,7 +67,6 @@ export const FewComparables: Story = {
 export const NoComparables: Story = {
   args: {
     comparables: [],
-    currentPropertyValue: 750000,
   },
   parameters: {
     docs: {
@@ -89,7 +85,7 @@ export const CloseProximity: Story = {
       comp.distance = parseFloat((Math.random() * 0.5 + 0.1).toFixed(1));
     });
 
-    return <ComparableProperties comparables={comparables} currentPropertyValue={1850000} />;
+    return <ComparableProperties comparables={comparables} />;
   },
   parameters: {
     docs: {
@@ -108,7 +104,7 @@ export const WiderArea: Story = {
       comp.distance = parseFloat((Math.random() * 3 + 1).toFixed(1));
     });
 
-    return <ComparableProperties comparables={comparables} currentPropertyValue={890000} />;
+    return <ComparableProperties comparables={comparables} />;
   },
   parameters: {
     docs: {
@@ -128,7 +124,7 @@ export const HigherPricedComparables: Story = {
       comp.financials.purchasePrice = comp.financials.currentValue * 0.95;
     });
 
-    return <ComparableProperties comparables={comparables} currentPropertyValue={1450000} />;
+    return <ComparableProperties comparables={comparables} />;
   },
   parameters: {
     docs: {
@@ -148,7 +144,7 @@ export const LowerPricedComparables: Story = {
       comp.financials.purchasePrice = comp.financials.currentValue * 1.05;
     });
 
-    return <ComparableProperties comparables={comparables} currentPropertyValue={720000} />;
+    return <ComparableProperties comparables={comparables} />;
   },
   parameters: {
     docs: {
@@ -170,7 +166,7 @@ export const MixedPriceRange: Story = {
       comp.financials.purchasePrice = comp.financials.currentValue * (0.9 + Math.random() * 0.2);
     });
 
-    return <ComparableProperties comparables={comparables} currentPropertyValue={1150000} />;
+    return <ComparableProperties comparables={comparables} />;
   },
   parameters: {
     docs: {
@@ -190,7 +186,7 @@ export const DifferentStatuses: Story = {
       comp.status = statuses[index];
     });
 
-    return <ComparableProperties comparables={comparables} currentPropertyValue={920000} />;
+    return <ComparableProperties comparables={comparables} />;
   },
   parameters: {
     docs: {
@@ -220,7 +216,7 @@ export const LuxuryMarketComparables: Story = {
       comp.title = luxuryTitles[comparables.indexOf(comp)];
     });
 
-    return <ComparableProperties comparables={comparables} currentPropertyValue={4200000} />;
+    return <ComparableProperties comparables={comparables} />;
   },
   parameters: {
     docs: {
@@ -250,7 +246,7 @@ export const StarterHomeComparables: Story = {
       comp.title = starterTitles[comparables.indexOf(comp)];
     });
 
-    return <ComparableProperties comparables={comparables} currentPropertyValue={340000} />;
+    return <ComparableProperties comparables={comparables} />;
   },
   parameters: {
     docs: {

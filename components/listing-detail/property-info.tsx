@@ -48,7 +48,6 @@ export function PropertyInfo({ title, address, investorBrief, status }: Property
 					</h1>
 					<Chip
 						color={statusInfo.color}
-						variant="flat"
 						className="flex-shrink-0 flex items-center gap-1"
 					>
 						<Icon icon={statusInfo.icon} className="h-4 w-4" aria-hidden="true" />

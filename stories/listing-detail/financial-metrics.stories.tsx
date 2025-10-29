@@ -40,16 +40,13 @@ export const Default: Story = {
 
 export const HighValueProperty: Story = {
   args: {
-    listing: {
-      ...generateListing("high-value-property"),
-      finances: {
-        purchasePrice: 5000000,
-        currentValue: 5750000,
-        monthlyPayment: 28500,
-        interestRate: 5.8,
-        loanTerm: 360,
-        maturityDate: new Date(Date.now() + 30 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-      },
+    financials: {
+      purchasePrice: 5000000,
+      currentValue: 5750000,
+      monthlyPayment: 28500,
+      interestRate: 5.8,
+      loanTerm: 360,
+      maturityDate: new Date(Date.now() + 30 * 365 * 24 * 60 * 60 * 1000).toISOString(),
     },
   },
   parameters: {
@@ -63,16 +60,13 @@ export const HighValueProperty: Story = {
 
 export const InvestmentMetrics: Story = {
   args: {
-    listing: {
-      ...generateListing("investment-property"),
-      finances: {
-        purchasePrice: 1250000,
-        currentValue: 1425000,
-        monthlyPayment: 7200,
-        interestRate: 6.2,
-        loanTerm: 300,
-        maturityDate: new Date(Date.now() + 25 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-      },
+    financials: {
+      purchasePrice: 1250000,
+      currentValue: 1425000,
+      monthlyPayment: 7200,
+      interestRate: 6.2,
+      loanTerm: 300,
+      maturityDate: new Date(Date.now() + 25 * 365 * 24 * 60 * 60 * 1000).toISOString(),
     },
   },
   parameters: {
@@ -86,16 +80,13 @@ export const InvestmentMetrics: Story = {
 
 export const LossScenario: Story = {
   args: {
-    listing: {
-      ...generateListing("decline-property"),
-      finances: {
-        purchasePrice: 850000,
-        currentValue: 765000,
-        monthlyPayment: 5100,
-        interestRate: 7.1,
-        loanTerm: 240,
-        maturityDate: new Date(Date.now() + 20 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-      },
+    financials: {
+      purchasePrice: 850000,
+      currentValue: 765000,
+      monthlyPayment: 5100,
+      interestRate: 7.1,
+      loanTerm: 240,
+      maturityDate: new Date(Date.now() + 20 * 365 * 24 * 60 * 60 * 1000).toISOString(),
     },
   },
   parameters: {
@@ -109,16 +100,13 @@ export const LossScenario: Story = {
 
 export const LowInterestRate: Story = {
   args: {
-    listing: {
-      ...generateListing("low-rate-property"),
-      finances: {
-        purchasePrice: 750000,
-        currentValue: 825000,
-        monthlyPayment: 3800,
-        interestRate: 4.1,
-        loanTerm: 360,
-        maturityDate: new Date(Date.now() + 30 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-      },
+    financials: {
+      purchasePrice: 750000,
+      currentValue: 825000,
+      monthlyPayment: 3800,
+      interestRate: 4.1,
+      loanTerm: 360,
+      maturityDate: new Date(Date.now() + 30 * 365 * 24 * 60 * 60 * 1000).toISOString(),
     },
   },
   parameters: {
@@ -132,16 +120,13 @@ export const LowInterestRate: Story = {
 
 export const ShortTermLoan: Story = {
   args: {
-    listing: {
-      ...generateListing("short-term-loan"),
-      finances: {
-        purchasePrice: 600000,
-        currentValue: 690000,
-        monthlyPayment: 6800,
-        interestRate: 5.5,
-        loanTerm: 180,
-        maturityDate: new Date(Date.now() + 15 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-      },
+    financials: {
+      purchasePrice: 600000,
+      currentValue: 690000,
+      monthlyPayment: 6800,
+      interestRate: 5.5,
+      loanTerm: 180,
+      maturityDate: new Date(Date.now() + 15 * 365 * 24 * 60 * 60 * 1000).toISOString(),
     },
   },
   parameters: {
@@ -155,16 +140,13 @@ export const ShortTermLoan: Story = {
 
 export const BreakEvenScenario: Story = {
   args: {
-    listing: {
-      ...generateListing("break-even-property"),
-      finances: {
-        purchasePrice: 925000,
-        currentValue: 925000,
-        monthlyPayment: 5500,
-        interestRate: 6.0,
-        loanTerm: 300,
-        maturityDate: new Date(Date.now() + 25 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-      },
+    financials: {
+      purchasePrice: 925000,
+      currentValue: 925000,
+      monthlyPayment: 5500,
+      interestRate: 6.0,
+      loanTerm: 300,
+      maturityDate: new Date(Date.now() + 25 * 365 * 24 * 60 * 60 * 1000).toISOString(),
     },
   },
   parameters: {
@@ -178,16 +160,13 @@ export const BreakEvenScenario: Story = {
 
 export const FirstTimeHomeBuyer: Story = {
   args: {
-    listing: {
-      ...generateListing("starter-home"),
-      finances: {
-        purchasePrice: 350000,
-        currentValue: 385000,
-        monthlyPayment: 2100,
-        interestRate: 5.8,
-        loanTerm: 360,
-        maturityDate: new Date(Date.now() + 30 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-      },
+    financials: {
+      purchasePrice: 350000,
+      currentValue: 385000,
+      monthlyPayment: 2100,
+      interestRate: 5.8,
+      loanTerm: 360,
+      maturityDate: new Date(Date.now() + 30 * 365 * 24 * 60 * 60 * 1000).toISOString(),
     },
   },
   parameters: {
@@ -204,44 +183,35 @@ export const ComparisonView: Story = {
     const properties = [
       {
         name: "Conservative Investment",
-        listing: {
-          ...generateListing("conservative"),
-          finances: {
-            purchasePrice: 800000,
-            currentValue: 880000,
-            monthlyPayment: 4500,
-            interestRate: 4.8,
-            loanTerm: 360,
-            maturityDate: new Date(Date.now() + 30 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-          },
+        financials: {
+          purchasePrice: 800000,
+          currentValue: 880000,
+          monthlyPayment: 4500,
+          interestRate: 4.8,
+          loanTerm: 360,
+          maturityDate: new Date(Date.now() + 30 * 365 * 24 * 60 * 60 * 1000).toISOString(),
         },
       },
       {
         name: "Balanced Investment",
-        listing: {
-          ...generateListing("balanced"),
-          finances: {
-            purchasePrice: 1200000,
-            currentValue: 1320000,
-            monthlyPayment: 6800,
-            interestRate: 5.9,
-            loanTerm: 300,
-            maturityDate: new Date(Date.now() + 25 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-          },
+        financials: {
+          purchasePrice: 1200000,
+          currentValue: 1320000,
+          monthlyPayment: 6800,
+          interestRate: 5.9,
+          loanTerm: 300,
+          maturityDate: new Date(Date.now() + 25 * 365 * 24 * 60 * 60 * 1000).toISOString(),
         },
       },
       {
         name: "Aggressive Investment",
-        listing: {
-          ...generateListing("aggressive"),
-          finances: {
-            purchasePrice: 2000000,
-            currentValue: 2100000,
-            monthlyPayment: 13500,
-            interestRate: 6.8,
-            loanTerm: 240,
-            maturityDate: new Date(Date.now() + 20 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-          },
+        financials: {
+          purchasePrice: 2000000,
+          currentValue: 2100000,
+          monthlyPayment: 13500,
+          interestRate: 6.8,
+          loanTerm: 240,
+          maturityDate: new Date(Date.now() + 20 * 365 * 24 * 60 * 60 * 1000).toISOString(),
         },
       },
     ];
@@ -251,7 +221,7 @@ export const ComparisonView: Story = {
         {properties.map((property, index) => (
           <div key={index}>
             <h3 className="text-sm font-medium mb-2">{property.name}</h3>
-            <FinancialMetrics financials={property.listing.financials} />
+            <FinancialMetrics financials={property.financials} />
           </div>
         ))}
       </div>

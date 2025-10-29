@@ -23,6 +23,11 @@ const meta: Meta<typeof MobileListingScroller> = {
   },
 };
 
+interface MobileListingScrollerProps<T> {
+  sections: MobileListingSection<T>[];
+  renderCard: (item: T) => React.ReactNode;
+}
+
 export default meta;
 type Story = StoryObj<typeof meta>;
 
@@ -128,17 +133,20 @@ const otherMortgageListings: MockListing[] = [
 ];
 
 // Render card function
-const renderCard = (item: MockListing) => (
-  <Horizontal
-    key={item.id}
-    title={item.title}
-    address={item.address}
-    imageSrc={item.imageSrc}
-    ltv={item.ltv}
-    apr={item.apr}
-    principal={item.principal}
-  />
-);
+const renderCard = (item: unknown) => {
+  const mockItem = item as MockListing;
+  return (
+    <Horizontal
+      key={mockItem.id}
+      title={mockItem.title}
+      address={mockItem.address}
+      imageSrc={mockItem.imageSrc}
+      ltv={mockItem.ltv}
+      apr={mockItem.apr}
+      principal={mockItem.principal}
+    />
+  );
+};
 
 // Default story showing all mortgage types
 export const Default: Story = {
@@ -148,7 +156,7 @@ export const Default: Story = {
       { title: "Second Mortgages", items: secondMortgageListings },
       { title: "Other Mortgages", items: otherMortgageListings },
     ],
-    renderCard,
+    renderCard: renderCard,
   },
   parameters: {
     docs: {

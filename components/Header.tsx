@@ -10,9 +10,7 @@ export default function Header() {
   const { handleNavigation } = useNavigationTransition();
 
   const handleNavigationClick = (href: string) => {
-    handleNavigation(() => {
-      router.push(href);
-    });
+    handleNavigation(href);
   };
 
   return (

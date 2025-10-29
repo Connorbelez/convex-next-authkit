@@ -58,7 +58,7 @@ export function ComparableProperties({ comparables }: ComparablePropertiesProps)
 			<div className="flex items-center gap-2">
 				<Icon icon="lucide:building-2" className="h-6 w-6 text-primary" />
 				<h2 className="text-2xl font-bold">Comparable Properties</h2>
-				<Chip size="sm" variant="flat">
+				<Chip>
 					{comparables.length} nearby
 				</Chip>
 			</div>

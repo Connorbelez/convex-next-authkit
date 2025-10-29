@@ -55,6 +55,7 @@ export const DifferentRatings: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Excellent (5.0)</h3>
         <AirbnbListingCard
+          id="1"
           title="Luxury Penthouse Suite"
           location="Miami Beach, Florida"
           host="Michael"
@@ -69,6 +70,7 @@ export const DifferentRatings: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Very Good (4.2)</h3>
         <AirbnbListingCard
+          id="2"
           title="Modern Downtown Loft"
           location="Austin, Texas"
           host="Jennifer"
@@ -83,6 +85,7 @@ export const DifferentRatings: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Fair (3.5)</h3>
         <AirbnbListingCard
+          id="3"
           title="Budget Studio Apartment"
           location="Seattle, Washington"
           host="David"
@@ -111,6 +114,7 @@ export const VariousPrices: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Budget ($75/night)</h3>
         <AirbnbListingCard
+          id="4"
           title="Shared Room in Cozy House"
           location="Portland, Oregon"
           host="Lisa"
@@ -125,6 +129,7 @@ export const VariousPrices: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Mid-Range ($175/night)</h3>
         <AirbnbListingCard
+          id="5"
           title="Entire Apartment"
           location="Denver, Colorado"
           host="Robert"
@@ -139,6 +144,7 @@ export const VariousPrices: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Luxury ($550/night)</h3>
         <AirbnbListingCard
+          id="6"
           title="Oceanfront Villa"
           location="Laguna Beach, California"
           host="Patricia"
@@ -292,6 +298,7 @@ export const DifferentCategories: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Cabin</h3>
         <AirbnbListingCard
+          id="7"
           title="Rustic Mountain Cabin"
           location="Lake Tahoe, California"
           host="Chris"
@@ -307,6 +314,7 @@ export const DifferentCategories: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Treehouse</h3>
         <AirbnbListingCard
+          id="8"
           title="Luxury Treehouse Retreat"
           location="Portland, Oregon"
           host="Alex"
@@ -322,6 +330,7 @@ export const DifferentCategories: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Farm stay</h3>
         <AirbnbListingCard
+          id="9"
           title="Organic Farm Experience"
           location="Napa Valley, California"
           host="Sophie"
