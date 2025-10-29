@@ -39,7 +39,7 @@ function getInitials(first?: string | null, last?: string | null, email?: string
 
 export default function ProfilePage() {
   const { user: authUser } = useAuth();
-  const data = useQuery(api.profile.getCurrentUserProfile, {});
+  const data = useQuery(api.profile.getCurrentUserProfile, authUser ? {} : undefined);
   const updateProfile = useMutation(api.profile.updateProfile);
   const setActiveOrg = useMutation(api.profile.setActiveOrganization);
   const generateUploadUrl = useAction(api.profile.generateUploadUrl);

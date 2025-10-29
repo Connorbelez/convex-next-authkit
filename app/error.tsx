@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
  * Root error boundary
  * Catches errors in the home page and provides recovery options
  */
-export default function Error({
+export default function ErrorPage({
 	error,
 	reset,
 }: {
@@ -40,17 +40,15 @@ export default function Error({
 				)}
 
 				<div className="flex flex-col gap-3">
-					<Button
-						variant="default"
-						size="lg"
-						onClick={reset}
-					>
+					<Button variant="default" size="lg" onClick={reset}>
 						Try again
 					</Button>
 					<Button
 						variant="outline"
 						size="lg"
-						onClick={() => (window.location.href = "/")}
+						onClick={() => {
+							window.location.href = "/";
+						}}
 					>
 						Go to home
 					</Button>

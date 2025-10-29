@@ -1,19 +1,19 @@
 "use client";
 
+import { Button } from "@heroui/react";
+import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import type { User } from "@workos-inc/node";
 import {
 	Authenticated,
 	Unauthenticated,
 	useMutation,
 	useQuery,
 } from "convex/react";
-import { api } from "../convex/_generated/api";
 import Link from "next/link";
-import { useAuth } from "@workos-inc/authkit-nextjs/components";
-import type { User } from "@workos-inc/node";
-import { Button } from "@heroui/react";
-import { ResourceLinks } from "../components/ResourceLinks";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ViewTransition } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ResourceLinks } from "../components/ResourceLinks";
+import { api } from "../convex/_generated/api";
 
 export default function Home() {
 	const { user, signOut } = useAuth();

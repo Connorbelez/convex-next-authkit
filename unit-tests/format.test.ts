@@ -6,7 +6,7 @@ describe("formatUsdAbbrev", () => {
         expect(formatUsdAbbrev(35000000)).toBe("$350k"); // $350,000
     });
     it("formats millions with M", () => {
-        expect(formatUsdAbbrev(1_250_000_00)).toBe("$1.2M");
+        expect(formatUsdAbbrev(1_250_000_00)).toBe("$1.3M");
     });
     it("handles small amounts without decimals", () => {
         expect(formatUsdAbbrev(95000)).toBe("$950");

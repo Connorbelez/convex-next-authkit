@@ -1,8 +1,8 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from "vitest/config";
-// import path from "path";
-// import { fileURLToPath } from 'node:url';
-// const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+import path from "path";
+import { fileURLToPath } from 'node:url';
+const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
@@ -14,7 +14,12 @@ export default defineConfig({
       }
     },
     exclude: ["e2e/**", "node_modules/**", "dist/**"],
-  }
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(dirname, "./"),
+    },
+  },
   // Avoid aliasing the "convex" npm package name to the local directory,
   // since it can break imports like `import { v } from "convex/values"`.
 });
