@@ -5,6 +5,7 @@ import { ListingsClient } from "./listings-client";
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { ViewTransition } from "react";
 
 // Extended type with required fields for rendering
 interface ListingItem extends FilterableItem {
@@ -112,27 +113,33 @@ export default async function ListingsPage() {
 	console.log("APR range:", Math.min(...listings.map((l) => l.apr!)), "-", Math.max(...listings.map((l) => l.apr!)));
 
 	return (
-		<div className="min-h-screen">
-			<div className="container mx-auto px-4 py-6">
-				{/* Breadcrumb Navigation */}
-				<BreadcrumbNav
-					items={[{ label: "Listings" }]}
-					className="mb-6"
-				/>
+		<ViewTransition>
+			<div className="min-h-screen">
+			<div className="container flex flex-col mx-auto px-4 py-6">
+			{/* Breadcrumb Navigation */}
+					<BreadcrumbNav
+						items={[{ label: "Listings" }]}
+						className="mb-8"
+					/>
 
-				<div className="mb-6">
-					<h1 className="text-3xl font-bold">Investment Listings</h1>
-					<p className="text-muted-foreground mt-2">
-						Browse and filter available real estate investment opportunities
-					</p>
-					<p className="text-sm text-muted-foreground mt-1">
-						Showing {listings.length} properties in the Greater Toronto Area
-					</p>
+					<div className="space-y-3">
+						<h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl">
+							Investment Listings
+						</h1>
+						<p className="text-lg text-muted-foreground">
+							Browse and filter available real estate investment opportunities
+						</p>
+						<p className="text-base text-muted-foreground">
+							Showing {listings.length} properties in the Greater Toronto Area
+						</p>
+					</div>
+
+					<div className="mt-8">
+						<ListingsClient listings={listings} />
+					</div>
 				</div>
-
-				<ListingsClient listings={listings} />
-			</div>
-		</div>
+            </div>
+        </ViewTransition>
 	);
 }
 

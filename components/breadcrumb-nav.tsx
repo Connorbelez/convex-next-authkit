@@ -10,6 +10,8 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { ViewTransition } from "react";
+import { useNavigationTransition } from "@/components/transitions/useNavigationTransition";
 
 export interface BreadcrumbItem {
 	label: string;
@@ -32,9 +34,10 @@ interface BreadcrumbNavProps {
  * ]} />
  */
 export function BreadcrumbNav({ items, className }: BreadcrumbNavProps) {
-	return (
-		<div className={className}>
-			<Breadcrumb>
+    return (
+        <ViewTransition>
+            <div className={className}>
+                <Breadcrumb>
 				<BreadcrumbList>
 					{/* Home link */}
 					<BreadcrumbItem>
@@ -69,7 +72,8 @@ export function BreadcrumbNav({ items, className }: BreadcrumbNavProps) {
 						);
 					})}
 				</BreadcrumbList>
-			</Breadcrumb>
-		</div>
+                </Breadcrumb>
+            </div>
+        </ViewTransition>
 	);
 }

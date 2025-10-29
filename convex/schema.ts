@@ -19,6 +19,10 @@ export default defineSchema({
     last_name: v.optional(v.string()),
     profile_picture_url: v.optional(v.string()),
     profile_picture: v.optional(v.string()), // Handle both field names for compatibility
+    // Optional user phone number
+    phone: v.optional(v.string()),
+    // Active organization selection (WorkOS organization id)
+    active_organization_id: v.optional(v.string()),
     // Timestamps from WorkOS
     created_at: v.optional(v.string()),
     updated_at: v.optional(v.string()),

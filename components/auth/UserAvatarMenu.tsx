@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SettingsDialog } from "@/components/settings-dialog";
+import { useRouter } from "next/navigation";
 
 function getInitials(name?: string | null, email?: string | null) {
   if (name && name.trim()) {
@@ -28,9 +29,10 @@ function getInitials(name?: string | null, email?: string | null) {
 }
 
 export function UserAvatarMenu() {
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const [showSettings, setShowSettings] = useState(false);
   const [settingsKey, setSettingsKey] = useState(0);
+  const router = useRouter();
 
   const displayName = useMemo(() => {
     if (!user) return "Guest User";
@@ -75,7 +77,12 @@ export function UserAvatarMenu() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault();
+              router.push("/profile");
+            }}
+          >
             Profile
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -87,7 +94,13 @@ export function UserAvatarMenu() {
             Admin Panel
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+          <DropdownMenuItem
+            onSelect={async (e) => {
+              e.preventDefault();
+              await signOut();
+              router.push("/");
+            }}
+          >
             Logout
           </DropdownMenuItem>
         </DropdownMenuContent>

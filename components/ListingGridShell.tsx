@@ -340,7 +340,7 @@ export function ListingGridShell<T extends WithLatLng>({
         <div className={classNames?.mapColumn ?? "w-[40%] 84rem:w-[35%]"}>
           <div
             className={
-              classNames?.mapWrapper ?? "sticky top-4 h-[calc(100vh-7rem)]"
+              classNames?.mapWrapper ?? "sticky top-20 h-[calc(100vh-7rem)]"
             }
           >
             <ListingMap

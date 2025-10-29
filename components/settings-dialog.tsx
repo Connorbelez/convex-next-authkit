@@ -3,15 +3,15 @@
 import * as React from "react"
 import {
   Bell,
+  Briefcase,
   Check,
+  CheckSquare,
+  ClipboardList,
   Globe,
-  Home,
   Keyboard,
   LinkIcon,
   Lock,
-  Menu,
   MessageCircle,
-  Paintbrush,
   Settings,
   Video,
   ImageIcon,
@@ -28,6 +28,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import {
@@ -73,10 +74,10 @@ const sampleFiles = [
 ]
 
 const sections = [
-  { id: "notifications", name: "Notifications", icon: Bell },
-  { id: "navigation", name: "Navigation", icon: Menu },
-  { id: "home", name: "Home", icon: Home },
-  { id: "appearance", name: "Appearance", icon: Paintbrush },
+  { id: "notifications", name: "Notifications", icon: Bell, notificationCount: 5 },
+  { id: "deals", name: "Deals", icon: Briefcase },
+  { id: "tasks", name: "Tasks", icon: CheckSquare, notificationCount: 3 },
+  { id: "deal-requests", name: "Deal Requests", icon: ClipboardList },
   { id: "messages", name: "Messages & media", icon: MessageCircle, hasSubTabs: true },
   { id: "language", name: "Language & region", icon: Globe },
   { id: "accessibility", name: "Accessibility", icon: Keyboard },
@@ -266,13 +267,23 @@ export function SettingsDialog() {
                     }
                   }}
                   className={cn(
-                    "flex flex-col items-center justify-center gap-1.5 rounded-lg px-6 py-3 text-xs font-medium transition-colors whitespace-nowrap min-w-[80px] shrink-0",
+                    "flex flex-col items-center justify-center gap-1.5 rounded-lg px-6 py-3 text-xs font-medium transition-colors whitespace-nowrap min-w-[80px] shrink-0 relative",
                     activeSection === section.id
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground",
                   )}
                 >
-                  <section.icon className="h-5 w-5" />
+                  <div className="relative">
+                    <section.icon className="h-5 w-5" />
+                    {section.notificationCount && section.notificationCount > 0 && (
+                      <Badge
+                        variant="destructive"
+                        className="absolute -top-2 -right-2 h-4 min-w-4 px-1 text-[10px] flex items-center justify-center"
+                      >
+                        {section.notificationCount}
+                      </Badge>
+                    )}
+                  </div>
                   <span className="text-center leading-tight">{section.name}</span>
                 </button>
               ))}
@@ -310,7 +321,7 @@ export function SettingsDialog() {
                     }
                   }}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors mb-1",
+                    "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors mb-1 relative",
                     activeSection === section.id
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -318,8 +329,28 @@ export function SettingsDialog() {
                   )}
                   title={sidebarCollapsed ? section.name : undefined}
                 >
-                  <section.icon className="h-5 w-5 shrink-0" />
-                  {!sidebarCollapsed && <span className="truncate">{section.name}</span>}
+                  <div className="relative">
+                    <section.icon className="h-5 w-5 shrink-0" />
+                    {section.notificationCount && section.notificationCount > 0 && (
+                      <Badge
+                        variant="destructive"
+                        className="absolute -top-1.5 -right-1.5 h-4 min-w-4 px-1 text-[10px] flex items-center justify-center"
+                      >
+                        {section.notificationCount}
+                      </Badge>
+                    )}
+                  </div>
+                  {!sidebarCollapsed && (
+                    <span className="truncate flex-1">{section.name}</span>
+                  )}
+                  {!sidebarCollapsed && section.notificationCount && section.notificationCount > 0 && (
+                    <Badge
+                      variant="destructive"
+                      className="h-5 min-w-5 px-1.5 text-xs flex items-center justify-center ml-auto"
+                    >
+                      {section.notificationCount}
+                    </Badge>
+                  )}
                 </button>
               ))}
             </nav>

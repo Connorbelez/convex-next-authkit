@@ -5,6 +5,8 @@ import "./globals.css";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
+import { PageSkeleton } from "@/components/skeletons";
+import { ViewTransition } from "react";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -34,10 +36,12 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<Suspense fallback={<div>Loading...</div>}>
+				<Suspense fallback={<PageSkeleton />}>
 					<ConvexClientProvider>
 						<Header />
-						<main>{children}</main>
+						<ViewTransition>
+							<main>{children}</main>
+						</ViewTransition>
 						<Toaster />
 					</ConvexClientProvider>
 				</Suspense>

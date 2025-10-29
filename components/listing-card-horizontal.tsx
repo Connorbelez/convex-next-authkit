@@ -4,6 +4,7 @@ import { Button, Card, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { Badge, badgeVariants } from "@/components/ui/badge";
 import Link from "next/link";
+import { ViewTransition } from "react";
 
 export interface HorizontalProps {
   id?: string;
@@ -111,10 +112,16 @@ export function Horizontal({
   if (id) {
     return (
       <Link href={`/listings/${id}`} className="block">
-        {CardContent}
+        <ViewTransition name={`listing-card-${id}`}>
+          {CardContent}
+        </ViewTransition>
       </Link>
     );
   }
 
-  return CardContent;
+  return (
+    <ViewTransition name={`listing-card-${id}`}>
+      {CardContent}
+    </ViewTransition>
+  );
 }
