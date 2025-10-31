@@ -3,18 +3,11 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Search, Bell, ChevronDown, Home, FileText, BookOpen, HelpCircle, Mail, Menu, X } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
 import { CommandPalette } from "./command-palette"
+import { BreadcrumbNav } from "@/components/breadcrumb-nav"
+import { UserAvatarMenu } from "@/components/auth/UserAvatarMenu"
 import { cn } from "@/lib/utils"
 
 interface Tab {
@@ -36,7 +29,7 @@ interface TwoLevelNavProps {
   breadcrumbs?: { label: string; href?: string }[]
 }
 
-export function TwoLevelNav({ breadcrumbs = [{ label: "Home" }] }: TwoLevelNavProps) {
+export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
   const [activeTab, setActiveTab] = React.useState("home")
   const [commandOpen, setCommandOpen] = React.useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
@@ -132,10 +125,7 @@ export function TwoLevelNav({ breadcrumbs = [{ label: "Home" }] }: TwoLevelNavPr
               </Button>
 
               {/* User Avatar - Visible on all screen sizes */}
-              <Avatar className="size-8 cursor-pointer">
-                <AvatarImage src="/placeholder.svg?height=32&width=32" />
-                <AvatarFallback className="bg-primary text-primary-foreground text-xs">FL</AvatarFallback>
-              </Avatar>
+              <UserAvatarMenu />
 
               <Button
                 variant="ghost"
@@ -157,27 +147,7 @@ export function TwoLevelNav({ breadcrumbs = [{ label: "Home" }] }: TwoLevelNavPr
         >
           <div className="flex items-center justify-between h-12 px-4 md:px-6">
             {/* Breadcrumbs */}
-            <Breadcrumb>
-              <BreadcrumbList>
-                {breadcrumbs.map((crumb, index) => (
-                  <React.Fragment key={index}>
-                    <BreadcrumbItem>
-                      {index === breadcrumbs.length - 1 ? (
-                        <BreadcrumbPage className="text-foreground text-sm">{crumb.label}</BreadcrumbPage>
-                      ) : (
-                        <BreadcrumbLink
-                          href={crumb.href || "#"}
-                          className="text-muted-foreground hover:text-foreground text-sm"
-                        >
-                          {crumb.label}
-                        </BreadcrumbLink>
-                      )}
-                    </BreadcrumbItem>
-                    {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
-                  </React.Fragment>
-                ))}
-              </BreadcrumbList>
-            </Breadcrumb>
+            <BreadcrumbNav items={breadcrumbs} />
 
             {/* Search and Feedback */}
             <div className="flex items-center gap-2 md:gap-3">

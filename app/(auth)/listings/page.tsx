@@ -2,7 +2,6 @@ import { generateMultipleListings } from "@/lib/mock-data/generate-multiple-list
 import type { MockListing } from "@/lib/mock-data/listings";
 import type { FilterableItem } from "@/components/ListingGridShell";
 import { ListingsClient } from "./listings-client";
-import { BreadcrumbNav } from "@/components/breadcrumb-nav";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import { ViewTransition } from "react";
@@ -117,10 +116,7 @@ export default async function ListingsPage() {
 			<div className="min-h-screen">
 			<div className="container flex flex-col mx-auto px-4 py-6">
 			{/* Breadcrumb Navigation */}
-					<BreadcrumbNav
-						items={[{ label: "Listings" }]}
-						className="mb-8"
-					/>
+					{/* Breadcrumb Navigation */}
 
 					<div className="space-y-3">
 						<h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl">

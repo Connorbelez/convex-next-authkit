@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BreadcrumbNav } from "@/components/breadcrumb-nav";
 
 /**
  * Listings page error boundary
@@ -25,10 +24,6 @@ export default function Error({
 		<div className="min-h-screen">
 			<div className="container mx-auto px-4 py-6">
 				{/* Breadcrumb Navigation */}
-				<BreadcrumbNav
-					items={[{ label: "Listings" }]}
-					className="mb-6"
-				/>
 
 				<div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
 					<div className="max-w-md w-full space-y-4 text-center">

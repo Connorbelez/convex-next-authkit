@@ -4,9 +4,10 @@ import { Suspense } from "react";
 import "./globals.css";
 import { ViewTransition } from "react";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
-import Header from "@/components/Header";
+import { TwoLevelNav } from "@/components/navigation/two-level-nav";
 import { PageSkeleton } from "@/components/skeletons";
 import { Toaster } from "@/components/ui/sonner";
+import NavigationProvider from "@/components/navigation/navigation-provider";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -38,11 +39,13 @@ export default function RootLayout({
 			>
 				<Suspense fallback={<PageSkeleton />}>
 					<ConvexClientProvider>
-						<Header />
-						<ViewTransition>
-							<main>{children}</main>
-						</ViewTransition>
-						<Toaster />
+						<NavigationProvider>
+							<TwoLevelNav />
+							<ViewTransition>
+								<main className="min-h-screen pt-28">{children}</main>
+							</ViewTransition>
+							<Toaster />
+						</NavigationProvider>
 					</ConvexClientProvider>
 				</Suspense>
 			</body>
