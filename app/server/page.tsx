@@ -2,6 +2,7 @@ import Home from './inner';
 import { preloadQuery, preloadedQueryResult } from 'convex/nextjs';
 import { api } from '@/convex/_generated/api';
 import { withAuth } from '@workos-inc/authkit-nextjs';
+import { ViewTransition } from "react";
 
 export default async function ServerPage() {
   const { accessToken } = await withAuth();
@@ -16,6 +17,7 @@ export default async function ServerPage() {
   const data = preloadedQueryResult(preloaded);
 
   return (
+    <ViewTransition>
     <main className="p-8 flex flex-col gap-4 mx-auto max-w-2xl">
       <h1 className="text-4xl font-bold text-center">Convex + Next.js</h1>
       <div className="flex flex-col gap-4 bg-slate-200 dark:bg-slate-800 p-4 rounded-md">
@@ -26,5 +28,6 @@ export default async function ServerPage() {
       </div>
       <Home preloaded={preloaded} />
     </main>
+    </ViewTransition>
   );
 }

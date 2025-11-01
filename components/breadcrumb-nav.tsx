@@ -36,29 +36,18 @@ interface BreadcrumbNavProps {
  *   { label: "Property Details" }
  * ]} />
  */
-export function BreadcrumbNav({ className }: BreadcrumbNavProps) {
-	const pathname = usePathname();
-	const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([]);
-
+export function BreadcrumbNav({ className, items }: BreadcrumbNavProps) {
+	const [localItems, setLocalItems] = useState<BreadcrumbItem[]>(items);
 	useEffect(() => {
-		console.log("PATHNAME", pathname);
-
-		const pathParts = pathname.split("/");
-		const breadcrumbs = pathParts.map((part, index) => ({
-			label: part.charAt(0).toUpperCase() + part.slice(1),
-			href: `${SITE_URL}${pathParts.slice(0, index + 1).join("/")}`,
-		}));
-		console.log("BREADCRUMBS", breadcrumbs);
-		breadcrumbs.shift();
-		setBreadcrumbs(breadcrumbs);
-	}, [pathname]);
+		setLocalItems(items);
+	}, [items]);
 	return (
 		<ViewTransition>
 			<div className={className}>
 				<Breadcrumb>
 					<BreadcrumbList>
 						{/* Home link */}
-						<BreadcrumbItem>
+						{/* <BreadcrumbItem>
 							<BreadcrumbLink asChild>
 								<Link
 									href="/"
@@ -69,14 +58,33 @@ export function BreadcrumbNav({ className }: BreadcrumbNavProps) {
 									<span className="sr-only md:not-sr-only md:inline">Home</span>
 								</Link>
 							</BreadcrumbLink>
-						</BreadcrumbItem>
+						</BreadcrumbItem> */}
 
-						{breadcrumbs.map((item, index) => {
-							const isLast = index === breadcrumbs.length - 1;
-
+						{localItems.map((item, index) => {
+							const isLast = index === localItems.length - 1;
+							if (index === 0) {
+								return (
+									<div key={item.label} className="contents">
+										<BreadcrumbItem key={item.label}>
+											<BreadcrumbLink asChild>
+												<Link
+													href="/"
+													className="flex items-center gap-1.5"
+													aria-label="Go to home"
+												>
+													<Home className="h-4 w-4" />
+													<span className="sr-only md:not-sr-only md:inline">
+														Home
+													</span>
+												</Link>
+											</BreadcrumbLink>
+										</BreadcrumbItem>
+										<BreadcrumbSeparator />
+									</div>
+								);
+							}
 							return (
-								<div key={index} className="contents">
-									<BreadcrumbSeparator />
+								<div key={item.label} className="contents">
 									<BreadcrumbItem>
 										{isLast || !item.href ? (
 											<BreadcrumbPage>{item.label}</BreadcrumbPage>
@@ -86,6 +94,7 @@ export function BreadcrumbNav({ className }: BreadcrumbNavProps) {
 											</BreadcrumbLink>
 										)}
 									</BreadcrumbItem>
+									{!isLast && <BreadcrumbSeparator />}
 								</div>
 							);
 						})}

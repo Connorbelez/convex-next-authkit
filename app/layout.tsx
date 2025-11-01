@@ -39,13 +39,12 @@ export default function RootLayout({
 			>
 				<Suspense fallback={<PageSkeleton />}>
 					<ConvexClientProvider>
-						<ViewTransition>
-							<NavigationProvider>
-								<TwoLevelNav />
-								<main className="min-h-screen pt-28">{children}</main>
-								<Toaster />
-							</NavigationProvider>
-						</ViewTransition>
+						{/* <ViewTransition> */}
+						<NavigationProvider>
+							<main className="min-h-screen pt-28">{children}</main>
+							<Toaster />
+						</NavigationProvider>
+						{/* </ViewTransition> */}
 					</ConvexClientProvider>
 				</Suspense>
 			</body>

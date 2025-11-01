@@ -29,7 +29,7 @@ import {
 	DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { Map } from "lucide-react";
+import { Map as MapIcon } from "lucide-react";
 import { useFiltersStore } from "./contexts/listingContext";
 
 type ClassNames = {
@@ -246,7 +246,7 @@ export function ListingGridShell<T extends WithLatLng>({
 
 	React.useEffect(() => {
 		setItems(filteredItems);
-	}, [filteredItems]);
+	}, [filteredItems, setItems]);
 
 	if (isMobile) {
 		return (
@@ -271,7 +271,7 @@ export function ListingGridShell<T extends WithLatLng>({
 									size="lg"
 									className="rounded-full shadow-lg h-14 w-14 p-0"
 								>
-									<Map className="h-6 w-6" />
+									<MapIcon className="h-6 w-6" />
 								</Button>
 							</DrawerTrigger>
 							<DrawerContent className="h-[85vh] rounded-t-2xl">

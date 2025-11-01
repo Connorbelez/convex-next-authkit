@@ -18,8 +18,10 @@ import {
 import Link from "next/link";
 import { useFiltersStore } from "../contexts/listingContext";
 import { FilterBar } from "../filter-bar";
+import { ViewTransition } from "react";
 interface TwoLevelNavProps {
 	breadcrumbs?: { label: string; href?: string }[];
+	pathname?: string;
 }
 
 function isListingsPage(pathname: string) {
@@ -28,9 +30,10 @@ function isListingsPage(pathname: string) {
 	);
 }
 
-export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
-	const pathname = usePathname();
-	const router = useRouter();
+export function TwoLevelNav({
+	breadcrumbs = [],
+	pathname = "",
+}: TwoLevelNavProps) {
 	const [commandOpen, setCommandOpen] = React.useState(false);
 	const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
@@ -44,11 +47,6 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
 		document.addEventListener("keydown", down);
 		return () => document.removeEventListener("keydown", down);
 	}, []);
-
-	const handleNavClick = (navItem: NavItem) => {
-		router.push(navItem.href);
-		setMobileMenuOpen(false);
-	};
 
 	return (
 		<>
@@ -91,8 +89,8 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
 										prefetch={true}
 										href={navItem.href}
 									>
-										<Button
-											variant="ghost"
+										<button
+											type="button"
 											key={navItem.id}
 											// onClick={() => handleNavClick(navItem)}
 											className={cn(
@@ -120,12 +118,11 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
 													</div>
 												</motion.div>
 											)}
-										</Button>
+										</button>
 									</Link>
 								);
 							})}
 						</div>
-
 						{/* Right Side - User Controls */}
 						<div className="flex items-center gap-2 md:gap-3">
 							{/* Notifications - Visible on all screen sizes */}
@@ -177,13 +174,14 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
 						{!isListingsPage(pathname) && (
 							<div className="flex items-center gap-2 md:gap-3">
 								{/* Search */}
-								<button
+								<Button
+									variant="ghost"
 									onClick={() => setCommandOpen(true)}
 									className="flex items-center gap-2 px-2 md:px-3 py-1.5 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors text-sm text-muted-foreground"
 								>
 									<Search className="size-4" />
 									<span className="text-xs hidden sm:inline">Search...</span>
-								</button>
+								</Button>
 
 								{/* Feedback - Hidden on small mobile */}
 								<Button
@@ -226,30 +224,36 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
 										const isActive = isNavItemActive(navItem, pathname);
 
 										return (
-											<button
+											<Link
 												key={navItem.id}
-												onClick={() => handleNavClick(navItem)}
-												className={cn(
-													"w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left",
-													isActive
-														? "bg-primary/10 text-primary font-semibold"
-														: "text-foreground/80 hover:bg-secondary hover:text-foreground",
-												)}
+												href={navItem.href}
+												prefetch={true}
 											>
-												<Icon className="size-5" />
-												<span className="text-base">{navItem.label}</span>
-												{isActive && (
-													<motion.div
-														layoutId="mobile-active"
-														className="ml-auto size-2 rounded-full bg-primary"
-														transition={{
-															type: "spring",
-															stiffness: 300,
-															damping: 30,
-														}}
-													/>
-												)}
-											</button>
+												<Button
+													variant="ghost"
+													key={navItem.id}
+													className={cn(
+														"w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left",
+														isActive
+															? "bg-primary/10 text-primary font-semibold"
+															: "text-foreground/80 hover:bg-secondary hover:text-foreground",
+													)}
+												>
+													<Icon className="size-5" />
+													<span className="text-base">{navItem.label}</span>
+													{isActive && (
+														<motion.div
+															layoutId="mobile-active"
+															className="ml-auto size-2 rounded-full bg-primary"
+															transition={{
+																type: "spring",
+																stiffness: 300,
+																damping: 30,
+															}}
+														/>
+													)}
+												</Button>
+											</Link>
 										);
 									})}
 
@@ -257,7 +261,8 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
 									<div className="h-px bg-border my-4" />
 
 									{/* Mobile-only actions */}
-									<button
+									<Button
+										variant="ghost"
 										onClick={() => {
 											setCommandOpen(true);
 											setMobileMenuOpen(false);
@@ -266,13 +271,16 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
 									>
 										<Search className="size-5" />
 										<span className="text-base">Search</span>
-									</button>
+									</Button>
 
-									<button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-foreground/80 hover:bg-secondary hover:text-foreground transition-colors text-left sm:hidden">
+									<Button
+										variant="ghost"
+										className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-foreground/80 hover:bg-secondary hover:text-foreground transition-colors text-left sm:hidden"
+									>
 										<Bell className="size-5" />
 										<span className="text-base">Notifications</span>
 										<span className="ml-auto size-2 rounded-full bg-primary" />
-									</button>
+									</Button>
 								</div>
 							</motion.div>
 						</>

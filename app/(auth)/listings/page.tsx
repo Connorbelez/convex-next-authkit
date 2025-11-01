@@ -112,7 +112,7 @@ export default async function ListingsPage() {
 	console.log("APR range:", Math.min(...listings.map((l) => l.apr!)), "-", Math.max(...listings.map((l) => l.apr!)));
 
 	return (
-		// <ViewTransition>
+		<ViewTransition>
 			<div className="min-h-screen">
 			<div className="container flex flex-col mx-auto py-6">
 			{/* Breadcrumb Navigation */}
@@ -132,7 +132,7 @@ export default async function ListingsPage() {
 					</div>
 				</div>
             </div>
-        // </ViewTransition>
+        </ViewTransition>
 	);
 }
 

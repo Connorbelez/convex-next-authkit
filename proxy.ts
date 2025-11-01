@@ -33,8 +33,13 @@ function generateRequestId() {
 
 export default async function proxy(req: NextRequest) {
   // call the authkit middleware first
+  const headers = new Headers(req.headers);
+  headers.set("x-current-path", req.nextUrl.pathname);
+  console.info("HEADERS", {headers: headers});
+  console.info("REQUEST", {url: req.url, pathname: req.nextUrl.pathname, search: req.nextUrl.search});
+  console.info("PATHNAME", {pathname: req.nextUrl.pathname});
   const res = (await base(req as any, {} as any)) as NextResponse;
-  console.info("Request: ", {req: req});
+  res.headers.set("x-current-path", req.nextUrl.pathname);
   try {
     // const existing = req.headers.get('x-request-id');
     // const requestId = existing ?? generateRequestId();
