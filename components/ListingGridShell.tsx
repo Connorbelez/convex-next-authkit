@@ -1,26 +1,18 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import { Map as MapIcon } from "lucide-react";
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-
 import {
 	ListingMap,
 	type ListingMapProps,
 	type ViewportBounds,
 } from "@/components/ListingMap";
-import type { WithLatLng } from "@/hooks/use-filtered-listings";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useViewportFilteredItems } from "@/hooks/use-filtered-listings";
 import {
 	MobileListingScroller,
 	type MobileListingSection,
 } from "@/components/mobile-listing-scroller";
-import { FilterBar } from "./filter-bar";
-import {
-	type FilterState,
-	DEFAULT_FILTERS,
-	FILTER_BOUNDS,
-} from "./types/listing-filters";
+import { Button } from "@/components/ui/button";
 import {
 	Drawer,
 	DrawerContent,
@@ -28,9 +20,11 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { Map as MapIcon } from "lucide-react";
+import type { WithLatLng } from "@/hooks/use-filtered-listings";
+import { useViewportFilteredItems } from "@/hooks/use-filtered-listings";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useFiltersStore } from "./contexts/listingContext";
+import { FILTER_BOUNDS, type FilterState } from "./types/listing-filters";
 
 type ClassNames = {
 	container?: string;
@@ -68,7 +62,7 @@ export type ListingGridShellProps<T extends WithLatLng> = {
 
 function applyFilters<T extends FilterableItem>(
 	items: ReadonlyArray<T>,
-	filters: FilterState,
+	filters: FilterState
 ): ReadonlyArray<T> {
 	const filteredItems = items.filter((item) => {
 		// LTV filter
@@ -120,7 +114,7 @@ function applyFilters<T extends FilterableItem>(
 			const query = filters.searchQuery.toLowerCase();
 			const matchesTitle = item.title?.toLowerCase().includes(query);
 			const matchesAddress = item.address?.toLowerCase().includes(query);
-			if (!matchesTitle && !matchesAddress) {
+			if (!(matchesTitle || matchesAddress)) {
 				return false;
 			}
 		}
@@ -211,14 +205,14 @@ export function ListingGridShell<T extends WithLatLng>({
 		if (!showFilters) return items;
 		return applyFilters(
 			items as ReadonlyArray<FilterableItem>,
-			filters,
+			filters
 		) as ReadonlyArray<T>;
 	}, [items, filters, showFilters]);
 
 	// Then apply viewport filtering
 	const filteredItems = useViewportFilteredItems(
 		userFilteredItems,
-		viewportBounds,
+		viewportBounds
 	);
 
 	const onViewportChange = React.useCallback((bounds: ViewportBounds) => {
@@ -258,28 +252,28 @@ export function ListingGridShell<T extends WithLatLng>({
 					{/* Main listing scroller */}
 					<div className={classNames?.gridColumn}>
 						<MobileListingScroller
-							sections={mobileSections}
 							renderCard={renderCard}
+							sections={mobileSections}
 						/>
 					</div>
 
 					{/* Floating map button */}
-					<div className="fixed bottom-6 right-6 z-40">
-						<Drawer open={isMapDrawerOpen} onOpenChange={setIsMapDrawerOpen}>
+					<div className="fixed right-6 bottom-6 z-40">
+						<Drawer onOpenChange={setIsMapDrawerOpen} open={isMapDrawerOpen}>
 							<DrawerTrigger asChild>
 								<Button
+									className="h-14 w-14 rounded-full p-0 shadow-lg"
 									size="lg"
-									className="rounded-full shadow-lg h-14 w-14 p-0"
 								>
 									<MapIcon className="h-6 w-6" />
 								</Button>
 							</DrawerTrigger>
 							<DrawerContent className="h-[85vh] rounded-t-2xl">
 								<motion.div
-									variants={drawerVariants as any}
-									initial="hidden"
 									animate="visible"
-									className="h-full flex flex-col"
+									className="flex h-full flex-col"
+									initial="hidden"
+									variants={drawerVariants as any}
 								>
 									<motion.div variants={itemVariants as any}>
 										<DrawerHeader>
@@ -287,15 +281,15 @@ export function ListingGridShell<T extends WithLatLng>({
 										</DrawerHeader>
 									</motion.div>
 									<motion.div
+										className="min-h-0 flex-1 px-4 pb-4"
 										variants={itemVariants as any}
-										className="flex-1 px-4 pb-4 min-h-0"
 									>
 										<div className="h-full">
 											<ListingMap
-												items={filteredItems}
-												renderPopup={renderMapPopup}
-												onViewportChange={onViewportChange}
 												className="h-full w-full rounded-lg"
+												items={filteredItems}
+												onViewportChange={onViewportChange}
+												renderPopup={renderMapPopup}
 												{...mapProps}
 											/>
 										</div>
@@ -316,19 +310,19 @@ export function ListingGridShell<T extends WithLatLng>({
       )} */}
 			<section className={classNames?.container ?? "flex gap-x-4 px-4 pt-4"}>
 				<div className={classNames?.gridColumn ?? "flex-1"}>
-					<div className="grid grid-cols-1 84rem:grid-cols-2">
+					<div className="grid 84rem:grid-cols-2 grid-cols-1">
 						<AnimatePresence mode="popLayout">
 							{filteredItems.map((item) => (
 								<motion.div
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, scale: 0.95 }}
+									initial={{ opacity: 0, y: 20 }}
 									key={
 										(item as { id?: string | number }).id ??
 										JSON.stringify(item)
 									}
-									initial={{ opacity: 0, y: 20 }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0, scale: 0.95 }}
-									transition={{ duration: 0.2 }}
 									layout
+									transition={{ duration: 0.2 }}
 								>
 									{renderCard(item)}
 								</motion.div>
@@ -336,17 +330,17 @@ export function ListingGridShell<T extends WithLatLng>({
 						</AnimatePresence>
 					</div>
 				</div>
-				<div className={classNames?.mapColumn ?? "w-[40%] 84rem:w-[35%]"}>
+				<div className={classNames?.mapColumn ?? "84rem:w-[35%] w-[40%]"}>
 					<div
 						className={
 							classNames?.mapWrapper ?? "sticky top-30 h-[calc(100vh-7rem)]"
 						}
 					>
 						<ListingMap
-							items={filteredItems}
-							renderPopup={renderMapPopup}
-							onViewportChange={onViewportChange}
 							className="h-full"
+							items={filteredItems}
+							onViewportChange={onViewportChange}
+							renderPopup={renderMapPopup}
 							{...mapProps}
 						/>
 					</div>

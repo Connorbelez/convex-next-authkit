@@ -2,7 +2,7 @@
 // Small collection of helper utilities to verify a test harness is wired up.
 
 export function add(a: number, b: number): number {
-    return a + b;
+	return a + b;
 }
 
 /**
@@ -10,7 +10,7 @@ export function add(a: number, b: number): number {
  * Useful for testing async behavior in your harness.
  */
 export function delayedEcho<T>(value: T, ms = 20): Promise<T> {
-    return new Promise((resolve) => setTimeout(() => resolve(value), ms));
+	return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
 
 /**
@@ -21,20 +21,20 @@ export function delayedEcho<T>(value: T, ms = 20): Promise<T> {
  *   c.get(); // 6
  */
 export function makeCounter(initial = 0) {
-    let value = initial;
-    return {
-        increment: (by = 1) => {
-            value += by;
-            return value;
-        },
-        decrement: (by = 1) => {
-            value -= by;
-            return value;
-        },
-        get: () => value,
-        reset: (v = initial) => {
-            value = v;
-            return value;
-        },
-    };
+	let value = initial;
+	return {
+		increment: (by = 1) => {
+			value += by;
+			return value;
+		},
+		decrement: (by = 1) => {
+			value -= by;
+			return value;
+		},
+		get: () => value,
+		reset: (v = initial) => {
+			value = v;
+			return value;
+		},
+	};
 }

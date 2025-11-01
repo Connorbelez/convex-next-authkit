@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
-import { ViewTransition } from "react";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
-import { TwoLevelNav } from "@/components/navigation/two-level-nav";
+import NavigationProvider from "@/components/navigation/navigation-provider";
 import { PageSkeleton } from "@/components/skeletons";
 import { Toaster } from "@/components/ui/sonner";
-import NavigationProvider from "@/components/navigation/navigation-provider";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
+import { useEffect, useRef, useState } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Icon } from "@iconify/react";
 
@@ -61,8 +61,8 @@ export function PropertyMap({ location, address }: PropertyMapProps) {
 						`<div class="p-2">
 							<p class="font-semibold">${address.street}</p>
 							<p class="text-sm text-gray-600">${address.city}, ${address.state}</p>
-						</div>`,
-					),
+						</div>`
+					)
 				)
 				.addTo(map.current);
 
@@ -101,16 +101,16 @@ export function PropertyMap({ location, address }: PropertyMapProps) {
 
 	if (mapError) {
 		return (
-			<div className="relative aspect-4/3 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 lg:aspect-auto lg:h-full">
+			<div className="relative aspect-4/3 w-full overflow-hidden rounded-lg bg-gray-100 lg:aspect-auto lg:h-full dark:bg-gray-800">
 				<div className="flex h-full flex-col items-center justify-center p-6 text-center">
-					<Icon icon="lucide:map-pin-off" className="h-12 w-12 text-gray-400" />
+					<Icon className="h-12 w-12 text-gray-400" icon="lucide:map-pin-off" />
 					<p className="mt-3 font-medium text-gray-700 dark:text-gray-300">
 						Map Unavailable
 					</p>
-					<p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+					<p className="mt-1 text-gray-500 text-sm dark:text-gray-400">
 						{mapError}
 					</p>
-					<p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+					<p className="mt-4 text-gray-600 text-sm dark:text-gray-400">
 						{address.street}
 						<br />
 						{address.city}, {address.state}
@@ -126,16 +126,16 @@ export function PropertyMap({ location, address }: PropertyMapProps) {
 				<div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
 					<div className="flex flex-col items-center">
 						<Icon
-							icon="lucide:loader-2"
 							className="h-8 w-8 animate-spin text-primary"
+							icon="lucide:loader-2"
 						/>
-						<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+						<p className="mt-2 text-gray-600 text-sm dark:text-gray-400">
 							Loading map...
 						</p>
 					</div>
 				</div>
 			)}
-			<div ref={mapContainer} className="h-full w-full" />
+			<div className="h-full w-full" ref={mapContainer} />
 		</div>
 	);
 }

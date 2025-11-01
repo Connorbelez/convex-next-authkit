@@ -1,8 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 /**
  * Listing detail page error boundary
@@ -23,10 +23,10 @@ export default function Error({
 	return (
 		<div className="container mx-auto max-w-7xl px-4 py-8">
 			{/* Breadcrumb Navigation */}
-			<div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
-				<div className="max-w-md w-full space-y-4 text-center">
+			<div className="flex min-h-[60vh] flex-col items-center justify-center space-y-6">
+				<div className="w-full max-w-md space-y-4 text-center">
 					<div className="space-y-2">
-						<h1 className="text-3xl font-bold text-red-600">
+						<h1 className="font-bold text-3xl text-red-600">
 							Failed to Load Listing
 						</h1>
 						<p className="text-muted-foreground">
@@ -35,45 +35,27 @@ export default function Error({
 					</div>
 
 					{error.message && (
-						<div className="p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg text-left">
-							<p className="text-sm text-red-800 dark:text-red-200 font-mono break-words">
+						<div className="rounded-lg border border-red-200 bg-red-50 p-4 text-left dark:border-red-800 dark:bg-red-950/20">
+							<p className="break-words font-mono text-red-800 text-sm dark:text-red-200">
 								{error.message}
 							</p>
 						</div>
 					)}
 
 					<div className="flex flex-col gap-3">
-						<Button
-							variant="default"
-							size="lg"
-							onClick={reset}
-						>
+						<Button onClick={reset} size="lg" variant="default">
 							Try again
 						</Button>
-						<Button
-							variant="outline"
-							size="lg"
-							className="w-full"
-							asChild
-						>
-							<Link href="/listings">
-								Back to listings
-							</Link>
+						<Button asChild className="w-full" size="lg" variant="outline">
+							<Link href="/listings">Back to listings</Link>
 						</Button>
-						<Button
-							variant="ghost"
-							size="lg"
-							className="w-full"
-							asChild
-						>
-							<Link href="/">
-								Go to home
-							</Link>
+						<Button asChild className="w-full" size="lg" variant="ghost">
+							<Link href="/">Go to home</Link>
 						</Button>
 					</div>
 
 					{error.digest && (
-						<p className="text-xs text-muted-foreground">
+						<p className="text-muted-foreground text-xs">
 							Error ID: {error.digest}
 						</p>
 					)}

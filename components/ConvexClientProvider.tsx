@@ -1,19 +1,18 @@
 "use client";
 
-import { ReactNode, useCallback, useState } from "react";
-import { ConvexReactClient } from "convex/react";
-import { ConvexProviderWithAuth } from "convex/react";
 import {
 	AuthKitProvider,
-	useAuth,
 	useAccessToken,
+	useAuth,
 } from "@workos-inc/authkit-nextjs/components";
+import { ConvexProviderWithAuth, ConvexReactClient } from "convex/react";
+import { type ReactNode, useCallback, useState } from "react";
 import { logger } from "../lib/logger";
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
-	const [convex] = useState(() => {
-		return new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-	});
+	const [convex] = useState(
+		() => new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
+	);
 	return (
 		<AuthKitProvider>
 			<ConvexProviderWithAuth client={convex} useAuth={useAuthFromAuthKit}>
@@ -49,7 +48,7 @@ function useAuthFromAuthKit() {
 				return null;
 			}
 		},
-		[user, refresh, getAccessToken],
+		[user, refresh, getAccessToken]
 	);
 
 	return {

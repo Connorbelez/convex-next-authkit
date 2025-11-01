@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, Star, Zap, Shield } from "lucide-react";
+import { Heart, Shield, Star, Zap } from "lucide-react";
+import { useState } from "react";
 
 const IconRadio = () => {
 	const [selected, setSelected] = useState("favorite");
@@ -15,7 +15,7 @@ const IconRadio = () => {
 	];
 	return (
 		<div className="space-y-4">
-			<h2 className="text-xl font-semibold">Icon Radio Selection</h2>
+			<h2 className="font-semibold text-xl">Icon Radio Selection</h2>
 			<div className="flex flex-wrap gap-4">
 				{options.map((option) => {
 					const isSelected = selected === option.id;
@@ -23,28 +23,24 @@ const IconRadio = () => {
 
 					return (
 						<motion.div
-							key={option.id}
-							className={`
-            cursor-pointer flex flex-col items-center space-y-2
-            ${
-							isSelected
-								? "text-[#0A6EFF]"
-								: "text-primary/50 hover:text-primary/80"
-						}
+							className={`flex cursor-pointer flex-col items-center space-y-2 ${
+								isSelected
+									? "text-[#0A6EFF]"
+									: "text-primary/50 hover:text-primary/80"
+							}
           `}
+							key={option.id}
 							onClick={() => setSelected(option.id)}
 							whileHover={{ y: -2 }}
 							whileTap={{ scale: 0.95 }}
 						>
 							<motion.div
-								className={`
-              w-16 h-16 rounded-full border flex items-center justify-center
-              ${isSelected ? "border-[#0A6EFF]" : ""}
-            `}
 								animate={{
 									scale: isSelected ? [1, 1.2, 1] : 1,
 									rotate: isSelected ? [0, 10, -10, 0] : 0,
 								}}
+								className={`flex h-16 w-16 items-center justify-center rounded-full border ${isSelected ? "border-[#0A6EFF]" : ""}
+            `}
 								transition={{
 									duration: 0.5,
 									times: [0, 0.2, 0.5, 1],

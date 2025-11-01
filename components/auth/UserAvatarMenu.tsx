@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { SettingsDialog } from "@/components/settings-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -11,8 +13,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SettingsDialog } from "@/components/settings-dialog";
-import { useRouter } from "next/navigation";
 
 function getInitials(name?: string | null, email?: string | null) {
 	if (name && name.trim()) {
@@ -60,19 +60,19 @@ export function UserAvatarMenu() {
 					<button className="inline-flex items-center justify-center rounded-full outline-hidden">
 						<Avatar>
 							{imageUrl ? (
-								<AvatarImage src={imageUrl} alt={displayName} />
+								<AvatarImage alt={displayName} src={imageUrl} />
 							) : (
 								<AvatarFallback>{initials}</AvatarFallback>
 							)}
 						</Avatar>
 					</button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent sideOffset={8} align="end" className="z-200">
+				<DropdownMenuContent align="end" className="z-200" sideOffset={8}>
 					<DropdownMenuLabel>
 						<div className="flex min-w-40 flex-col">
-							<span className="text-sm font-medium">{displayName}</span>
+							<span className="font-medium text-sm">{displayName}</span>
 							{email ? (
-								<span className="text-xs text-muted-foreground">{email}</span>
+								<span className="text-muted-foreground text-xs">{email}</span>
 							) : null}
 						</div>
 					</DropdownMenuLabel>

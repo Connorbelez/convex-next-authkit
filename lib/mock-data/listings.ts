@@ -74,12 +74,12 @@ const CITIES = [
 	{ name: "North York", state: "ON", lat: 43.7615, lng: -79.4111 },
 	{ name: "Scarborough", state: "ON", lat: 43.7731, lng: -79.2578 },
 	{ name: "Etobicoke", state: "ON", lat: 43.6205, lng: -79.5132 },
-	{ name: "Mississauga", state: "ON", lat: 43.5890, lng: -79.6441 },
-	{ name: "Markham", state: "ON", lat: 43.8561, lng: -79.3370 },
+	{ name: "Mississauga", state: "ON", lat: 43.589, lng: -79.6441 },
+	{ name: "Markham", state: "ON", lat: 43.8561, lng: -79.337 },
 	{ name: "Vaughan", state: "ON", lat: 43.8361, lng: -79.4983 },
 	{ name: "Richmond Hill", state: "ON", lat: 43.8828, lng: -79.4403 },
 	{ name: "Oakville", state: "ON", lat: 43.4675, lng: -79.6877 },
-	{ name: "Burlington", state: "ON", lat: 43.3255, lng: -79.7990 },
+	{ name: "Burlington", state: "ON", lat: 43.3255, lng: -79.799 },
 ];
 
 const STREETS = [
@@ -130,7 +130,12 @@ function randomInt(min: number, max: number, seed: string): number {
 	return Math.floor(seededRandom(seed) * (max - min + 1)) + min;
 }
 
-function randomFloat(min: number, max: number, seed: string, decimals = 2): number {
+function randomFloat(
+	min: number,
+	max: number,
+	seed: string,
+	decimals = 2
+): number {
 	const value = seededRandom(seed) * (max - min) + min;
 	return Number(value.toFixed(decimals));
 }
@@ -153,8 +158,8 @@ export function generateListing(id: string): MockListing {
 	// Calculate monthly payment using mortgage formula
 	const monthlyRate = interestRate / 100 / 12;
 	const monthlyPayment = Math.round(
-		(purchasePrice * monthlyRate * Math.pow(1 + monthlyRate, loanTermMonths)) /
-			(Math.pow(1 + monthlyRate, loanTermMonths) - 1),
+		(purchasePrice * monthlyRate * (1 + monthlyRate) ** loanTermMonths) /
+			((1 + monthlyRate) ** loanTermMonths - 1)
 	);
 
 	// Generate 3-7 images
@@ -171,7 +176,8 @@ export function generateListing(id: string): MockListing {
 
 	const listing: MockListing = {
 		_id: id,
-		_creationTime: Date.now() - randomInt(0, 365 * 24 * 60 * 60 * 1000, `${id}-created`),
+		_creationTime:
+			Date.now() - randomInt(0, 365 * 24 * 60 * 60 * 1000, `${id}-created`),
 		title: randomChoice(PROPERTY_TITLES, id),
 		address: {
 			street: `${streetNumber} ${streetName}`,
@@ -195,22 +201,34 @@ export function generateListing(id: string): MockListing {
 			loanTerm: loanTermMonths,
 			maturityDate: maturityDate.toISOString(),
 		},
-		status: randomChoice(["active", "active", "funded", "closed"] as const, `${id}-status`), // More likely to be active
+		status: randomChoice(
+			["active", "active", "funded", "closed"] as const,
+			`${id}-status`
+		), // More likely to be active
 		viewCount: randomInt(0, 500, `${id}-views`),
-		createdAt: new Date(Date.now() - randomInt(0, 365 * 24 * 60 * 60 * 1000, `${id}-created2`)).toISOString(),
+		createdAt: new Date(
+			Date.now() - randomInt(0, 365 * 24 * 60 * 60 * 1000, `${id}-created2`)
+		).toISOString(),
 		updatedAt: new Date().toISOString(),
 	};
 
 	// Add appraisal if applicable
 	if (hasAppraisal) {
 		const appraisalDate = new Date();
-		appraisalDate.setMonth(appraisalDate.getMonth() - randomInt(1, 12, `${id}-appraisaldate`));
+		appraisalDate.setMonth(
+			appraisalDate.getMonth() - randomInt(1, 12, `${id}-appraisaldate`)
+		);
 
 		listing.appraisal = {
-			value: Math.round(purchasePrice * randomFloat(0.98, 1.12, `${id}-appraisalval`)),
+			value: Math.round(
+				purchasePrice * randomFloat(0.98, 1.12, `${id}-appraisalval`)
+			),
 			date: appraisalDate.toISOString(),
 			appraiser: randomChoice(APPRAISER_NAMES, `${id}-appraiser`),
-			method: randomChoice(["comparative", "income", "cost"] as const, `${id}-method`),
+			method: randomChoice(
+				["comparative", "income", "cost"] as const,
+				`${id}-method`
+			),
 		};
 	}
 
@@ -241,7 +259,11 @@ export function generatePayments(listingId: string, count = 12): MockPayment[] {
 		}
 
 		// Payment types cycle through principal, interest, escrow
-		const typeOptions: Array<"principal" | "interest" | "escrow"> = ["principal", "interest", "escrow"];
+		const typeOptions: Array<"principal" | "interest" | "escrow"> = [
+			"principal",
+			"interest",
+			"escrow",
+		];
 		const type = typeOptions[i % 3];
 
 		// Amount varies by type
@@ -272,7 +294,10 @@ export function generatePayments(listingId: string, count = 12): MockPayment[] {
  * Generate comparable properties based on a reference listing
  * Returns properties within similar price range and location
  */
-export function generateComparables(referenceId: string, limit = 6): Array<MockListing & { distance: number }> {
+export function generateComparables(
+	referenceId: string,
+	limit = 6
+): Array<MockListing & { distance: number }> {
 	const reference = generateListing(referenceId);
 	const comparables: Array<MockListing & { distance: number }> = [];
 
@@ -283,13 +308,19 @@ export function generateComparables(referenceId: string, limit = 6): Array<MockL
 
 		// Adjust price to be within 20% of reference
 		const priceVariation = randomFloat(0.85, 1.15, `${compId}-pricevar`);
-		listing.financials.currentValue = Math.round(reference.financials.currentValue * priceVariation);
-		listing.financials.purchasePrice = Math.round(reference.financials.purchasePrice * priceVariation);
+		listing.financials.currentValue = Math.round(
+			reference.financials.currentValue * priceVariation
+		);
+		listing.financials.purchasePrice = Math.round(
+			reference.financials.purchasePrice * priceVariation
+		);
 
 		// Adjust location to be nearby (within ~5 miles)
 		listing.location = {
-			lat: reference.location.lat + randomFloat(-0.05, 0.05, `${compId}-lat2`, 4),
-			lng: reference.location.lng + randomFloat(-0.05, 0.05, `${compId}-lng2`, 4),
+			lat:
+				reference.location.lat + randomFloat(-0.05, 0.05, `${compId}-lat2`, 4),
+			lng:
+				reference.location.lng + randomFloat(-0.05, 0.05, `${compId}-lng2`, 4),
 		};
 
 		// Use same city for comparables

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { startTransition } from "react";
 
 /**
@@ -19,7 +19,7 @@ export function useNavigationTransition() {
 	};
 
 	const getNavigationDirection = (
-		targetPath: string,
+		targetPath: string
 	): "left" | "right" | "none" => {
 		const currentPath = pathname;
 

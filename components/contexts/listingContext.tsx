@@ -1,11 +1,9 @@
 // "use client";
 
-import * as React from "react";
-import type { FilterState } from "../types/listing-filters";
-import { DEFAULT_FILTERS } from "../types/listing-filters";
 import { create } from "zustand";
 import type { FilterableItem } from "../ListingGridShell";
-import { combine } from "zustand/middleware";
+import type { FilterState } from "../types/listing-filters";
+import { DEFAULT_FILTERS } from "../types/listing-filters";
 
 // const useFiltersStore = create((set) => ({
 //   filters: DEFAULT_FILTERS,
@@ -27,8 +25,8 @@ type Actions = {
 export const useFiltersStore = create<State & Actions>((set) => ({
 	filters: DEFAULT_FILTERS,
 	items: [] as ReadonlyArray<FilterableItem>,
-	setFilters: (filters: FilterState) => set({ filters: filters }),
-	setItems: (items: ReadonlyArray<FilterableItem>) => set({ items: items }),
+	setFilters: (filters: FilterState) => set({ filters }),
+	setItems: (items: ReadonlyArray<FilterableItem>) => set({ items }),
 }));
 
 // const useFiltersStore = create(combine(

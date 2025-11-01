@@ -1,9 +1,9 @@
 "use client";
 
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import React from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "motion/react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -11,7 +11,7 @@ import {
 	CardFooter,
 	CardHeader,
 } from "@/components/ui/card";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface TourStep {
 	target: string;
@@ -44,13 +44,13 @@ export function Tour({
 }: TourProps) {
 	const [currentStep, setCurrentStep] = React.useState(0);
 	const [targetElement, setTargetElement] = React.useState<HTMLElement | null>(
-		null,
+		null
 	);
 	const [position, setPosition] = React.useState({ top: 0, left: 0 });
 	const cardRef = React.useRef<HTMLDivElement>(null);
 
 	const calculatePosition = React.useCallback(() => {
-		if (!targetElement || !cardRef.current) return null;
+		if (!(targetElement && cardRef.current)) return null;
 
 		const targetRect = targetElement.getBoundingClientRect();
 		const cardRect = cardRef.current.getBoundingClientRect();
@@ -109,11 +109,11 @@ export function Tour({
 
 		top = Math.max(
 			SPACING,
-			Math.min(viewport.height - cardRect.height - SPACING, top),
+			Math.min(viewport.height - cardRect.height - SPACING, top)
 		);
 		left = Math.max(
 			SPACING,
-			Math.min(viewport.width - cardRect.width - SPACING, left),
+			Math.min(viewport.width - cardRect.width - SPACING, left)
 		);
 
 		return { top, left };
@@ -130,7 +130,7 @@ export function Tour({
 		if (!open) return;
 
 		const target = document.querySelector(
-			steps[currentStep].target,
+			steps[currentStep].target
 		) as HTMLElement;
 		setTargetElement(target);
 
@@ -193,15 +193,14 @@ export function Tour({
 				<>
 					{/* Overlay with cutout */}
 					<motion.div
-						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 0.2 }}
 						className="fixed inset-0 z-50"
+						exit={{ opacity: 0 }}
+						initial={{ opacity: 0 }}
+						transition={{ duration: 0.2 }}
 					>
 						{/* Dark overlay sections */}
 						<motion.div
-							initial={{ opacity: 0, scale: 0.95 }}
 							animate={{
 								opacity: 1,
 								scale: 1,
@@ -229,28 +228,30 @@ export function Tour({
                 )`
 									: "",
 							}}
+							className="absolute inset-0 bg-black/50 dark:bg-white/50"
 							exit={{ opacity: 0, scale: 0.95 }}
+							initial={{ opacity: 0, scale: 0.95 }}
 							transition={{
 								type: "spring",
 								damping: 20,
 								stiffness: 300,
 								clipPath: { type: "spring", damping: 25, stiffness: 400 },
 							}}
-							className="absolute inset-0 bg-black/50 dark:bg-white/50"
 						/>
 					</motion.div>
 
 					{/* Tour card */}
 					<motion.div
-						ref={cardRef}
-						initial={{ opacity: 0, scale: 0.9 }}
 						animate={{
 							opacity: 1,
 							scale: 1,
 							top: position.top,
 							left: position.left,
 						}}
+						className={cn("fixed z-[70] w-[320px]", className)}
 						exit={{ opacity: 0, scale: 0.9 }}
+						initial={{ opacity: 0, scale: 0.9 }}
+						ref={cardRef}
 						transition={{
 							type: "spring",
 							damping: 20,
@@ -259,31 +260,30 @@ export function Tour({
 							top: { type: "spring", damping: 20, stiffness: 300 },
 							left: { type: "spring", damping: 20, stiffness: 300 },
 						}}
-						className={cn("fixed z-[70] w-[320px]", className)}
 					>
 						<div
 							className={cn(
-								"absolute w-0 h-0 border-8 border-transparent",
+								"absolute h-0 w-0 border-8 border-transparent",
 								placement === "top" &&
-									"bottom-[-16px] left-1/2 -translate-x-1/2 border-t-white",
+									"-translate-x-1/2 bottom-[-16px] left-1/2 border-t-white",
 								placement === "bottom" &&
-									"top-[-16px] left-1/2 -translate-x-1/2 border-b-white",
+									"-translate-x-1/2 top-[-16px] left-1/2 border-b-white",
 								placement === "left" &&
-									"right-[-16px] top-1/2 -translate-y-1/2 border-l-white",
+									"-translate-y-1/2 top-1/2 right-[-16px] border-l-white",
 								placement === "right" &&
-									"left-[-16px] top-1/2 -translate-y-1/2 border-r-white",
+									"-translate-y-1/2 top-1/2 left-[-16px] border-r-white"
 							)}
 						/>
 						<Card>
 							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-								<div className="text-sm font-medium">
+								<div className="font-medium text-sm">
 									Step {currentStep + 1} of {steps.length}
 								</div>
 								<Button
-									variant="ghost"
-									size="icon"
 									className="h-8 w-8 p-0"
 									onClick={handleClose}
+									size="icon"
+									variant="ghost"
 								>
 									<X className="h-4 w-4" />
 								</Button>
@@ -292,21 +292,21 @@ export function Tour({
 								<h4 className="font-semibold leading-none tracking-tight">
 									{steps[currentStep].title}
 								</h4>
-								<p className="text-sm text-muted-foreground mt-2">
+								<p className="mt-2 text-muted-foreground text-sm">
 									{steps[currentStep].description}
 								</p>
 							</CardContent>
 							<CardFooter className="flex justify-between">
 								<Button
-									variant="outline"
-									size="sm"
-									onClick={handlePrev}
 									disabled={currentStep === 0}
+									onClick={handlePrev}
+									size="sm"
+									variant="outline"
 								>
 									<ChevronLeft className="mr-2 h-4 w-4" />
 									Previous
 								</Button>
-								<Button size="sm" onClick={handleNext}>
+								<Button onClick={handleNext} size="sm">
 									{currentStep === steps.length - 1 ? (
 										"Finish"
 									) : (
@@ -322,6 +322,6 @@ export function Tour({
 				</>
 			)}
 		</AnimatePresence>,
-		document.body,
+		document.body
 	);
 }

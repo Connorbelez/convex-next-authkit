@@ -1,12 +1,12 @@
 "use client";
 
-import * as React from "react";
-import { useState, useId, useEffect } from "react";
-import { Slot } from "@radix-ui/react-slot";
 import * as LabelPrimitive from "@radix-ui/react-label";
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import { type ClassValue, clsx } from "clsx";
 import { Eye, EyeOff } from "lucide-react";
-import { clsx, type ClassValue } from "clsx";
+import * as React from "react";
+import { useEffect, useId, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 function cn(...inputs: ClassValue[]) {
@@ -45,14 +45,7 @@ export function Typewriter({
 
 		const timeout = setTimeout(
 			() => {
-				if (!isDeleting) {
-					if (currentIndex < currentText.length) {
-						setDisplayText((prev) => prev + currentText[currentIndex]);
-						setCurrentIndex((prev) => prev + 1);
-					} else if (loop) {
-						setTimeout(() => setIsDeleting(true), delay);
-					}
-				} else {
+				if (isDeleting) {
 					if (displayText.length > 0) {
 						setDisplayText((prev) => prev.slice(0, -1));
 					} else {
@@ -60,9 +53,14 @@ export function Typewriter({
 						setCurrentIndex(0);
 						setTextArrayIndex((prev) => (prev + 1) % textArray.length);
 					}
+				} else if (currentIndex < currentText.length) {
+					setDisplayText((prev) => prev + currentText[currentIndex]);
+					setCurrentIndex((prev) => prev + 1);
+				} else if (loop) {
+					setTimeout(() => setIsDeleting(true), delay);
 				}
 			},
-			isDeleting ? deleteSpeed : speed,
+			isDeleting ? deleteSpeed : speed
 		);
 
 		return () => clearTimeout(timeout);
@@ -87,7 +85,7 @@ export function Typewriter({
 }
 
 const labelVariants = cva(
-	"text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+	"font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 );
 
 const Label = React.forwardRef<
@@ -96,15 +94,15 @@ const Label = React.forwardRef<
 		VariantProps<typeof labelVariants>
 >(({ className, ...props }, ref) => (
 	<LabelPrimitive.Root
-		ref={ref}
 		className={cn(labelVariants(), className)}
+		ref={ref}
 		{...props}
 	/>
 ));
 Label.displayName = LabelPrimitive.Root.displayName;
 
 const buttonVariants = cva(
-	"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+	"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
 	{
 		variants: {
 			variant: {
@@ -112,7 +110,7 @@ const buttonVariants = cva(
 				destructive:
 					"bg-destructive text-destructive-foreground hover:bg-destructive/90",
 				outline:
-					"border border-input dark:border-input/50 bg-background hover:bg-accent hover:text-accent-foreground",
+					"border border-input bg-background hover:bg-accent hover:text-accent-foreground dark:border-input/50",
 				secondary:
 					"bg-secondary text-secondary-foreground hover:bg-secondary/80",
 				ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -129,7 +127,7 @@ const buttonVariants = cva(
 			variant: "default",
 			size: "default",
 		},
-	},
+	}
 );
 interface ButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -146,24 +144,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				{...props}
 			/>
 		);
-	},
+	}
 );
 Button.displayName = "Button";
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-	({ className, type, ...props }, ref) => {
-		return (
-			<input
-				type={type}
-				className={cn(
-					"flex h-10 w-full rounded-lg border border-input dark:border-input/50 bg-background px-3 py-3 text-sm text-foreground shadow-sm shadow-black/5 transition-shadow placeholder:text-muted-foreground/70 focus-visible:bg-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-					className,
-				)}
-				ref={ref}
-				{...props}
-			/>
-		);
-	},
+	({ className, type, ...props }, ref) => (
+		<input
+			className={cn(
+				"flex h-10 w-full rounded-lg border border-input bg-background px-3 py-3 text-foreground text-sm shadow-black/5 shadow-sm transition-shadow placeholder:text-muted-foreground/70 focus-visible:bg-accent focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-input/50",
+				className
+			)}
+			ref={ref}
+			type={type}
+			{...props}
+		/>
+	)
 );
 Input.displayName = "Input";
 
@@ -181,28 +177,28 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
 				{label && <Label htmlFor={id}>{label}</Label>}
 				<div className="relative">
 					<Input
-						id={id}
-						type={showPassword ? "text" : "password"}
 						className={cn("pe-10", className)}
+						id={id}
 						ref={ref}
+						type={showPassword ? "text" : "password"}
 						{...props}
 					/>
 					<button
-						type="button"
-						onClick={togglePasswordVisibility}
-						className="absolute inset-y-0 end-0 flex h-full w-10 items-center justify-center text-muted-foreground/80 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
 						aria-label={showPassword ? "Hide password" : "Show password"}
+						className="absolute inset-y-0 end-0 flex h-full w-10 items-center justify-center text-muted-foreground/80 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+						onClick={togglePasswordVisibility}
+						type="button"
 					>
 						{showPassword ? (
-							<EyeOff className="size-4" aria-hidden="true" />
+							<EyeOff aria-hidden="true" className="size-4" />
 						) : (
-							<Eye className="size-4" aria-hidden="true" />
+							<Eye aria-hidden="true" className="size-4" />
 						)}
 					</button>
 				</div>
 			</div>
 		);
-	},
+	}
 );
 PasswordInput.displayName = "PasswordInput";
 
@@ -213,13 +209,13 @@ function SignInForm() {
 	};
 	return (
 		<form
-			onSubmit={handleSignIn}
 			autoComplete="on"
 			className="flex flex-col gap-8"
+			onSubmit={handleSignIn}
 		>
 			<div className="flex flex-col items-center gap-2 text-center">
-				<h1 className="text-2xl font-bold">Sign in to your account</h1>
-				<p className="text-balance text-sm text-muted-foreground">
+				<h1 className="font-bold text-2xl">Sign in to your account</h1>
+				<p className="text-balance text-muted-foreground text-sm">
 					Enter your email below to sign in
 				</p>
 			</div>
@@ -227,22 +223,22 @@ function SignInForm() {
 				<div className="grid gap-2">
 					<Label htmlFor="email">Email</Label>
 					<Input
+						autoComplete="email"
 						id="email"
 						name="email"
-						type="email"
 						placeholder="m@example.com"
 						required
-						autoComplete="email"
+						type="email"
 					/>
 				</div>
 				<PasswordInput
-					name="password"
-					label="Password"
-					required
 					autoComplete="current-password"
+					label="Password"
+					name="password"
 					placeholder="Password"
+					required
 				/>
-				<Button type="submit" variant="outline" className="mt-2">
+				<Button className="mt-2" type="submit" variant="outline">
 					Sign In
 				</Button>
 			</div>
@@ -257,13 +253,13 @@ function SignUpForm() {
 	};
 	return (
 		<form
-			onSubmit={handleSignUp}
 			autoComplete="on"
 			className="flex flex-col gap-8"
+			onSubmit={handleSignUp}
 		>
 			<div className="flex flex-col items-center gap-2 text-center">
-				<h1 className="text-2xl font-bold">Create an account</h1>
-				<p className="text-balance text-sm text-muted-foreground">
+				<h1 className="font-bold text-2xl">Create an account</h1>
+				<p className="text-balance text-muted-foreground text-sm">
 					Enter your details below to sign up
 				</p>
 			</div>
@@ -271,33 +267,33 @@ function SignUpForm() {
 				<div className="grid gap-1">
 					<Label htmlFor="name">Full Name</Label>
 					<Input
+						autoComplete="name"
 						id="name"
 						name="name"
-						type="text"
 						placeholder="John Doe"
 						required
-						autoComplete="name"
+						type="text"
 					/>
 				</div>
 				<div className="grid gap-2">
 					<Label htmlFor="email">Email</Label>
 					<Input
+						autoComplete="email"
 						id="email"
 						name="email"
-						type="email"
 						placeholder="m@example.com"
 						required
-						autoComplete="email"
+						type="email"
 					/>
 				</div>
 				<PasswordInput
-					name="password"
-					label="Password"
-					required
 					autoComplete="new-password"
+					label="Password"
+					name="password"
 					placeholder="Password"
+					required
 				/>
-				<Button type="submit" variant="outline" className="mt-2">
+				<Button className="mt-2" type="submit" variant="outline">
 					Sign Up
 				</Button>
 			</div>
@@ -318,27 +314,27 @@ function AuthFormContainer({
 			<div className="text-center text-sm">
 				{isSignIn ? "Don't have an account?" : "Already have an account?"}{" "}
 				<Button
-					variant="link"
 					className="pl-1 text-foreground"
 					onClick={onToggle}
+					variant="link"
 				>
 					{isSignIn ? "Sign up" : "Sign in"}
 				</Button>
 			</div>
-			<div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+			<div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-border after:border-t">
 				<span className="relative z-10 bg-background px-2 text-muted-foreground">
 					Or continue with
 				</span>
 			</div>
 			<Button
-				variant="outline"
-				type="button"
 				onClick={() => console.log("UI: Google button clicked")}
+				type="button"
+				variant="outline"
 			>
 				<img
-					src="https://www.svgrepo.com/show/475656/google-color.svg"
 					alt="Google icon"
 					className="mr-2 h-4 w-4"
+					src="https://www.svgrepo.com/show/475656/google-color.svg"
 				/>
 				Continue with Google
 			</Button>
@@ -403,7 +399,7 @@ export function AuthUI({
 	const currentContent = isSignIn ? finalSignInContent : finalSignUpContent;
 
 	return (
-		<div className="w-full min-h-screen md:grid md:grid-cols-2">
+		<div className="min-h-screen w-full md:grid md:grid-cols-2">
 			<style>{`
         input[type="password"]::-ms-reveal,
         input[type="password"]::-ms-clear {
@@ -415,24 +411,24 @@ export function AuthUI({
 			</div>
 
 			<div
-				className="hidden md:block relative bg-cover bg-center transition-all duration-500 ease-in-out"
-				style={{ backgroundImage: `url(${currentContent.image.src})` }}
+				className="relative hidden bg-center bg-cover transition-all duration-500 ease-in-out md:block"
 				key={currentContent.image.src}
+				style={{ backgroundImage: `url(${currentContent.image.src})` }}
 			>
 				<div className="absolute inset-x-0 bottom-0 h-[100px] bg-gradient-to-t from-background to-transparent" />
 
 				<div className="relative z-10 flex h-full flex-col items-center justify-end p-2 pb-6">
 					<blockquote className="space-y-2 text-center text-foreground">
-						<p className="text-lg font-medium">
+						<p className="font-medium text-lg">
 							“
 							<Typewriter
 								key={currentContent.quote.text}
-								text={currentContent.quote.text}
 								speed={60}
+								text={currentContent.quote.text}
 							/>
 							”
 						</p>
-						<cite className="block text-sm font-light text-muted-foreground not-italic">
+						<cite className="block font-light text-muted-foreground text-sm not-italic">
 							— {currentContent.quote.author}
 						</cite>
 					</blockquote>

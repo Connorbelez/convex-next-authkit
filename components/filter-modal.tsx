@@ -1,17 +1,9 @@
-import React from "react";
 import { Icon } from "@iconify/react";
-import { CircleCheck } from "lucide-react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-
-import { FILTER_BOUNDS } from "./types/listing-filters";
-import {
-	type FilterState,
-	type MortgageType,
-	type PropertyType,
-} from "./types/listing-filters";
+import { CircleCheck } from "lucide-react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import RangeSliderWithHistogram from "@/components/ui/range-slider-with-histogram";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
 	Dialog,
 	DialogContent,
@@ -20,13 +12,15 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { DatePicker } from "@/components/ui/date-picker";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-} from "@/components/ui/tooltip";
+import RangeSliderWithHistogram from "@/components/ui/range-slider-with-histogram";
+import { Separator } from "@/components/ui/separator";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import type { FilterableItem } from "./ListingGridShell";
+import {
+	FILTER_BOUNDS,
+	type FilterState,
+	type MortgageType,
+} from "./types/listing-filters";
 
 interface FilterModalProps {
 	filters: FilterState;
@@ -68,7 +62,7 @@ export default function FilterModal({
 			field: "ltv" | "apr" | "principal",
 			min: number,
 			max: number,
-			barCount: number,
+			barCount: number
 		): number[] => {
 			const buckets = Array(barCount).fill(0);
 			const bucketSize = (max - min) / barCount;
@@ -78,7 +72,7 @@ export default function FilterModal({
 				if (value !== undefined && value >= min && value <= max) {
 					const bucketIndex = Math.min(
 						Math.floor((value - min) / bucketSize),
-						barCount - 1,
+						barCount - 1
 					);
 					buckets[bucketIndex]++;
 				}
@@ -86,7 +80,7 @@ export default function FilterModal({
 
 			return buckets;
 		},
-		[items],
+		[items]
 	);
 
 	// Pre-calculate histogram data for all sliders with finer detail (40 bars = 20 * 2)
@@ -96,9 +90,9 @@ export default function FilterModal({
 				"ltv",
 				FILTER_BOUNDS.ltvRange[0],
 				FILTER_BOUNDS.ltvRange[1],
-				20,
+				20
 			),
-		[calculateHistogram],
+		[calculateHistogram]
 	);
 
 	const aprHistogram = React.useMemo(
@@ -107,9 +101,9 @@ export default function FilterModal({
 				"apr",
 				FILTER_BOUNDS.interestRateRange[0],
 				FILTER_BOUNDS.interestRateRange[1],
-				20,
+				20
 			),
-		[calculateHistogram],
+		[calculateHistogram]
 	);
 
 	const principalHistogram = React.useMemo(
@@ -118,9 +112,9 @@ export default function FilterModal({
 				"principal",
 				FILTER_BOUNDS.loanAmountRange[0],
 				FILTER_BOUNDS.loanAmountRange[1],
-				20,
+				20
 			),
-		[calculateHistogram],
+		[calculateHistogram]
 	);
 
 	const safeFilters: FilterState = filters || {
@@ -211,43 +205,43 @@ export default function FilterModal({
 	];
 
 	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
+		<Dialog onOpenChange={setIsOpen} open={isOpen}>
 			<DialogTrigger asChild>
-				<Button variant="outline" size="lg" className="rounded-full">
+				<Button className="rounded-full" size="lg" variant="outline">
 					Filters
-					<Icon icon="lucide:filter" className="ml-2" />
+					<Icon className="ml-2" icon="lucide:filter" />
 				</Button>
 			</DialogTrigger>
 			<TooltipProvider delayDuration={0}>
-				<DialogContent className="max-h-[80vh] z-101  overflow-y-auto max-w-[calc(100vw-1rem)] w-[calc(100vw-1rem)] min-w-[300px] px-2 sm:px-6">
+				<DialogContent className="z-101 max-h-[80vh] w-[calc(100vw-1rem)] min-w-[300px] max-w-[calc(100vw-1rem)] overflow-y-auto px-2 sm:px-6">
 					<DialogHeader>
-						<DialogTitle className="text-center text-2xl font-medium">
+						<DialogTitle className="text-center font-medium text-2xl">
 							Filters
 						</DialogTitle>
 					</DialogHeader>
 
-					<div className="flex flex-col gap-3 py-1 px-1 sm:px-0">
+					<div className="flex flex-col gap-3 px-1 py-1 sm:px-0">
 						<Separator />
 
 						<div className="space-y-2">
-							<h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
-								<Icon icon="lucide:percent" className="w-5 h-5" />
+							<h2 className="flex items-center justify-center gap-2 text-center font-medium text-foreground/50 text-lg sm:text-xl">
+								<Icon className="h-5 w-5" icon="lucide:percent" />
 								LTV
 							</h2>
-							<div className="w-full overflow-x-hidden relative z-[105]">
+							<div className="relative z-[105] w-full overflow-x-hidden">
 								<RangeSliderWithHistogram
-									min={FILTER_BOUNDS.ltvRange[0]}
-									max={FILTER_BOUNDS.ltvRange[1]}
-									step={1}
+									className="w-full"
 									defaultValue={safeFilters.ltvRange}
 									formatValue={(value) => `${value}%`}
+									histogramData={ltvHistogram}
+									max={FILTER_BOUNDS.ltvRange[1]}
+									min={FILTER_BOUNDS.ltvRange[0]}
 									onValueChange={handleLtvChange}
-									variant="compact"
-									targetBarCount={20}
 									showCard={false}
 									showTitle={false}
-									histogramData={ltvHistogram}
-									className="w-full"
+									step={1}
+									targetBarCount={20}
+									variant="compact"
 								/>
 							</div>
 						</div>
@@ -255,24 +249,24 @@ export default function FilterModal({
 						<Separator />
 
 						<div className="space-y-2">
-							<h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
-								<Icon icon="lucide:trending-up" className="w-5 h-5" />
+							<h2 className="flex items-center justify-center gap-2 text-center font-medium text-foreground/50 text-lg sm:text-xl">
+								<Icon className="h-5 w-5" icon="lucide:trending-up" />
 								Interest Rate
 							</h2>
-							<div className="w-full overflow-x-hidden relative z-[105]">
+							<div className="relative z-[105] w-full overflow-x-hidden">
 								<RangeSliderWithHistogram
-									min={FILTER_BOUNDS.interestRateRange[0]}
-									max={FILTER_BOUNDS.interestRateRange[1]}
-									step={0.1}
+									className="w-full"
 									defaultValue={safeFilters.interestRateRange}
 									formatValue={(value) => `${value}%`}
+									histogramData={aprHistogram}
+									max={FILTER_BOUNDS.interestRateRange[1]}
+									min={FILTER_BOUNDS.interestRateRange[0]}
 									onValueChange={handleInterestRateChange}
-									variant="compact"
-									targetBarCount={20}
 									showCard={false}
 									showTitle={false}
-									histogramData={aprHistogram}
-									className="w-full"
+									step={0.1}
+									targetBarCount={20}
+									variant="compact"
 								/>
 							</div>
 						</div>
@@ -280,24 +274,24 @@ export default function FilterModal({
 						<Separator />
 
 						<div className="space-y-2">
-							<h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
-								<Icon icon="lucide:dollar-sign" className="w-5 h-5" />
+							<h2 className="flex items-center justify-center gap-2 text-center font-medium text-foreground/50 text-lg sm:text-xl">
+								<Icon className="h-5 w-5" icon="lucide:dollar-sign" />
 								Loan Amount
 							</h2>
-							<div className="w-full overflow-x-hidden relative z-[105]">
+							<div className="relative z-[105] w-full overflow-x-hidden">
 								<RangeSliderWithHistogram
-									min={FILTER_BOUNDS.loanAmountRange[0]}
-									max={FILTER_BOUNDS.loanAmountRange[1]}
-									step={10000}
+									className="w-full"
 									defaultValue={safeFilters.loanAmountRange}
 									formatValue={(value) => `$${value.toLocaleString()}`}
+									histogramData={principalHistogram}
+									max={FILTER_BOUNDS.loanAmountRange[1]}
+									min={FILTER_BOUNDS.loanAmountRange[0]}
 									onValueChange={handleLoanAmountChange}
-									variant="compact"
-									targetBarCount={20}
 									showCard={false}
 									showTitle={false}
-									histogramData={principalHistogram}
-									className="w-full"
+									step={10000}
+									targetBarCount={20}
+									variant="compact"
 								/>
 							</div>
 						</div>
@@ -305,30 +299,30 @@ export default function FilterModal({
 						<Separator />
 
 						<div className="space-y-2">
-							<h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
-								<Icon icon="lucide:file-text" className="w-5 h-5" />
+							<h2 className="flex items-center justify-center gap-2 text-center font-medium text-foreground/50 text-lg sm:text-xl">
+								<Icon className="h-5 w-5" icon="lucide:file-text" />
 								Mortgage Type
 							</h2>
-							<div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 justify-center items-center py-4">
+							<div className="grid grid-cols-1 items-center justify-center gap-2 py-4 sm:grid-cols-3 sm:gap-3">
 								{mortgageTypeOptions.map((option) => (
 									<CheckboxPrimitive.Root
-										key={option.value}
 										checked={safeFilters.mortgageTypes.includes(option.value)}
+										className="relative rounded-lg px-2 py-2 text-center text-muted-foreground ring-[1px] ring-border transition-all data-[state=checked]:text-primary data-[state=checked]:ring-2 data-[state=checked]:ring-primary sm:px-4 sm:py-3"
+										key={option.value}
 										onCheckedChange={() =>
 											handleMortgageTypeToggle(option.value)
 										}
-										className="relative ring-[1px] ring-border rounded-lg px-2 py-2 sm:px-4 sm:py-3 text-center text-muted-foreground data-[state=checked]:ring-2 data-[state=checked]:ring-primary data-[state=checked]:text-primary transition-all"
 									>
 										<div className="flex flex-col items-center gap-2">
-											<span className="text-2xl font-semibold">
+											<span className="font-semibold text-2xl">
 												{option.label}
 											</span>
-											<span className="text-sm font-medium tracking-tight">
+											<span className="font-medium text-sm tracking-tight">
 												{option.displayLabel}
 											</span>
 										</div>
 										<CheckboxPrimitive.Indicator className="absolute top-2 right-2">
-											<CircleCheck className="fill-primary text-primary-foreground w-5 h-5" />
+											<CircleCheck className="h-5 w-5 fill-primary text-primary-foreground" />
 										</CheckboxPrimitive.Indicator>
 									</CheckboxPrimitive.Root>
 								))}
@@ -338,8 +332,8 @@ export default function FilterModal({
 						<Separator />
 
 						<div className="space-y-2">
-							<h2 className="text-foreground/50 text-center text-lg sm:text-xl font-medium flex items-center justify-center gap-2">
-								<Icon icon="lucide:calendar" className="w-5 h-5" />
+							<h2 className="flex items-center justify-center gap-2 text-center font-medium text-foreground/50 text-lg sm:text-xl">
+								<Icon className="h-5 w-5" icon="lucide:calendar" />
 								Maturity Date
 							</h2>
 							<div className="flex justify-center">
@@ -351,25 +345,25 @@ export default function FilterModal({
 						</div>
 					</div>
 
-					<DialogFooter className="flex flex-col sm:flex-row sm:justify-between gap-2">
+					<DialogFooter className="flex flex-col gap-2 sm:flex-row sm:justify-between">
 						<Button
-							variant="outline"
-							size="sm"
 							onClick={() => setIsOpen(false)}
+							size="sm"
+							variant="outline"
 						>
 							Close
 						</Button>
 						{hasActiveFilters && (
 							<Button
-								variant="destructive"
-								size="sm"
 								onClick={handleClearFilters}
+								size="sm"
+								variant="destructive"
 							>
-								<Icon icon="lucide:x" className="mr-2" />
+								<Icon className="mr-2" icon="lucide:x" />
 								Clear Filters
 							</Button>
 						)}
-						<Button size="sm" onClick={() => setIsOpen(false)}>
+						<Button onClick={() => setIsOpen(false)} size="sm">
 							Apply
 						</Button>
 					</DialogFooter>

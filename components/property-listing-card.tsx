@@ -1,10 +1,10 @@
 "use client";
 
-import { Star, Heart } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Heart, Star } from "lucide-react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export interface ListingProps {
 	id: string;
@@ -62,7 +62,7 @@ export function AirbnbListingCard({
 	};
 
 	const handleTouchEnd = () => {
-		if (!touchStartX || !touchEndX) return;
+		if (!(touchStartX && touchEndX)) return;
 
 		const distance = touchStartX - touchEndX;
 		const swipeThreshold = 50; // Minimum swipe distance in pixels
@@ -79,10 +79,10 @@ export function AirbnbListingCard({
 	return (
 		<div className="group w-[200px] sm:w-[300px] md:w-[400px] lg:w-[400px] xl:w-[400px]">
 			<div
-				className="relative aspect-square rounded-xl overflow-hidden mb-2"
-				onTouchStart={handleTouchStart}
-				onTouchMove={handleTouchMove}
+				className="relative mb-2 aspect-square overflow-hidden rounded-xl"
 				onTouchEnd={handleTouchEnd}
+				onTouchMove={handleTouchMove}
+				onTouchStart={handleTouchStart}
 			>
 				{/* Image carousel container with sliding animation */}
 				<div
@@ -91,14 +91,14 @@ export function AirbnbListingCard({
 				>
 					{images.map((image, index) => (
 						<div
+							className="relative h-full min-w-full flex-shrink-0"
 							key={index}
-							className="min-w-full h-full relative flex-shrink-0"
 						>
 							<Image
-								src={image || "/placeholder.svg"}
 								alt={`${title} - Image ${index + 1}`}
-								fill
 								className="object-cover"
+								fill
+								src={image || "/placeholder.svg"}
 							/>
 						</div>
 					))}
@@ -108,61 +108,61 @@ export function AirbnbListingCard({
 					<>
 						{/* Navigation buttons */}
 						<button
-							onClick={prevImage}
-							className="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
 							aria-label="Previous image"
+							className="-translate-y-1/2 absolute top-1/2 left-2 rounded-full bg-white p-1 opacity-0 shadow-md transition-opacity group-hover:opacity-100"
+							onClick={prevImage}
 						>
 							<svg
-								width="16"
+								className="text-black"
+								fill="none"
 								height="16"
 								viewBox="0 0 16 16"
-								fill="none"
+								width="16"
 								xmlns="http://www.w3.org/2000/svg"
-								className="text-black"
 							>
 								<path
 									d="M10 12L6 8L10 4"
 									stroke="currentColor"
-									strokeWidth="2"
 									strokeLinecap="round"
 									strokeLinejoin="round"
+									strokeWidth="2"
 								/>
 							</svg>
 						</button>
 						<button
-							onClick={nextImage}
-							className="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
 							aria-label="Next image"
+							className="-translate-y-1/2 absolute top-1/2 right-2 rounded-full bg-white p-1 opacity-0 shadow-md transition-opacity group-hover:opacity-100"
+							onClick={nextImage}
 						>
 							<svg
-								width="16"
+								className="text-black"
+								fill="none"
 								height="16"
 								viewBox="0 0 16 16"
-								fill="none"
+								width="16"
 								xmlns="http://www.w3.org/2000/svg"
-								className="text-black"
 							>
 								<path
 									d="M6 12L10 8L6 4"
 									stroke="currentColor"
-									strokeWidth="2"
 									strokeLinecap="round"
 									strokeLinejoin="round"
+									strokeWidth="2"
 								/>
 							</svg>
 						</button>
 
 						{/* Image position indicators */}
-						<div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+						<div className="-translate-x-1/2 absolute bottom-2 left-1/2 flex gap-1">
 							{images.map((_, index) => (
 								<div
-									key={index}
 									className={cn(
 										"h-1.5 rounded-full transition-all",
 										currentImageIndex === index
 											? "w-6 bg-white"
-											: "w-1.5 bg-white/60",
+											: "w-1.5 bg-white/60"
 									)}
+									key={index}
 								/>
 							))}
 						</div>
@@ -171,9 +171,9 @@ export function AirbnbListingCard({
 
 				{/* Favorite button */}
 				<button
-					onClick={() => setIsFavorite(!isFavorite)}
-					className="absolute top-3 right-3 text-white hover:scale-110 transition-transform"
 					aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
+					className="absolute top-3 right-3 text-white transition-transform hover:scale-110"
+					onClick={() => setIsFavorite(!isFavorite)}
 				>
 					<Heart
 						className="h-7 w-7 drop-shadow-md"
@@ -187,12 +187,12 @@ export function AirbnbListingCard({
 				{(isSuperhost || isNew) && (
 					<div className="absolute top-3 left-3">
 						{isSuperhost && (
-							<Badge className="bg-white text-black font-medium text-xs mb-2">
+							<Badge className="mb-2 bg-white font-medium text-black text-xs">
 								Superhost
 							</Badge>
 						)}
 						{isNew && (
-							<Badge className="bg-white text-black font-medium text-xs">
+							<Badge className="bg-white font-medium text-black text-xs">
 								New
 							</Badge>
 						)}
@@ -210,17 +210,17 @@ export function AirbnbListingCard({
 						<Star className="h-4 w-4 fill-current" />
 						<span className="ml-1">{rating}</span>
 						{reviewCount > 0 && (
-							<span className="text-gray-500 dark:text-gray-400 ml-1">
+							<span className="ml-1 text-gray-500 dark:text-gray-400">
 								({reviewCount})
 							</span>
 						)}
 					</div>
 				</div>
 
-				<p className="text-gray-500 dark:text-gray-400 text-sm">
+				<p className="text-gray-500 text-sm dark:text-gray-400">
 					{category ? `${category} • ` : ""}Hosted by {host}
 				</p>
-				<p className="text-gray-500 dark:text-gray-400 text-sm">{dates}</p>
+				<p className="text-gray-500 text-sm dark:text-gray-400">{dates}</p>
 
 				<p className="pt-1">
 					<span className="font-semibold">${price}</span>

@@ -1,8 +1,7 @@
 "use client";
 
-import { startTransition } from "react";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { type ReactNode, startTransition } from "react";
 
 export type TransitionType = "slide" | "cross-fade" | "none";
 

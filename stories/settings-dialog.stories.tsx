@@ -38,13 +38,11 @@ export const Default: Story = {
  * Interactive dialog that can be opened and closed
  */
 export const Interactive: Story = {
-	render: () => {
-		return (
-			<div className="flex items-center justify-center min-h-[400px]">
-				<SettingsDialog />
-			</div>
-		);
-	},
+	render: () => (
+		<div className="flex min-h-[400px] items-center justify-center">
+			<SettingsDialog />
+		</div>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -138,16 +136,14 @@ export const TabletView: Story = {
  * Navigation section
  */
 export const NavigationSection: Story = {
-	render: () => {
-		return (
-			<div className="flex items-center justify-center min-h-[500px]">
-				<p className="text-muted-foreground">
-					Click "Open Dialog" and select "Navigation" from the sidebar
-				</p>
-				<SettingsDialog />
-			</div>
-		);
-	},
+	render: () => (
+		<div className="flex min-h-[500px] items-center justify-center">
+			<p className="text-muted-foreground">
+				Click "Open Dialog" and select "Navigation" from the sidebar
+			</p>
+			<SettingsDialog />
+		</div>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -162,20 +158,19 @@ export const NavigationSection: Story = {
  * Notifications section
  */
 export const NotificationsSection: Story = {
-	render: () => {
-		return (
-			<div className="flex items-center justify-center min-h-[500px]">
-				<p className="text-muted-foreground">
-					Click "Open Dialog" and select "Notifications" from the sidebar
-				</p>
-				<SettingsDialog />
-			</div>
-		);
-	},
+	render: () => (
+		<div className="flex min-h-[500px] items-center justify-center">
+			<p className="text-muted-foreground">
+				Click "Open Dialog" and select "Notifications" from the sidebar
+			</p>
+			<SettingsDialog />
+		</div>
+	),
 	parameters: {
 		docs: {
 			description: {
-				story: "Notifications section showing the basic structure for notification preferences.",
+				story:
+					"Notifications section showing the basic structure for notification preferences.",
 			},
 		},
 	},
@@ -185,20 +180,19 @@ export const NotificationsSection: Story = {
  * Appearance section
  */
 export const AppearanceSection: Story = {
-	render: () => {
-		return (
-			<div className="flex items-center justify-center min-h-[500px]">
-				<p className="text-muted-foreground">
-					Click "Open Dialog" and select "Appearance" from the sidebar
-				</p>
-				<SettingsDialog />
-			</div>
-		);
-	},
+	render: () => (
+		<div className="flex min-h-[500px] items-center justify-center">
+			<p className="text-muted-foreground">
+				Click "Open Dialog" and select "Appearance" from the sidebar
+			</p>
+			<SettingsDialog />
+		</div>
+	),
 	parameters: {
 		docs: {
 			description: {
-				story: "Appearance section for theme and visual customization settings.",
+				story:
+					"Appearance section for theme and visual customization settings.",
 			},
 		},
 	},
@@ -208,20 +202,19 @@ export const AppearanceSection: Story = {
  * Privacy & visibility section
  */
 export const PrivacySection: Story = {
-	render: () => {
-		return (
-			<div className="flex items-center justify-center min-h-[500px]">
-				<p className="text-muted-foreground">
-					Click "Open Dialog" and select "Privacy & visibility" from the sidebar
-				</p>
-				<SettingsDialog />
-			</div>
-		);
-	},
+	render: () => (
+		<div className="flex min-h-[500px] items-center justify-center">
+			<p className="text-muted-foreground">
+				Click "Open Dialog" and select "Privacy & visibility" from the sidebar
+			</p>
+			<SettingsDialog />
+		</div>
+	),
 	parameters: {
 		docs: {
 			description: {
-				story: "Privacy and visibility settings section for controlling data and profile visibility.",
+				story:
+					"Privacy and visibility settings section for controlling data and profile visibility.",
 			},
 		},
 	},
@@ -231,73 +224,77 @@ export const PrivacySection: Story = {
  * All sections overview
  */
 export const AllSections: Story = {
-	render: () => {
-		return (
-			<div className="space-y-4">
-				<div className="text-center space-y-2">
-					<h3 className="text-lg font-semibold">Available Settings Sections</h3>
-					<p className="text-sm text-muted-foreground">
-						Navigate through all available sections using the sidebar
+	render: () => (
+		<div className="space-y-4">
+			<div className="space-y-2 text-center">
+				<h3 className="font-semibold text-lg">Available Settings Sections</h3>
+				<p className="text-muted-foreground text-sm">
+					Navigate through all available sections using the sidebar
+				</p>
+			</div>
+			<div className="mx-auto mb-4 grid max-w-2xl grid-cols-2 gap-4">
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Notifications</h4>
+					<p className="text-muted-foreground text-xs">
+						Manage notification preferences
 					</p>
 				</div>
-				<div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto mb-4">
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Notifications</h4>
-						<p className="text-xs text-muted-foreground">Manage notification preferences</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Navigation</h4>
-						<p className="text-xs text-muted-foreground">Navigation settings</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Home</h4>
-						<p className="text-xs text-muted-foreground">Home page settings</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Appearance</h4>
-						<p className="text-xs text-muted-foreground">Theme and visual settings</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Messages & media</h4>
-						<p className="text-xs text-muted-foreground">
-							Messages, media, links, and files
-						</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Language & region</h4>
-						<p className="text-xs text-muted-foreground">Localization settings</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Accessibility</h4>
-						<p className="text-xs text-muted-foreground">Accessibility options</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Audio & video</h4>
-						<p className="text-xs text-muted-foreground">Media preferences</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Connected accounts</h4>
-						<p className="text-xs text-muted-foreground">Third-party integrations</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Privacy & visibility</h4>
-						<p className="text-xs text-muted-foreground">Privacy controls</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Advanced</h4>
-						<p className="text-xs text-muted-foreground">Advanced settings</p>
-					</div>
-					<div className="p-4 border rounded-lg">
-						<h4 className="font-medium mb-2">Mark as read</h4>
-						<p className="text-xs text-muted-foreground">Mark all as read</p>
-					</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Navigation</h4>
+					<p className="text-muted-foreground text-xs">Navigation settings</p>
 				</div>
-				<div className="flex justify-center">
-					<SettingsDialog />
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Home</h4>
+					<p className="text-muted-foreground text-xs">Home page settings</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Appearance</h4>
+					<p className="text-muted-foreground text-xs">
+						Theme and visual settings
+					</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Messages & media</h4>
+					<p className="text-muted-foreground text-xs">
+						Messages, media, links, and files
+					</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Language & region</h4>
+					<p className="text-muted-foreground text-xs">Localization settings</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Accessibility</h4>
+					<p className="text-muted-foreground text-xs">Accessibility options</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Audio & video</h4>
+					<p className="text-muted-foreground text-xs">Media preferences</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Connected accounts</h4>
+					<p className="text-muted-foreground text-xs">
+						Third-party integrations
+					</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Privacy & visibility</h4>
+					<p className="text-muted-foreground text-xs">Privacy controls</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Advanced</h4>
+					<p className="text-muted-foreground text-xs">Advanced settings</p>
+				</div>
+				<div className="rounded-lg border p-4">
+					<h4 className="mb-2 font-medium">Mark as read</h4>
+					<p className="text-muted-foreground text-xs">Mark all as read</p>
 				</div>
 			</div>
-		);
-	},
+			<div className="flex justify-center">
+				<SettingsDialog />
+			</div>
+		</div>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -318,7 +315,8 @@ export const DarkMode: Story = {
 		},
 		docs: {
 			description: {
-				story: "Settings dialog in dark mode, demonstrating proper theming support.",
+				story:
+					"Settings dialog in dark mode, demonstrating proper theming support.",
 			},
 		},
 	},
@@ -335,26 +333,24 @@ export const DarkMode: Story = {
  * Responsive breakpoints comparison
  */
 export const ResponsiveComparison: Story = {
-	render: () => {
-		return (
-			<div className="space-y-8">
-				<div>
-					<h3 className="text-lg font-semibold mb-4 text-center">Desktop View</h3>
-					<div className="border rounded-lg p-4 min-w-[1000px]">
+	render: () => (
+		<div className="space-y-8">
+			<div>
+				<h3 className="mb-4 text-center font-semibold text-lg">Desktop View</h3>
+				<div className="min-w-[1000px] rounded-lg border p-4">
+					<SettingsDialog />
+				</div>
+			</div>
+			<div>
+				<h3 className="mb-4 text-center font-semibold text-lg">Mobile View</h3>
+				<div className="mx-auto max-w-[375px] rounded-lg border p-4">
+					<div className="origin-top scale-75">
 						<SettingsDialog />
 					</div>
 				</div>
-				<div>
-					<h3 className="text-lg font-semibold mb-4 text-center">Mobile View</h3>
-					<div className="border rounded-lg p-4 max-w-[375px] mx-auto">
-						<div className="scale-75 origin-top">
-							<SettingsDialog />
-						</div>
-					</div>
-				</div>
 			</div>
-		);
-	},
+		</div>
+	),
 	parameters: {
 		layout: "fullscreen",
 		docs: {

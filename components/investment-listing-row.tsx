@@ -1,21 +1,21 @@
 "use client";
 
-import Image from "next/image";
 import {
 	Banknote,
-	Percent,
+	ChevronRight,
 	LineChart,
 	MapPin,
-	ChevronRight,
+	Percent,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { formatPercent, formatUsdAbbrev, formatUsdFull } from "@/lib/format";
+import Image from "next/image";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatPercent, formatUsdAbbrev, formatUsdFull } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 export interface InvestmentListingProps {
 	id: string;
@@ -43,15 +43,15 @@ function MetricPill({ icon, label, value, tooltip, className }: MetricProps) {
 	const content = (
 		<div
 			className={cn(
-				"flex flex-col items-start rounded-md border bg-card px-3 py-2 min-w-[88px]",
-				className,
+				"flex min-w-[88px] flex-col items-start rounded-md border bg-card px-3 py-2",
+				className
 			)}
 		>
-			<div className="flex items-center gap-1.5 text-muted-foreground text-[11px] uppercase tracking-wide">
+			<div className="flex items-center gap-1.5 text-[11px] text-muted-foreground uppercase tracking-wide">
 				{icon}
 				<span>{label}</span>
 			</div>
-			<div className="font-semibold text-xl md:text-2xl tabular-nums leading-6">
+			<div className="font-semibold text-xl tabular-nums leading-6 md:text-2xl">
 				{value}
 			</div>
 		</div>
@@ -92,26 +92,26 @@ export function InvestmentListingRow(props: InvestmentListingProps) {
 
 	return (
 		<button
-			type="button"
-			onClick={onClick}
-			className={cn(
-				"group w-full text-left flex items-center gap-4 rounded-xl border bg-background p-4 transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-			)}
 			aria-label={`${title} in ${city}, ${region}. Principal ${principalFull}. LTV ${ltvPercent} percent. Interest ${interestAprPercent} percent APR.`}
+			className={cn(
+				"group flex w-full items-center gap-4 rounded-xl border bg-background p-4 text-left transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+			)}
+			onClick={onClick}
+			type="button"
 		>
 			{/* Thumbnail */}
 			<div className="relative h-20 w-20 min-w-20 overflow-hidden rounded-md">
 				<Image
-					src={imageThumbUrl || "/placeholder.svg"}
 					alt={imageAlt || title}
-					fill
 					className="object-cover"
+					fill
+					src={imageThumbUrl || "/placeholder.svg"}
 				/>
 			</div>
 
 			{/* Textual section */}
-			<div className="flex-1 min-w-0">
-				<div className="flex items-center gap-2 text-sm text-muted-foreground">
+			<div className="min-w-0 flex-1">
+				<div className="flex items-center gap-2 text-muted-foreground text-sm">
 					<MapPin className="h-3.5 w-3.5" />
 					<span className="truncate">
 						{city}, {region}
@@ -124,8 +124,8 @@ export function InvestmentListingRow(props: InvestmentListingProps) {
 					<div className="mt-1 flex flex-wrap gap-1.5">
 						{badges.map((b, i) => (
 							<span
-								key={i}
 								className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground"
+								key={i}
 							>
 								{b}
 							</span>
@@ -139,20 +139,20 @@ export function InvestmentListingRow(props: InvestmentListingProps) {
 				<MetricPill
 					icon={<Banknote className="h-3.5 w-3.5" />}
 					label="Principal"
-					value={principalShort}
 					tooltip={`Principal (full): ${principalFull}`}
+					value={principalShort}
 				/>
 				<MetricPill
 					icon={<Percent className="h-3.5 w-3.5" />}
 					label="LTV"
-					value={ltvShort}
 					tooltip={`Loan-to-value ratio: ${ltvPercent}%`}
+					value={ltvShort}
 				/>
 				<MetricPill
 					icon={<LineChart className="h-3.5 w-3.5" />}
 					label="Interest"
-					value={interestShort}
 					tooltip={`Annual percentage rate (APR): ${interestAprPercent}%`}
+					value={interestShort}
 				/>
 			</div>
 

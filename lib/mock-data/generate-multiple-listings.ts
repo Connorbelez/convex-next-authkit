@@ -12,7 +12,7 @@ import { generateListing, type MockListing } from "./listings";
  */
 export function generateMultipleListings(
 	count: number,
-	prefix = "listing",
+	prefix = "listing"
 ): MockListing[] {
 	const listings: MockListing[] = [];
 
@@ -32,4 +32,3 @@ export function generateMultipleListings(
 export function generateListingsFromIds(ids: string[]): MockListing[] {
 	return ids.map((id) => generateListing(id));
 }
-

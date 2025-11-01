@@ -48,27 +48,27 @@ export function PropertyInfo({
 			{/* Header with title and status */}
 			<div>
 				<div className="mb-3 flex items-start justify-between gap-4">
-					<h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl">
+					<h1 className="font-bold text-3xl text-gray-900 tracking-tight md:text-4xl dark:text-white">
 						{title}
 					</h1>
 					<Chip
+						className="flex flex-shrink-0 items-center gap-1"
 						color={statusInfo.color}
-						className="flex-shrink-0 flex items-center gap-1"
 					>
 						<Icon
-							icon={statusInfo.icon}
-							className="h-4 w-4"
 							aria-hidden="true"
+							className="h-4 w-4"
+							icon={statusInfo.icon}
 						/>
 						<span>{statusInfo.label}</span>
 					</Chip>
 				</div>
 
 				{/* Address */}
-				<div className="flex items-start gap-2 text-lg text-gray-600 dark:text-gray-400">
+				<div className="flex items-start gap-2 text-gray-600 text-lg dark:text-gray-400">
 					<Icon
-						icon="lucide:map-pin"
 						className="mt-0.5 h-5 w-5 flex-shrink-0"
+						icon="lucide:map-pin"
 					/>
 					<address className="not-italic">
 						{address.street}, {address.city}, {address.state} {address.zip}
@@ -83,12 +83,12 @@ export function PropertyInfo({
 						<div className="space-y-3">
 							<div className="flex items-center gap-2">
 								<Icon
-									icon="lucide:file-text"
 									className="h-5 w-5 text-primary"
+									icon="lucide:file-text"
 								/>
-								<h2 className="text-lg font-semibold">Investor Brief</h2>
+								<h2 className="font-semibold text-lg">Investor Brief</h2>
 							</div>
-							<div className="prose prose-sm max-w-none dark:prose-invert">
+							<div className="prose prose-sm dark:prose-invert max-w-none">
 								<p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
 									{investorBrief}
 								</p>

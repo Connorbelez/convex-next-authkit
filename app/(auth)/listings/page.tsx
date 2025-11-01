@@ -1,10 +1,10 @@
-import { generateMultipleListings } from "@/lib/mock-data/generate-multiple-listings";
-import type { MockListing } from "@/lib/mock-data/listings";
-import type { FilterableItem } from "@/components/ListingGridShell";
-import { ListingsClient } from "./listings-client";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { ViewTransition } from "react";
+import type { FilterableItem } from "@/components/ListingGridShell";
+import { generateMultipleListings } from "@/lib/mock-data/generate-multiple-listings";
+import type { MockListing } from "@/lib/mock-data/listings";
+import { ListingsClient } from "./listings-client";
 
 // Extended type with required fields for rendering
 interface ListingItem extends FilterableItem {
@@ -104,35 +104,15 @@ export default async function ListingsPage() {
 
 	// Transform to ListingItem format
 	const listings = mockListings.map(transformListing);
-
-	console.log(`Generated ${listings.length} listings in Toronto area`);
-	console.log("Sample listing:", JSON.stringify(listings[0], null, 2));
-	console.log("LTV range:", Math.min(...listings.map((l) => l.ltv!)), "-", Math.max(...listings.map((l) => l.ltv!)));
-	console.log("Principal range:", Math.min(...listings.map((l) => l.principal!)), "-", Math.max(...listings.map((l) => l.principal!)));
-	console.log("APR range:", Math.min(...listings.map((l) => l.apr!)), "-", Math.max(...listings.map((l) => l.apr!)));
-
 	return (
 		<ViewTransition>
 			<div className="min-h-screen">
-			<div className="container flex flex-col mx-auto py-6">
-			{/* Breadcrumb Navigation */}
-					{/* Breadcrumb Navigation */}
-
-					{/* <div className="space-y-3">
-						<h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl">
-							Investment Listings
-						</h1>
-						<p className="text-base text-muted-foreground">
-							Showing {listings.length} properties in the Greater Toronto Area
-						</p>
-					</div> */}
-
-					<div className="mt-4">
+				<div className="container mx-auto flex flex-col py-6">
+					<div className="">
 						<ListingsClient listings={listings} />
 					</div>
 				</div>
-            </div>
-        </ViewTransition>
+			</div>
+		</ViewTransition>
 	);
 }
-

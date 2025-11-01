@@ -46,15 +46,15 @@ function MetricCard({
 			<CardContent className="p-4">
 				<div className="flex items-start gap-3">
 					<div className={`rounded-lg bg-primary/10 p-2 ${colorClass}`}>
-						<Icon icon={icon} className="h-5 w-5" />
+						<Icon className="h-5 w-5" icon={icon} />
 					</div>
 					<div className="flex-1">
-						<p className="text-sm text-gray-600 dark:text-gray-400">{label}</p>
-						<p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+						<p className="text-gray-600 text-sm dark:text-gray-400">{label}</p>
+						<p className="mt-1 font-bold text-2xl text-gray-900 dark:text-white">
 							{value}
 						</p>
 						{sublabel && (
-							<p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+							<p className="mt-1 text-gray-500 text-xs dark:text-gray-500">
 								{sublabel}
 							</p>
 						)}
@@ -84,8 +84,8 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-2">
-				<Icon icon="lucide:trending-up" className="h-6 w-6 text-primary" />
-				<h2 className="text-2xl font-bold">Key Financials</h2>
+				<Icon className="h-6 w-6 text-primary" icon="lucide:trending-up" />
+				<h2 className="font-bold text-2xl">Key Financials</h2>
 			</div>
 
 			{/* Metrics Grid */}
@@ -97,11 +97,11 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 				/>
 
 				<MetricCard
+					colorClass={valueChange >= 0 ? "text-green-600" : "text-red-600"}
 					icon="lucide:trending-up"
 					label="Current Value"
-					value={formatCurrency(financials.currentValue)}
 					sublabel={`${valueChangePercent >= 0 ? "+" : ""}${valueChangePercent.toFixed(1)}% from purchase`}
-					colorClass={valueChange >= 0 ? "text-green-600" : "text-red-600"}
+					value={formatCurrency(financials.currentValue)}
 				/>
 
 				<MetricCard
@@ -127,18 +127,18 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 					<CardContent className="p-4">
 						<div className="flex items-start gap-3">
 							<div className="rounded-lg bg-orange-100 p-2 text-orange-600 dark:bg-orange-900/30">
-								<Icon icon="lucide:calendar-check" className="h-5 w-5" />
+								<Icon className="h-5 w-5" icon="lucide:calendar-check" />
 							</div>
 							<div className="flex-1">
-								<p className="text-sm text-gray-600 dark:text-gray-400">
+								<p className="text-gray-600 text-sm dark:text-gray-400">
 									Maturity Date
 								</p>
-								<p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+								<p className="mt-1 font-bold text-2xl text-gray-900 dark:text-white">
 									{format(maturityDate, "MMMM d, yyyy")}
 								</p>
 								<div className="mt-2 flex items-center gap-2">
-									<Icon icon="lucide:timer" className="h-4 w-4 text-gray-500" />
-									<p className="text-sm text-gray-600 dark:text-gray-400">
+									<Icon className="h-4 w-4 text-gray-500" icon="lucide:timer" />
+									<p className="text-gray-600 text-sm dark:text-gray-400">
 										{daysUntilMaturity > 0 ? (
 											<>
 												{yearsRemaining > 0 && (

@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useMemo } from "react";
-import { Slider } from "@/components/ui/slider";
 import { motion } from "framer-motion";
+import type React from "react";
+import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
 import {
 	Tooltip,
 	TooltipContent,
@@ -68,7 +69,7 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
 		}
 		// Generate random data for demo
 		return Array.from({ length: numBars }, () =>
-			Math.floor(Math.random() * 6000),
+			Math.floor(Math.random() * 6000)
 		);
 	}, [histogramData, numBars]);
 
@@ -98,13 +99,13 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
 		<>
 			{showTitle && <h2 className={titleClass}>{title}</h2>}
 
-			<div className="flex justify-between mb-2">
+			<div className="mb-2 flex justify-between">
 				<span className={valueClass}>{formatValue(minValue)}</span>
 				<span className={valueClass}>{formatValue(maxValue)}</span>
 			</div>
 
 			<div className={`relative ${histogramHeight} overflow-hidden`}>
-				<div className="flex items-end h-full">
+				<div className="flex h-full items-end">
 					{histogramDataToUse.map((count, index) => {
 						// Calculate bucket range for this bar
 						const bucketStart = min + index * bucketSize;
@@ -121,9 +122,9 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
 								<Tooltip>
 									<TooltipTrigger asChild>
 										<motion.div
-											className={`flex-1 mx-[1px] rounded-sm ${barColor}`}
-											initial={{ height: 0 }}
 											animate={{ height: `${(count / maxCount) * 100}%` }}
+											className={`mx-[1px] flex-1 rounded-sm ${barColor}`}
+											initial={{ height: 0 }}
 											transition={{ duration: 0.3 }}
 										/>
 									</TooltipTrigger>
@@ -147,17 +148,17 @@ const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
 			<div className="relative mt-2">
 				<Slider
 					defaultValue={[minValue, maxValue]}
-					min={min}
 					max={max}
-					step={step}
+					min={min}
 					onValueChange={(values) => {
 						const [newMin, newMax] = values;
 						setMinValue(newMin);
 						setMaxValue(newMax);
 						onValueChange?.([newMin, newMax]);
 					}}
+					step={step}
 				/>
-				<div className="flex justify-between mt-2">
+				<div className="mt-2 flex justify-between">
 					<span className="text-gray-400">{minLabel}</span>
 					<span className="text-gray-400">{maxLabel}</span>
 				</div>
