@@ -34,7 +34,13 @@ interface MetricCardProps {
 	colorClass?: string;
 }
 
-function MetricCard({ icon, label, value, sublabel, colorClass = "text-primary" }: MetricCardProps) {
+function MetricCard({
+	icon,
+	label,
+	value,
+	sublabel,
+	colorClass = "text-primary",
+}: MetricCardProps) {
 	return (
 		<Card.Root>
 			<CardContent className="p-4">
@@ -44,8 +50,14 @@ function MetricCard({ icon, label, value, sublabel, colorClass = "text-primary" 
 					</div>
 					<div className="flex-1">
 						<p className="text-sm text-gray-600 dark:text-gray-400">{label}</p>
-						<p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
-						{sublabel && <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">{sublabel}</p>}
+						<p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+							{value}
+						</p>
+						{sublabel && (
+							<p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+								{sublabel}
+							</p>
+						)}
 					</div>
 				</div>
 			</CardContent>
@@ -65,7 +77,9 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 	const loanTermYears = Math.floor(financials.loanTerm / 12);
 	const loanTermMonths = financials.loanTerm % 12;
 	const loanTermText =
-		loanTermMonths > 0 ? `${loanTermYears}y ${loanTermMonths}m` : `${loanTermYears} years`;
+		loanTermMonths > 0
+			? `${loanTermYears}y ${loanTermMonths}m`
+			: `${loanTermYears} years`;
 
 	return (
 		<div className="space-y-6">
@@ -102,7 +116,11 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 					value={formatPercentage(financials.interestRate)}
 				/>
 
-				<MetricCard icon="lucide:clock" label="Loan Term" value={loanTermText} />
+				<MetricCard
+					icon="lucide:clock"
+					label="Loan Term"
+					value={loanTermText}
+				/>
 
 				{/* Maturity Date - Takes 2 columns on larger screens */}
 				<Card.Root className="sm:col-span-2 lg:col-span-3 xl:col-span-3">
@@ -112,7 +130,9 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 								<Icon icon="lucide:calendar-check" className="h-5 w-5" />
 							</div>
 							<div className="flex-1">
-								<p className="text-sm text-gray-600 dark:text-gray-400">Maturity Date</p>
+								<p className="text-sm text-gray-600 dark:text-gray-400">
+									Maturity Date
+								</p>
 								<p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
 									{format(maturityDate, "MMMM d, yyyy")}
 								</p>
@@ -121,8 +141,12 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 									<p className="text-sm text-gray-600 dark:text-gray-400">
 										{daysUntilMaturity > 0 ? (
 											<>
-												{yearsRemaining > 0 && <span>{yearsRemaining} years </span>}
-												{monthsRemaining > 0 && <span>{monthsRemaining} months </span>}
+												{yearsRemaining > 0 && (
+													<span>{yearsRemaining} years </span>
+												)}
+												{monthsRemaining > 0 && (
+													<span>{monthsRemaining} months </span>
+												)}
 												remaining
 											</>
 										) : (

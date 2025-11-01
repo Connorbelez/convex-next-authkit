@@ -31,7 +31,10 @@ export function ListingDetailSkeleton() {
 					{/* Thumbnail strip */}
 					<div className="flex gap-2 overflow-x-auto">
 						{[1, 2, 3, 4, 5].map((i) => (
-							<Skeleton key={i} className="h-20 w-20 rounded-md flex-shrink-0" />
+							<Skeleton
+								key={i}
+								className="h-20 w-20 rounded-md flex-shrink-0"
+							/>
 						))}
 					</div>
 				</div>
@@ -69,7 +72,10 @@ export function ListingDetailSkeleton() {
 				<Skeleton className="h-7 w-48 mb-4" />
 				<div className="space-y-2">
 					{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
-						<div key={i} className="flex items-center gap-4 p-4 border rounded-lg">
+						<div
+							key={i}
+							className="flex items-center gap-4 p-4 border rounded-lg"
+						>
 							<Skeleton className="h-5 w-24" />
 							<Skeleton className="h-5 w-32" />
 							<Skeleton className="h-5 w-28" />

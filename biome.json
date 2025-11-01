@@ -11,14 +11,9 @@
 			"app",
 			"app/",
 			"app/*",
-			"app/**",
 			"components",
-			"components/",
-			"components/**",
 			"components/*",
-			"!components/ui",
-
-
+			"components/**",
 			"!node_modules/",
 			"!dist/",
 			"!.convex/",
@@ -36,7 +31,6 @@
 		"lineWidth": 80,
 		"lineEnding": "lf"
 	},
-
 	"linter": {
 		"enabled": true,
 		"rules": {

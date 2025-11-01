@@ -52,7 +52,9 @@ export function ListingMapPopup({
 				<div className="flex items-center gap-4 text-xs">
 					<div className="flex items-center gap-1">
 						<Icon icon="lucide:circle-dollar-sign" className="h-4 w-4" />
-						<span className="font-semibold">${(principal / 1000).toFixed(0)}K</span>
+						<span className="font-semibold">
+							${(principal / 1000).toFixed(0)}K
+						</span>
 					</div>
 					<div className="flex items-center gap-1">
 						<Icon icon="lucide:percent-circle" className="h-4 w-4" />
@@ -70,4 +72,3 @@ export function ListingMapPopup({
 		</div>
 	);
 }
-
