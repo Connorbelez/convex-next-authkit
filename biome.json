@@ -11,6 +11,13 @@
 			"app",
 			"app/",
 			"app/*",
+			"app/**",
+			"components",
+			"components/",
+			"components/**",
+			"components/*",
+			"!components/ui",
+
 
 			"!node_modules/",
 			"!dist/",
@@ -19,6 +26,15 @@
 			"!convex/_generated",
 			"!convex/_generated/*"
 		]
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"attributePosition": "auto",
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 80,
+		"lineEnding": "lf"
 	},
 
 	"linter": {

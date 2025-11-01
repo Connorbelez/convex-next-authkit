@@ -213,7 +213,7 @@ export default function FilterModal({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="lg">
+        <Button variant="outline" size="lg" className="rounded-full">
           Filters
           <Icon icon="lucide:filter" className="ml-2" />
         </Button>

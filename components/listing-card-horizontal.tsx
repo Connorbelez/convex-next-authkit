@@ -4,6 +4,7 @@ import { Button, Card, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { Badge, badgeVariants } from "@/components/ui/badge";
 import Link from "next/link";
+import Image from "next/image";
 import { ViewTransition } from "react";
 
 export interface HorizontalProps {
@@ -32,14 +33,17 @@ export function Horizontal({
   const CardContent = (
     <Card.Root
     variant="flat"
-      className="w-full items-stretch md:flex-row hover:scale-105 hover:shadow-lg hover:shadow-black/10 transition-all duration-300"
+      className="w-full items-stretch md:flex-row hover:scale-103 hover:shadow-lg hover:shadow-black/10 transition-all duration-300"
     >
-      <img
-        alt={`${title} thumbnail`}
-        className="rounded-panel pointer-events-none aspect-video sm:aspect-square w-full select-none object-cover sm:max-w-[180px]"
-        loading="lazy"
-        src={imageSrc}
-      />
+      <div className="relative rounded-panel aspect-video sm:aspect-square w-full sm:max-w-[180px] overflow-hidden">
+        <Image
+          alt={`${title} thumbnail`}
+          className="pointer-events-none select-none object-cover"
+          fill
+          sizes="(max-width: 640px) 100vw, 180px"
+          src={imageSrc}
+        />
+      </div>
       <div className="flex flex-1 flex-col gap-3">
         <Card.Header className="gap-1">
           <Card.Title>{title}</Card.Title>
@@ -50,7 +54,7 @@ export function Horizontal({
           </Card.Description>
         </Card.Header>
         <Card.Content className="text-muted-foreground text-sm">
-          <div className="flex md:grid md:grid-cols-4 84rem:grid-cols-2 md:gap-2 items-center justify-around">
+          <div className="flex  xl:flex 84rem:grid 84rem:grid-cols-2 lg:gap-2 items-center justify-around">
             <span className="flex items-center">
               <Icon icon="lucide:percent-circle" className="h-5 w-5" />
               <span className="flex flex-col ml-2 py-1 justify-around align-middle">
@@ -58,7 +62,7 @@ export function Horizontal({
                 <p className="text-sm font-bold">{ltv}</p>
               </span>
             </span>
-            <div className="md:hidden h-8 w-px bg-foreground/30 shrink-0" />
+            <div className="lg:hidden xl:block 84rem:hidden h-8 w-px bg-foreground/30 shrink-0" />
             <span className="flex items-center">
               <Icon icon="lucide:percent-circle" className="h-5 w-5" />
               <span className="flex flex-col ml-2 py-1 justify-around align-middle">
@@ -66,7 +70,7 @@ export function Horizontal({
                 <p className="text-sm font-bold">{apr}</p>
               </span>
             </span>
-            <div className="md:hidden h-8 w-px bg-foreground/30 shrink-0" />
+            <div className="hidden xl:block 84rem:hidden h-8 w-px bg-foreground/30 shrink-0" />
             <span className="flex items-center">
               <Icon icon="lucide:circle-dollar-sign" className="h-5 w-5" />
               <span className="flex flex-col ml-2 py-1 justify-around align-middle">
@@ -76,7 +80,8 @@ export function Horizontal({
                 </p>
               </span>
             </span>
-            <span className="hidden md:flex md:items-center">
+            <div className="hidden xl:block 84rem:hidden h-8 w-px bg-foreground/30 shrink-0" />
+            <span className="hidden lg:flex lg:items-center">
               <Icon icon="lucide:circle-dollar-sign" className="h-5 w-5" />
               <span className="flex flex-col ml-2 py-1 justify-around align-middle">
                 <p className="text-xs">Market Value</p>

@@ -63,7 +63,7 @@ export function ListingMap<T extends LatLng>({
   renderPopup,
   onViewportChange,
   initialCenter = DEFAULT_CENTER,
-  initialZoom = DEFAULT_ZOOM,
+  // initialZoom = DEFAULT_ZOOM,
   className,
   containerClassName,
   style,
@@ -86,7 +86,7 @@ export function ListingMap<T extends LatLng>({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v12",
       center: [initialCenter.lng, initialCenter.lat],
-      zoom: initialZoom,
+      zoom: DEFAULT_ZOOM,
     });
 
     mapRef.current = map;
@@ -118,7 +118,7 @@ export function ListingMap<T extends LatLng>({
         mapRef.current = null;
       }
     };
-  }, [initialCenter.lat, initialCenter.lng, initialZoom, onViewportChange]);
+  }, [initialCenter.lat, initialCenter.lng, onViewportChange]);
 
   // Update markers when items change
   useEffect(() => {
@@ -198,9 +198,9 @@ export function ListingMap<T extends LatLng>({
 
         if (!bounds.isEmpty()) {
           mapRef.current.fitBounds(bounds, {
-            padding: { top: 80, bottom: 80, left: 80, right: 80 },
+            // padding: { top: 20, bottom: 20, left: 20, right: 20 },
             maxZoom: 12,
-            duration: 0,
+            duration: 3000,
           });
           hasSetInitialViewRef.current = true;
         }

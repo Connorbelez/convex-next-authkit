@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Map } from "lucide-react";
+import { useFiltersStore } from "./contexts/listingContext";
 
 type ClassNames = {
   container?: string;
@@ -69,7 +70,7 @@ function applyFilters<T extends FilterableItem>(
   items: ReadonlyArray<T>,
   filters: FilterState,
 ): ReadonlyArray<T> {
-  return items.filter((item) => {
+  const filteredItems = items.filter((item) => {
     // LTV filter
     if (
       item.ltv !== undefined &&
@@ -135,6 +136,8 @@ function applyFilters<T extends FilterableItem>(
 
     return true;
   });
+
+  return filteredItems;
 }
 
 // Animation variants from smooth-drawer
@@ -200,7 +203,7 @@ export function ListingGridShell<T extends WithLatLng>({
   const [viewportBounds, setViewportBounds] = React.useState<
     ViewportBounds | undefined
   >(undefined);
-  const [filters, setFilters] = React.useState<FilterState>(DEFAULT_FILTERS);
+  const { filters, setFilters, setItems } = useFiltersStore();
   const [isMapDrawerOpen, setIsMapDrawerOpen] = React.useState(false);
 
   // Apply user filters first
@@ -241,16 +244,16 @@ export function ListingGridShell<T extends WithLatLng>({
     return [{ title: "All Listings", items: filteredItems }];
   }, [filteredItems, groupItemsForMobile]);
 
+  React.useEffect(() => {
+    setItems(filteredItems);
+  }, [filteredItems]);
+
   if (isMobile) {
     return (
       <div className={classNames?.container}>
-        {showFilters && (
-          <FilterBar
-            filters={filters}
-            onFiltersChange={setFilters}
-            items={items as ReadonlyArray<FilterableItem>}
-          />
-        )}
+        {/* {showFilters && (
+          <FilterBar />
+        )} */}
         <div className="px-4">
           {/* Main listing scroller */}
           <div className={classNames?.gridColumn}>
@@ -308,13 +311,9 @@ export function ListingGridShell<T extends WithLatLng>({
 
   return (
     <div className="flex flex-col">
-      {showFilters && (
-        <FilterBar
-          filters={filters}
-          onFiltersChange={setFilters}
-          items={items as ReadonlyArray<FilterableItem>}
-        />
-      )}
+      {/* {showFilters && (
+        <FilterBar />
+      )} */}
       <section className={classNames?.container ?? "flex gap-x-4 px-4 pt-4"}>
         <div className={classNames?.gridColumn ?? "flex-1"}>
           <div className="grid grid-cols-1 84rem:grid-cols-2">
@@ -340,7 +339,7 @@ export function ListingGridShell<T extends WithLatLng>({
         <div className={classNames?.mapColumn ?? "w-[40%] 84rem:w-[35%]"}>
           <div
             className={
-              classNames?.mapWrapper ?? "sticky top-20 h-[calc(100vh-7rem)]"
+              classNames?.mapWrapper ?? "sticky top-30 h-[calc(100vh-7rem)]"
             }
           >
             <ListingMap

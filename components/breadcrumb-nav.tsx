@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import { ViewTransition } from "react";
 import { useNavigationTransition } from "@/components/transitions/useNavigationTransition";
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { SITE_URL } from "@/lib/siteurl";
 
 export interface BreadcrumbItem {
 	label: string;
@@ -33,7 +36,23 @@ interface BreadcrumbNavProps {
  *   { label: "Property Details" }
  * ]} />
  */
-export function BreadcrumbNav({ items, className }: BreadcrumbNavProps) {
+export function BreadcrumbNav({ className }: BreadcrumbNavProps) {
+	const pathname = usePathname();
+	const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([]);
+  
+	useEffect(() => {
+	  console.log("PATHNAME", pathname);
+  
+  
+	  const pathParts = pathname.split("/")
+	  const breadcrumbs = pathParts.map((part, index) => ({
+		label: part.charAt(0).toUpperCase() + part.slice(1),
+		href: `${SITE_URL}${pathParts.slice(0, index + 1).join("/")}`
+	  }));
+	  console.log("BREADCRUMBS", breadcrumbs);
+	  breadcrumbs.shift();
+	  setBreadcrumbs(breadcrumbs);
+	}, [pathname]);
     return (
         <ViewTransition>
             <div className={className}>
@@ -53,8 +72,8 @@ export function BreadcrumbNav({ items, className }: BreadcrumbNavProps) {
 						</BreadcrumbLink>
 					</BreadcrumbItem>
 
-					{items.map((item, index) => {
-						const isLast = index === items.length - 1;
+					{breadcrumbs.map((item, index) => {
+						const isLast = index === breadcrumbs.length - 1;
 
 						return (
 							<div key={index} className="contents">

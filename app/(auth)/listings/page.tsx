@@ -112,27 +112,27 @@ export default async function ListingsPage() {
 	console.log("APR range:", Math.min(...listings.map((l) => l.apr!)), "-", Math.max(...listings.map((l) => l.apr!)));
 
 	return (
-		<ViewTransition>
+		// <ViewTransition>
 			<div className="min-h-screen">
-			<div className="container flex flex-col mx-auto px-4 py-6">
+			<div className="container flex flex-col mx-auto py-6">
 			{/* Breadcrumb Navigation */}
 					{/* Breadcrumb Navigation */}
 
-					<div className="space-y-3">
+					{/* <div className="space-y-3">
 						<h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl">
 							Investment Listings
 						</h1>
 						<p className="text-base text-muted-foreground">
 							Showing {listings.length} properties in the Greater Toronto Area
 						</p>
-					</div>
+					</div> */}
 
 					<div className="mt-4">
 						<ListingsClient listings={listings} />
 					</div>
 				</div>
             </div>
-        </ViewTransition>
+        // </ViewTransition>
 	);
 }
 

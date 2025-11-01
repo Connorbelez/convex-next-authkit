@@ -11,14 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { FilterableItem } from "./ListingGridShell";
+import { useFiltersStore } from "./contexts/listingContext";
 
-interface FilterBarProps {
-  filters: FilterState;
-  onFiltersChange: (filters: FilterState) => void;
-  items?: ReadonlyArray<FilterableItem>;
-}
-
-export function FilterBar({ filters, onFiltersChange, items }: FilterBarProps) {
+export function FilterBar() {
+  const { filters, setFilters, items, setItems } = useFiltersStore();
   const safeFilters: FilterState = filters || {
     ltvRange: [0, 100] as [number, number],
     interestRateRange: [0, 10] as [number, number],
@@ -32,14 +28,14 @@ export function FilterBar({ filters, onFiltersChange, items }: FilterBarProps) {
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onFiltersChange({
+    setFilters({
       ...safeFilters,
       searchQuery: e.target.value,
     });
   };
 
   const handleClearFilters = () => {
-    onFiltersChange({
+    setFilters({
       ltvRange: FILTER_BOUNDS.ltvRange,
       interestRateRange: FILTER_BOUNDS.interestRateRange,
       loanAmountRange: FILTER_BOUNDS.loanAmountRange,
@@ -55,6 +51,8 @@ export function FilterBar({ filters, onFiltersChange, items }: FilterBarProps) {
   const hasActiveFilters =
     safeFilters.ltvRange[0] > FILTER_BOUNDS.ltvRange[0] ||
     safeFilters.ltvRange[1] < FILTER_BOUNDS.ltvRange[1] ||
+
+
     safeFilters.interestRateRange[0] > FILTER_BOUNDS.interestRateRange[0] ||
     safeFilters.interestRateRange[1] < FILTER_BOUNDS.interestRateRange[1] ||
     safeFilters.loanAmountRange[0] > FILTER_BOUNDS.loanAmountRange[0] ||
@@ -64,16 +62,16 @@ export function FilterBar({ filters, onFiltersChange, items }: FilterBarProps) {
     safeFilters.maturityDate !== undefined;
 
   return (
-    <div className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-[10] flex flex-col justify-center gap-4 px-4 py-4">
-      <div className="flex flex-wrap items-center justify-start gap-2 md:flex-nowrap">
-        <div className="relative w-full md:w-64">
+    <div className="z-[10] flex flex-col justify-center gap-x-4">
+      <div className="flex items-center justify-start gap-2 flex-nowrap">
+        <div className="relative md:w-64">
           <Icon
             className="text-foreground absolute left-3 top-1/2 -translate-y-1/2"
             icon="lucide:search"
           />
           <Input
             type="text"
-            placeholder="Search titles, regions..."
+            placeholder="Search ..."
             className="pl-10 rounded-full border-input shadow-md"
             value={safeFilters.searchQuery}
             onChange={handleSearchChange}
@@ -82,7 +80,7 @@ export function FilterBar({ filters, onFiltersChange, items }: FilterBarProps) {
 
         <FilterModal
           filters={filters}
-          onFiltersChange={onFiltersChange}
+          onFiltersChange={setFilters}
           items={items}
         />
 

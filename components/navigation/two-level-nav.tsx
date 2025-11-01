@@ -1,36 +1,30 @@
 "use client"
 
 import * as React from "react"
+import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Bell, ChevronDown, Home, FileText, BookOpen, HelpCircle, Mail, Menu, X } from "lucide-react"
+import { Search, Bell, ChevronDown, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CommandPalette } from "./command-palette"
 import { BreadcrumbNav } from "@/components/breadcrumb-nav"
 import { UserAvatarMenu } from "@/components/auth/UserAvatarMenu"
 import { cn } from "@/lib/utils"
-
-interface Tab {
-  id: string
-  label: string
-  icon: React.ElementType
-}
-
-const tabs: Tab[] = [
-  { id: "home", label: "Home", icon: Home },
-  { id: "listings", label: "Listings", icon: FileText },
-  { id: "blog", label: "Blog", icon: BookOpen },
-  { id: "about", label: "About", icon: FileText },
-  { id: "faq", label: "FAQ", icon: HelpCircle },
-  { id: "contact", label: "Contact Us", icon: Mail },
-]
-
+import { navigationItems, isNavItemActive, type NavItem } from "@/lib/navigation"
+import Link from "next/link"
+import { useFiltersStore } from "../contexts/listingContext"
+import { FilterBar } from "../filter-bar"
 interface TwoLevelNavProps {
   breadcrumbs?: { label: string; href?: string }[]
 }
 
+function isListingsPage(pathname: string) {
+  return pathname.split("/").length === 2 && pathname.split("/")[1] === "listings"
+}
+
 export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
-  const [activeTab, setActiveTab] = React.useState("home")
+  const pathname = usePathname()
+  const router = useRouter()
   const [commandOpen, setCommandOpen] = React.useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
 
@@ -45,8 +39,8 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
     return () => document.removeEventListener("keydown", down)
   }, [])
 
-  const handleTabClick = (tabId: string) => {
-    setActiveTab(tabId)
+  const handleNavClick = (navItem: NavItem) => {
+    router.push(navItem.href)
     setMobileMenuOpen(false)
   }
 
@@ -78,21 +72,23 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
 
             {/* Center - Tubelight Tabs (Desktop only) */}
             <div className="hidden lg:flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
-              {tabs.map((tab) => {
-                const Icon = tab.icon
-                const isActive = activeTab === tab.id
+              {navigationItems.map((navItem) => {
+                const Icon = navItem.icon
+                const isActive = isNavItemActive(navItem, pathname)
 
                 return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
+                  <Link key={`nav-link-${navItem.id}`} prefetch={true} href={navItem.href}>
+                  <Button
+                    variant="ghost"
+                    key={navItem.id}
+                    // onClick={() => handleNavClick(navItem)}
                     className={cn(
                       "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
                       "text-foreground/80 hover:text-primary",
                       isActive && "bg-muted text-primary",
                     )}
                   >
-                    <span>{tab.label}</span>
+                    <span>{navItem.label}</span>
                     {isActive && (
                       <motion.div
                         layoutId="lamp"
@@ -111,7 +107,8 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
                         </div>
                       </motion.div>
                     )}
-                  </button>
+                  </Button>
+                  </Link>
                 )
               })}
             </div>
@@ -145,11 +142,22 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
             mobileMenuOpen && "lg:block hidden",
           )}
         >
-          <div className="flex items-center justify-between h-12 px-4 md:px-6">
-            {/* Breadcrumbs */}
-            <BreadcrumbNav items={breadcrumbs} />
-
-            {/* Search and Feedback */}
+<div className="flex items-center h-12 px-4 md:px-6 relative">
+  {/* Breadcrumbs - Left */}
+  <BreadcrumbNav items={breadcrumbs} />
+  
+  {/* Filters - Absolutely Centered */}
+  <div className="md:absolute md:left-1/2 md:-translate-x-1/2 flex items-center gap-2">
+    {isListingsPage(pathname) && <FilterBar />}
+  </div>
+  
+  {/* Search/Feedback - Right */}
+  {!isListingsPage(pathname) && (
+    <div className="flex items-center gap-2 md:gap-3 ml-auto">
+      {/* ... search content ... */}
+    </div>
+  )}
+            {!isListingsPage(pathname) && (
             <div className="flex items-center gap-2 md:gap-3">
               {/* Search */}
               <button
@@ -165,6 +173,7 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
                 Feedback
               </Button>
             </div>
+            )}
           </div>
         </div>
 
@@ -191,14 +200,14 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
               >
                 <div className="px-4 py-6 space-y-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
                   {/* Navigation Items */}
-                  {tabs.map((tab) => {
-                    const Icon = tab.icon
-                    const isActive = activeTab === tab.id
+                  {navigationItems.map((navItem) => {
+                    const Icon = navItem.icon
+                    const isActive = isNavItemActive(navItem, pathname)
 
                     return (
                       <button
-                        key={tab.id}
-                        onClick={() => handleTabClick(tab.id)}
+                        key={navItem.id}
+                        onClick={() => handleNavClick(navItem)}
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left",
                           isActive
@@ -207,7 +216,7 @@ export function TwoLevelNav({ breadcrumbs = [] }: TwoLevelNavProps) {
                         )}
                       >
                         <Icon className="size-5" />
-                        <span className="text-base">{tab.label}</span>
+                        <span className="text-base">{navItem.label}</span>
                         {isActive && (
                           <motion.div
                             layoutId="mobile-active"
