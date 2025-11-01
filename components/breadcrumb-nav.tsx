@@ -16,13 +16,13 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { SITE_URL } from "@/lib/siteurl";
 
-export interface BreadcrumbItem {
+export interface BreadcrumbItemProps {
 	label: string;
 	href?: string;
 }
 
 interface BreadcrumbNavProps {
-	items: BreadcrumbItem[];
+	items: BreadcrumbItemProps[];
 	className?: string;
 }
 
@@ -37,7 +37,7 @@ interface BreadcrumbNavProps {
  * ]} />
  */
 export function BreadcrumbNav({ className, items }: BreadcrumbNavProps) {
-	const [localItems, setLocalItems] = useState<BreadcrumbItem[]>(items);
+	const [localItems, setLocalItems] = useState<BreadcrumbItemProps[]>(items);
 	useEffect(() => {
 		setLocalItems(items);
 	}, [items]);
