@@ -7,7 +7,7 @@ import {
 	Command,
 	Frame,
 	GalleryVerticalEnd,
-	Map,
+	MapPin,
 	PieChart,
 	Settings2,
 	SquareTerminal,
@@ -151,7 +151,7 @@ const data = {
 		{
 			name: "Travel",
 			url: "#",
-			icon: Map,
+			icon: MapPin,
 		},
 	],
 };

@@ -1,7 +1,7 @@
 import { Card, CardContent, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
-interface PropertyInfoProps {
+type PropertyInfoProps = {
 	title: string;
 	address: {
 		street: string;
@@ -12,7 +12,7 @@ interface PropertyInfoProps {
 	};
 	investorBrief?: string;
 	status: string;
-}
+};
 
 const statusConfig: Record<
 	string,

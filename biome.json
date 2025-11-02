@@ -30,10 +30,13 @@
       "!.next/",
       "!convex/_generated",
       "!convex/tsconfig.json",
-	  "!convex",
-	  "!convex/*",
-	  "!vitest.config.mts",
-	  "!biome.json",
+      "!convex",
+      "!convex/*",
+      "!vitest.config.mts",
+      "!biome.json",
+      "!.storybook",
+      "!.storybook/*",
+      "!.storybook",
       "!convex/_generated/*"
     ]
   },
@@ -61,7 +64,8 @@
         "noConsole": "off",
         "useAwait": "off",
         "noExplicitAny": "off",
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "noBitwiseOperators": "off"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "off"

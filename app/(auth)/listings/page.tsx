@@ -7,10 +7,10 @@ import type { MockListing } from "@/lib/mock-data/listings";
 import { ListingsClient } from "./listings-client";
 
 // Extended type with required fields for rendering
-interface ListingItem extends FilterableItem {
+type ListingItem = FilterableItem & {
 	id: string;
 	imageSrc: string;
-}
+};
 
 export const metadata: Metadata = {
 	title: "Investment Listings",
@@ -38,9 +38,9 @@ const PROPERTY_TYPES = [
  */
 function selectFromArray<T>(arr: readonly T[], seed: string): T {
 	let hash = 0;
-	for (let i = 0; i < seed.length; i++) {
+	for (let i = 0; i < seed.length; i += 1) {
 		hash = (hash << 5) - hash + seed.charCodeAt(i);
-		hash = hash & hash;
+		hash &= hash;
 	}
 	const x = Math.sin(hash) * 10000;
 	const random = x - Math.floor(x);
@@ -52,7 +52,7 @@ function selectFromArray<T>(arr: readonly T[], seed: string): T {
  */
 function seededRandomNumber(seed: string, min: number, max: number): number {
 	let hash = 0;
-	for (let i = 0; i < seed.length; i+=1) {
+	for (let i = 0; i < seed.length; i += 1) {
 		hash = (hash << 5) - hash + seed.charCodeAt(i);
 		hash &= hash;
 	}

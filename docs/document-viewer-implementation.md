@@ -10,20 +10,41 @@ The Document Viewer component uses Adobe PDF Embed API to display property docum
 ✅ Sized Container mode with fixed height
 ✅ Comprehensive error handling and logging
 ✅ Storybook stories created
+✅ Convex storage integration implemented
+✅ Wrapper component for real file URLs
 
 ## Component Location
-- Component: `components/listing-detail/document-viewer.tsx`
-- Stories: `stories/listing-detail/document-viewer.stories.tsx`
+- Core Component: `components/listing-detail/document-viewer.tsx`
+- Convex Wrapper: `components/listing-detail/document-viewer-wrapper.tsx`
+- Convex Queries: `convex/storage.ts`
+- Stories: `stories/listing-detail/document-viewer*.stories.tsx`
 - Used in: `app/(auth)/listings/[id]/page.tsx`
 
-## Current Implementation (Mock Data)
+## Current Implementation
 
-The component currently uses a test PDF URL from Adobe's demo servers:
+### Testing with Convex Storage
+The application now uses the `DocumentViewerWrapper` which fetches real signed URLs from Convex:
+
+```typescript
+// In the page component
+import { DocumentViewerWrapper } from "@/components/listing-detail";
+
+<DocumentViewerWrapper documents={listing.documents} />
+```
+
+The wrapper:
+1. Receives mock documents with placeholder URLs
+2. Fetches signed URLs from Convex storage via `api.storage.getTestDocumentUrl`
+3. Injects real URLs into the documents
+4. Passes updated documents to the DocumentViewer
+
+### Mock Data Fallback
+The mock data generator provides a test PDF URL as fallback:
 ```typescript
 const pdfUrl = "https://documentservices.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf";
 ```
 
-This allows the component to work immediately for development and testing.
+This allows the component to work immediately if Convex is unavailable.
 
 ## Production Integration with Convex Storage
 

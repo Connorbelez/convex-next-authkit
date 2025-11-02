@@ -12,15 +12,15 @@ import {
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export interface BreadcrumbItemProps {
+export type BreadcrumbItemProps = {
 	label: string;
 	href?: string;
-}
+};
 
-interface BreadcrumbNavProps {
+type BreadcrumbNavProps = {
 	items: BreadcrumbItemProps[];
 	className?: string;
-}
+};
 
 /**
  * Professional breadcrumb navigation component

@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 import { format, parseISO } from "date-fns";
 import Image from "next/image";
 
-interface AppraisalComparable {
+type AppraisalComparable = {
 	_id: string;
 	address: {
 		street: string;
@@ -19,11 +19,11 @@ interface AppraisalComparable {
 	bathrooms?: number;
 	propertyType?: string;
 	imageUrl: string;
-}
+};
 
-interface ComparablePropertiesProps {
+type ComparablePropertiesProps = {
 	comparables: AppraisalComparable[];
-}
+};
 
 function formatCurrency(amount: number): string {
 	return new Intl.NumberFormat("en-US", {
@@ -66,8 +66,8 @@ export function ComparableProperties({
 
 					return (
 						<Card.Root
-							key={comp._id}
 							className="overflow-hidden transition-shadow hover:shadow-md"
+							key={comp._id}
 						>
 							<CardContent className="p-0">
 								{/* Property Image */}

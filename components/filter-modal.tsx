@@ -1,5 +1,8 @@
 import { Icon } from "@iconify/react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import {
+	Indicator as CheckboxIndicator,
+	Root as CheckboxRoot,
+} from "@radix-ui/react-checkbox";
 import { CircleCheck } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -22,11 +25,11 @@ import {
 	type MortgageType,
 } from "./types/listing-filters";
 
-interface FilterModalProps {
+type FilterModalProps = {
 	filters: FilterState;
 	onFiltersChange: (filters: FilterState) => void;
-	items?: ReadonlyArray<FilterableItem>;
-}
+	items?: readonly FilterableItem[] | FilterableItem[];
+};
 
 export default function FilterModal({
 	filters,
@@ -64,19 +67,19 @@ export default function FilterModal({
 			max: number,
 			barCount: number
 		): number[] => {
-			const buckets = Array(barCount).fill(0);
+			const buckets = new Array(barCount).fill(0);
 			const bucketSize = (max - min) / barCount;
 
-			items.forEach((item) => {
+			for (const item of items) {
 				const value = item[field];
 				if (value !== undefined && value >= min && value <= max) {
 					const bucketIndex = Math.min(
 						Math.floor((value - min) / bucketSize),
 						barCount - 1
 					);
-					buckets[bucketIndex]++;
+					buckets[bucketIndex] += 1;
 				}
-			});
+			}
 
 			return buckets;
 		},
@@ -305,7 +308,7 @@ export default function FilterModal({
 							</h2>
 							<div className="grid grid-cols-1 items-center justify-center gap-2 py-4 sm:grid-cols-3 sm:gap-3">
 								{mortgageTypeOptions.map((option) => (
-									<CheckboxPrimitive.Root
+									<CheckboxRoot
 										checked={safeFilters.mortgageTypes.includes(option.value)}
 										className="relative rounded-lg px-2 py-2 text-center text-muted-foreground ring-[1px] ring-border transition-all data-[state=checked]:text-primary data-[state=checked]:ring-2 data-[state=checked]:ring-primary sm:px-4 sm:py-3"
 										key={option.value}
@@ -321,10 +324,10 @@ export default function FilterModal({
 												{option.displayLabel}
 											</span>
 										</div>
-										<CheckboxPrimitive.Indicator className="absolute top-2 right-2">
+										<CheckboxIndicator className="absolute top-2 right-2">
 											<CircleCheck className="h-5 w-5 fill-primary text-primary-foreground" />
-										</CheckboxPrimitive.Indicator>
-									</CheckboxPrimitive.Root>
+										</CheckboxIndicator>
+									</CheckboxRoot>
 								))}
 							</div>
 						</div>

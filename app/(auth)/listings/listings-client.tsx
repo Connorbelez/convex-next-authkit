@@ -1,6 +1,7 @@
 "use client";
 
-import * as React from "react";
+// import * as React from "react";
+import { useEffect } from "react";
 import {
 	type FilterableItem,
 	ListingGridShell,
@@ -8,21 +9,21 @@ import {
 import { Horizontal } from "@/components/listing-card-horizontal";
 import { ListingMapPopup } from "@/components/listing-map-popup";
 
-interface ListingItem extends FilterableItem {
+type ListingItem = FilterableItem & {
 	id: string;
 	imageSrc: string;
-}
+};
 
-interface ListingsClientProps {
+type ListingsClientProps = {
 	listings: ListingItem[];
-}
+};
 
 /**
  * Client wrapper for the listings page
  * Handles rendering of listing cards and map popups
  */
 export function ListingsClient({ listings }: ListingsClientProps) {
-	React.useEffect(() => {
+	useEffect(() => {
 		console.log("[ListingsClient] Received listings:", listings.length);
 		console.log("[ListingsClient] First listing:", listings[0]);
 	}, [listings]);
@@ -53,12 +54,12 @@ export function ListingsClient({ listings }: ListingsClientProps) {
 			)}
 			renderMapPopup={(listing) => (
 				<ListingMapPopup
-					address={listing.address!}
-					apr={listing.apr!}
-					id={listing.id!}
+					address={listing.address ?? ""}
+					apr={listing.apr ?? 0}
+					id={listing.id ?? ""}
 					imageSrc={listing.imageSrc}
-					principal={listing.principal!}
-					title={listing.title!}
+					principal={listing.principal ?? 0}
+					title={listing.title ?? ""}
 				/>
 			)}
 			showFilters={true}

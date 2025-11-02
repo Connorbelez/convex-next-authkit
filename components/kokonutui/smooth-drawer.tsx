@@ -27,10 +27,10 @@ import {
 	DrawerTrigger,
 } from "@/components/ui/drawer";
 
-interface PriceTagProps {
+type PriceTagProps = {
 	price: number;
 	discountedPrice: number;
-}
+};
 
 function PriceTag({ price, discountedPrice }: PriceTagProps) {
 	return (

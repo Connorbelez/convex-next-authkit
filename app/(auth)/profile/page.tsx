@@ -24,11 +24,14 @@ import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { MOCK_MEMBERSHIPS, MOCK_ORGS } from "@/lib/mock-data/organizations";
 
+// Regex for splitting names by whitespace - defined at top level for performance
+const NAME_SPLIT_REGEX = /\s+/;
+
 type ProfileData = {
 	user: any;
-	roles: Array<{ slug: string; name?: string }>;
-	organizations: Array<any>;
-	memberships: Array<any>;
+	roles: { slug: string; name?: string }[];
+	organizations: any[];
+	memberships: any[];
 	activeOrganizationId: string | null;
 };
 
@@ -39,13 +42,13 @@ function getInitials(
 ) {
 	const name = [first, last].filter(Boolean).join(" ");
 	if (name.trim()) {
-		const parts = name.trim().split(/\s+/);
+		const parts = name.trim().split(NAME_SPLIT_REGEX);
 		return (
-			`${parts[0]?.[0] ?? ""}${parts.length > 1 ? (parts[parts.length - 1][0] ?? "") : ""}`.toUpperCase() ||
+			`${parts[0]?.[0] ?? ""}${parts.length > 1 ? (parts.at(-1)?.[0] ?? "") : ""}`.toUpperCase() ||
 			"U"
 		);
 	}
-	if (email && email.length > 0) return email[0]!.toUpperCase();
+	if (email && email.length > 0) return email[0]?.toUpperCase() ?? "U";
 	return "U";
 }
 
@@ -74,12 +77,10 @@ export default function ProfilePage() {
 		if (!data) return;
 		let organizations = data.organizations ?? [];
 		let memberships = data.memberships ?? [];
-		let usedMock = false;
 		if (organizations.length === 0) {
 			organizations = [...MOCK_ORGS];
 			const uid = data.user?.idp_id ?? "mock-user";
 			memberships = MOCK_MEMBERSHIPS(uid);
-			usedMock = true;
 		}
 		return {
 			...data,
@@ -239,7 +240,7 @@ export default function ProfilePage() {
 								className="hidden"
 								onChange={(e) => {
 									const f = e.target.files?.[0];
-									if (f) void onPickAvatar(f);
+									if (f) onPickAvatar(f);
 								}}
 								type="file"
 							/>
@@ -287,10 +288,7 @@ export default function ProfilePage() {
 
 					<Card className="p-5">
 						<div className="mb-3 font-medium text-sm">Organization</div>
-						<Select
-							onValueChange={(v) => void onChangeOrg(v)}
-							value={activeOrg}
-						>
+						<Select onValueChange={(v) => onChangeOrg(v)} value={activeOrg}>
 							<SelectTrigger>
 								<SelectValue placeholder="Select organization" />
 							</SelectTrigger>
@@ -308,7 +306,7 @@ export default function ProfilePage() {
 								<Button
 									className="w-full"
 									disabled={isSyncing}
-									onClick={() => void onSyncOrganizations()}
+									onClick={() => onSyncOrganizations()}
 									size="sm"
 									variant="outline"
 								>
@@ -357,10 +355,7 @@ export default function ProfilePage() {
 							</div>
 						</div>
 						<div className="mt-5 flex items-center gap-3">
-							<Button
-								disabled={!dirty || isSaving}
-								onClick={() => void onSave()}
-							>
+							<Button disabled={!dirty || isSaving} onClick={() => onSave()}>
 								{isSaving ? "Saving..." : "Save changes"}
 							</Button>
 							{dirty ? null : (

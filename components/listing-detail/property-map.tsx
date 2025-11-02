@@ -1,7 +1,7 @@
 "use client";
 
 import mapboxgl from "mapbox-gl";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { LngLatLike } from "mapbox-gl";
 
@@ -45,7 +45,7 @@ function createGeodesicCircle(
 ) {
 	const coordinates: [number, number][] = [];
 	let firstCoord: [number, number] | null = null;
-	for (let i = 0; i < steps; i++) {
+	for (let i = 0; i < steps; i += 1) {
 		const bearing = (i / steps) * 360;
 		const coord = destinationPoint(longitude, latitude, radiusMeters, bearing);
 		if (i === 0) firstCoord = coord;
@@ -74,15 +74,15 @@ type MapProps = {
 	zoom: number;
 	wrapperClassName: string;
 };
-const Map = ({ latitude, longitude, zoom, wrapperClassName }: MapProps) => {
+const InnerPropertyMap = ({ latitude, longitude, zoom }: MapProps) => {
 	const mapContainerRef = useRef<HTMLDivElement>(null);
 
 	// Generate a small random offset for privacy (between -0.0005 and 0.0005 degrees)
 	// This is roughly 25-50 meters depending on location
-	const randomizeCoordinate = (coord: number): number => {
+	const randomizeCoordinate = useCallback((coord: number): number => {
 		const offset = (Math.random() - 0.5) * 0.001; // Random value between -0.0005 and 0.0005
 		return coord + offset;
-	};
+	}, []);
 
 	// Apply privacy offset to coordinates
 	const [lt, setLt] = useState(latitude);
@@ -101,7 +101,7 @@ const Map = ({ latitude, longitude, zoom, wrapperClassName }: MapProps) => {
 		setLng(longitude);
 		setOffsetLt(randomizeCoordinate(latitude));
 		setOffsetLng(randomizeCoordinate(longitude));
-	}, [latitude, longitude]);
+	}, [latitude, longitude, randomizeCoordinate]);
 
 	useEffect(() => {
 		mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -159,7 +159,7 @@ const Map = ({ latitude, longitude, zoom, wrapperClassName }: MapProps) => {
 		});
 
 		// Create Street View URL
-		const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lt},${lng}`;
+		// const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lt},${lng}`;
 
 		// Create popup with Street View link
 		// const popup = new mapboxgl.Popup({
@@ -197,7 +197,7 @@ const Map = ({ latitude, longitude, zoom, wrapperClassName }: MapProps) => {
 			}
 			map.remove();
 		};
-	}, [lng, lt, zoom]);
+	}, [lng, lt, zoom, offsetLng, offsetLt]);
 
 	return (
 		<div>
@@ -207,16 +207,15 @@ const Map = ({ latitude, longitude, zoom, wrapperClassName }: MapProps) => {
 			</div>
 			<div
 				className="map-container relative aspect-10/9 w-full rounded-lg"
-				ref={mapContainerRef}
-				aria-label="Map showing approximate property location"
 				data-testid="listing-map"
+				ref={mapContainerRef}
 			/>
 		</div>
 	);
 };
 
 // Wrapper component that matches the expected PropertyMap interface
-export interface PropertyMapProps {
+export type PropertyMapProps = {
 	location: {
 		lat: number;
 		lng: number;
@@ -226,15 +225,18 @@ export interface PropertyMapProps {
 		city: string;
 		state: string;
 	};
-}
+};
 
-export function PropertyMap({ location }: PropertyMapProps) {
+export function PropertyMapComponent({ location }: PropertyMapProps) {
 	return (
-		<Map
+		<InnerPropertyMap
 			latitude={location.lat}
 			longitude={location.lng}
-			zoom={15}
 			wrapperClassName="w-full h-full"
+			zoom={15}
 		/>
 	);
 }
+
+// Export the wrapper as PropertyMap to match barrel exports
+export { PropertyMapComponent as PropertyMap };

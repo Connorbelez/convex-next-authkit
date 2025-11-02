@@ -3,7 +3,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Bell, ChevronDown, Menu, Search, X } from "lucide-react";
 import Link from "next/link";
-import * as React from "react";
+// import * as React from "react";
+import { useEffect, useState } from "react";
 import { UserAvatarMenu } from "@/components/auth/UserAvatarMenu";
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";
 import { Badge } from "@/components/ui/badge";
@@ -13,10 +14,10 @@ import { cn } from "@/lib/utils";
 import { FilterBar } from "../filter-bar";
 import { CommandPalette } from "./command-palette";
 
-interface TwoLevelNavProps {
+type TwoLevelNavProps = {
 	breadcrumbs?: { label: string; href?: string }[];
 	pathname?: string;
-}
+};
 
 function isListingsPage(pathname: string) {
 	return (
@@ -28,10 +29,10 @@ export function TwoLevelNav({
 	breadcrumbs = [],
 	pathname = "",
 }: TwoLevelNavProps) {
-	const [commandOpen, setCommandOpen] = React.useState(false);
-	const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+	const [commandOpen, setCommandOpen] = useState(false);
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
 			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
@@ -74,7 +75,7 @@ export function TwoLevelNav({
 						{/* Center - Tubelight Tabs (Desktop only) */}
 						<div className="hidden items-center gap-3 rounded-full border border-border bg-background/5 px-1 py-1 shadow-lg backdrop-blur-lg lg:flex">
 							{navigationItems.map((navItem) => {
-								const Icon = navItem.icon;
+								// const Icon = navItem.icon;
 								const isActive = isNavItemActive(navItem, pathname);
 
 								return (

@@ -19,21 +19,21 @@ const base = authkitMiddleware({
 	},
 });
 
-function generateRequestId() {
-	try {
-		// Prefer Web Crypto API when available (Edge-safe)
-		// @ts-ignore
-		if (
-			typeof crypto !== "undefined" &&
-			typeof crypto.randomUUID === "function"
-		)
-			return crypto.randomUUID();
-	} catch (e) {
-		// ignore
-	}
-	// fallback small random id
-	return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
-}
+// function generateRequestId() {
+// 	try {
+// 		// Prefer Web Crypto API when available (Edge-safe)
+// 		// @ts-ignore
+// 		if (
+// 			typeof crypto !== "undefined" &&
+// 			typeof crypto.randomUUID === "function"
+// 		)
+// 			return crypto.randomUUID();
+// 	} catch (e) {
+// 		// ignore
+// 	}
+// 	// fallback small random id
+// 	return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+// }
 
 export default async function proxy(req: NextRequest) {
 	// call the authkit middleware first
@@ -48,13 +48,13 @@ export default async function proxy(req: NextRequest) {
 	console.info("PATHNAME", { pathname: req.nextUrl.pathname });
 	const res = (await base(req as any, {} as any)) as NextResponse;
 	res.headers.set("x-current-path", req.nextUrl.pathname);
-	try {
-		// const existing = req.headers.get('x-request-id');
-		// const requestId = existing ?? generateRequestId();
-		// res.headers.set('x-request-id', requestId);
-	} catch (e) {
-		// swallow - logging should not break middleware
-	}
+	// try {
+	// 	// const existing = req.headers.get('x-request-id');
+	// 	// const requestId = existing ?? generateRequestId();
+	// 	// res.headers.set('x-request-id', requestId);
+	// } catch (e) {
+	// 	// swallow - logging should not break middleware
+	// }
 	return res;
 }
 

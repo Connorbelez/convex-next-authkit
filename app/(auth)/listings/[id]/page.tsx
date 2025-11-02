@@ -3,13 +3,13 @@ import { ViewTransition } from "react";
 import {
 	AppraisalData,
 	ComparableProperties,
-	DocumentViewer,
 	FinancialMetrics,
 	ImageCarousel,
 	PaymentHistory,
 	PropertyInfo,
-	PropertyMap,
+	PropertyMapComponent,
 } from "@/components/listing-detail";
+import { DocumentViewerWrapper } from "@/components/listing-detail/document-viewer-wrapper";
 import { RequestListingSection } from "@/components/listing-detail/request-listing-section";
 import {
 	generateComparables,
@@ -17,11 +17,11 @@ import {
 	generatePayments,
 } from "@/lib/mock-data/listings";
 
-interface ListingDetailPageProps {
+type ListingDetailPageProps = {
 	params: Promise<{
 		id: string;
 	}>;
-}
+};
 
 export async function generateMetadata({
 	params,
@@ -44,6 +44,7 @@ export async function generateMetadata({
 			},
 		};
 	} catch (error) {
+		console.error("Error generating metadata:", error);
 		return {
 			title: "Listing Details",
 		};
@@ -79,7 +80,10 @@ export default async function ListingDetailPage({
 						images={listing.images}
 						propertyTitle={listing.title}
 					/>
-					<PropertyMap address={listing.address} location={listing.location} />
+					<PropertyMapComponent
+						address={listing.address}
+						location={listing.location}
+					/>
 				</div>
 
 				{/* Financial Metrics */}
@@ -95,7 +99,7 @@ export default async function ListingDetailPage({
 				{/* Document Viewer */}
 				{listing.documents && listing.documents.length > 0 && (
 					<div className="mb-12">
-						<DocumentViewer documents={listing.documents} />
+						<DocumentViewerWrapper documents={listing.documents} />
 					</div>
 				)}
 

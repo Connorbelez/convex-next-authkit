@@ -14,16 +14,19 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+// Regex for splitting on whitespace (defined at module level for performance)
+const WHITESPACE_REGEX = /\s+/;
+
 function getInitials(name?: string | null, email?: string | null) {
-	if (name && name.trim()) {
-		const parts = name.trim().split(/\s+/);
+	if (name?.trim()) {
+		const parts = name.trim().split(WHITESPACE_REGEX);
 		const first = parts[0]?.[0] ?? "";
-		const last = parts.length > 1 ? (parts[parts.length - 1][0] ?? "") : "";
+		const last = parts.length > 1 ? (parts.at(-1)?.[0] ?? "") : "";
 		const initials = `${first}${last}`.toUpperCase();
 		return initials || "GU";
 	}
 	if (email && email.length > 0) {
-		return email[0]!.toUpperCase();
+		return email[0]?.toUpperCase() ?? "U";
 	}
 	return "GU";
 }
@@ -49,6 +52,7 @@ export function UserAvatarMenu() {
 			<div
 				aria-label="Loading user"
 				className="h-8 w-8 animate-pulse rounded-full bg-muted"
+				role="status"
 			/>
 		);
 	}
@@ -57,7 +61,10 @@ export function UserAvatarMenu() {
 		<>
 			<DropdownMenu>
 				<DropdownMenuTrigger aria-label="Open user menu" asChild>
-					<button className="inline-flex items-center justify-center rounded-full outline-hidden">
+					<button
+						className="inline-flex items-center justify-center rounded-full outline-hidden"
+						type="button"
+					>
 						<Avatar>
 							{imageUrl ? (
 								<AvatarImage alt={displayName} src={imageUrl} />

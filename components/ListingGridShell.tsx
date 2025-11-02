@@ -2,7 +2,8 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Map as MapIcon } from "lucide-react";
-import * as React from "react";
+import { useEffect, useMemo, useState } from "react";
+// import * as React from "react";
 import {
 	ListingMap,
 	type ListingMapProps,
@@ -24,7 +25,7 @@ import type { WithLatLng } from "@/hooks/use-filtered-listings";
 import { useViewportFilteredItems } from "@/hooks/use-filtered-listings";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useFiltersStore } from "./contexts/listingContext";
-import { FILTER_BOUNDS, type FilterState } from "./types/listing-filters";
+import type { FilterState } from "./types/listing-filters";
 
 type ClassNames = {
 	container?: string;
@@ -45,7 +46,7 @@ export interface FilterableItem extends WithLatLng {
 }
 
 export type ListingGridShellProps<T extends WithLatLng> = {
-	items: ReadonlyArray<T>;
+	items: readonly T[];
 	renderCard: (item: T) => React.ReactNode;
 	renderMapPopup: ListingMapProps<T>["renderPopup"];
 	classNames?: ClassNames;
@@ -53,17 +54,16 @@ export type ListingGridShellProps<T extends WithLatLng> = {
 		Omit<ListingMapProps<T>, "items" | "renderPopup" | "onViewportChange">
 	>;
 	/** Optional function to group items into sections for mobile horizontal scrolling */
-	groupItemsForMobile?: (items: ReadonlyArray<T>) => MobileListingSection<T>[];
+	groupItemsForMobile?: (items: readonly T[]) => MobileListingSection<T>[];
 	/** Show filter bar (default: true) */
 	showFilters?: boolean;
 	/** Custom filter bounds (optional) */
-	filterBounds?: typeof FILTER_BOUNDS;
 };
 
 function applyFilters<T extends FilterableItem>(
-	items: ReadonlyArray<T>,
+	items: readonly T[],
 	filters: FilterState
-): ReadonlyArray<T> {
+): readonly T[] {
 	const filteredItems = items.filter((item) => {
 		// LTV filter
 		if (
@@ -191,22 +191,21 @@ export function ListingGridShell<T extends WithLatLng>({
 	mapProps,
 	groupItemsForMobile,
 	showFilters = true,
-	filterBounds = FILTER_BOUNDS,
 }: ListingGridShellProps<T>) {
 	const isMobile = useIsMobile();
-	const [viewportBounds, setViewportBounds] = React.useState<
+	const [viewportBounds, setViewportBounds] = useState<
 		ViewportBounds | undefined
 	>(undefined);
-	const { filters, setFilters, setItems } = useFiltersStore();
-	const [isMapDrawerOpen, setIsMapDrawerOpen] = React.useState(false);
+	const { filters, setItems } = useFiltersStore();
+	const [isMapDrawerOpen, setIsMapDrawerOpen] = useState(false);
 
 	// Apply user filters first
-	const userFilteredItems = React.useMemo(() => {
+	const userFilteredItems = useMemo(() => {
 		if (!showFilters) return items;
 		return applyFilters(
-			items as ReadonlyArray<FilterableItem>,
+			items as readonly FilterableItem[],
 			filters
-		) as ReadonlyArray<T>;
+		) as readonly T[];
 	}, [items, filters, showFilters]);
 
 	// Then apply viewport filtering
@@ -215,12 +214,12 @@ export function ListingGridShell<T extends WithLatLng>({
 		viewportBounds
 	);
 
-	const onViewportChange = React.useCallback((bounds: ViewportBounds) => {
+	const onViewportChange = (bounds: ViewportBounds) => {
 		setViewportBounds(bounds);
-	}, []);
+	};
 
 	// Group items for mobile horizontal scrolling
-	const mobileSections = React.useMemo(() => {
+	const mobileSections = useMemo(() => {
 		// Ensure we always have a valid array
 		if (!filteredItems || filteredItems.length === 0) {
 			return [];
@@ -238,7 +237,7 @@ export function ListingGridShell<T extends WithLatLng>({
 		return [{ title: "All Listings", items: filteredItems }];
 	}, [filteredItems, groupItemsForMobile]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		setItems(filteredItems);
 	}, [filteredItems, setItems]);
 

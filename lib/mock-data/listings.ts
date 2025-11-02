@@ -3,7 +3,7 @@
  * Provides procedurally generated test data without database dependencies
  */
 
-export interface MockListing {
+export type MockListing = {
 	_id: string;
 	_creationTime: number;
 	title: string;
@@ -50,9 +50,9 @@ export interface MockListing {
 	viewCount?: number;
 	createdAt: string;
 	updatedAt: string;
-}
+};
 
-export interface MockPayment {
+export type MockPayment = {
 	_id: string;
 	_creationTime: number;
 	listingId: string;
@@ -60,9 +60,9 @@ export interface MockPayment {
 	date: string; // ISO date
 	status: "paid" | "pending" | "late";
 	type: "principal" | "interest" | "escrow";
-}
+};
 
-export interface AppraisalComparable {
+export type AppraisalComparable = {
 	_id: string;
 	address: {
 		street: string;
@@ -78,16 +78,16 @@ export interface AppraisalComparable {
 	bathrooms?: number;
 	propertyType?: string;
 	imageUrl: string; // Placeholder image
-}
+};
 
-export interface MockDocument {
+export type MockDocument = {
 	_id: string;
 	name: string;
 	type: "appraisal" | "title" | "inspection" | "loan";
 	url: string;
 	uploadDate: string; // ISO date
 	fileSize?: number; // in bytes
-}
+};
 
 // Seed data for consistent generation
 const PROPERTY_TITLES = [
@@ -169,11 +169,11 @@ const LENDERS = [
 // Seeded random number generator for consistent results
 function seededRandom(seed: string): number {
 	let hash = 0;
-	for (let i = 0; i < seed.length; i++) {
+	for (let i = 0; i < seed.length; i += 1) {
 		hash = (hash << 5) - hash + seed.charCodeAt(i);
-		hash = hash & hash;
+		hash &= hash;
 	}
-	const x = Math.sin(hash++) * 10000;
+	const x = Math.sin(hash) * 10000;
 	return x - Math.floor(x);
 }
 
@@ -369,7 +369,7 @@ export function generatePayments(listingId: string, count = 12): MockPayment[] {
 	const payments: MockPayment[] = [];
 	const now = new Date();
 
-	for (let i = 0; i < count; i++) {
+	for (let i = 0; i < count; i += 1) {
 		const paymentDate = new Date(now);
 		paymentDate.setMonth(paymentDate.getMonth() - i);
 
@@ -428,7 +428,7 @@ export function generateComparables(
 	const comparables: AppraisalComparable[] = [];
 
 	// Generate comparable sales with sequential IDs
-	for (let i = 1; i <= limit; i++) {
+	for (let i = 1; i <= limit; i += 1) {
 		const compId = `comp_${referenceId}_${i}`;
 
 		// Generate address nearby

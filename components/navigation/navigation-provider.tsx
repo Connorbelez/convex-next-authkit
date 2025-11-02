@@ -3,10 +3,10 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { usePathNameStore } from "../contexts/pathNameContext";
 import { TwoLevelNav } from "./two-level-nav";
-export interface BreadcrumbItem {
+export type BreadcrumbItem = {
 	label: string;
 	href?: string;
-}
+};
 
 export default function NavigationProvider({
 	children,

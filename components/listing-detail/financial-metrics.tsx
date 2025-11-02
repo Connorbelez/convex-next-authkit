@@ -2,7 +2,10 @@ import { Card, CardContent } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { differenceInDays, format, parseISO } from "date-fns";
 
-interface FinancialMetricsProps {
+// Regex for splitting property type - defined at top level for performance
+const PROPERTY_TYPE_SPLIT_REGEX = /\s+-\s+|\s+-|-/;
+
+type FinancialMetricsProps = {
 	financials: {
 		purchasePrice: number;
 		currentValue: number;
@@ -19,7 +22,7 @@ interface FinancialMetricsProps {
 		mortgageType?: string; // New: 1st, 2nd, 3rd mortgage
 		propertyType?: string; // New: e.g., "Residential - Condo", "Commercial - Office"
 	};
-}
+};
 
 function formatCurrency(amount: number): string {
 	return new Intl.NumberFormat("en-US", {
@@ -38,7 +41,7 @@ function formatLTV(value: number): string {
 	return `${value.toFixed(1)}%`;
 }
 
-interface MetricCardProps {
+type MetricCardProps = {
 	icon: string;
 	label: string;
 	value: string;
@@ -46,7 +49,7 @@ interface MetricCardProps {
 	colorClass?: string;
 	trend?: "up" | "down" | "neutral";
 	isHighlighted?: boolean;
-}
+};
 
 function MetricCard({
 	icon,
@@ -65,11 +68,11 @@ function MetricCard({
 		>
 			<CardContent className="relative overflow-hidden p-5">
 				{/* Animated background gradient */}
-				<div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 hover:opacity-100" />
+				<div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 hover:opacity-100" />
 
 				<div className="relative z-10 flex items-start gap-3">
 					<div
-						className={`rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 p-3 ${colorClass} shadow-sm transition-all duration-300 hover:scale-110`}
+						className={`rounded-xl bg-linear-to-br from-primary/10 to-primary/5 p-3 ${colorClass} shadow-sm transition-all duration-300 hover:scale-110`}
 					>
 						<Icon className="h-6 w-6" icon={icon} />
 					</div>
@@ -140,7 +143,7 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 		if (!type) return { category: "Residential", subType: "Detached House" };
 
 		// Try to split by " - " or " -" or "-"
-		const parts = type.split(/\s+-\s+|\s+-|-/);
+		const parts = type.split(PROPERTY_TYPE_SPLIT_REGEX);
 		if (parts.length >= 2) {
 			return {
 				category: parts[0].trim(),
@@ -161,15 +164,15 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 	const ltv = (principalLoanAmount / currentValue) * 100;
 
 	// Determine LTV color coding
-	const getLTVColorClass = (ltv: number) => {
-		if (ltv <= 60) return "text-green-600";
-		if (ltv <= 80) return "text-yellow-600";
+	const getLTVColorClass = (value: number) => {
+		if (value <= 60) return "text-green-600";
+		if (value <= 80) return "text-yellow-600";
 		return "text-red-600";
 	};
 
-	const getLTVLabel = (ltv: number) => {
-		if (ltv <= 60) return "Excellent (≤60%)";
-		if (ltv <= 80) return "Good (≤80%)";
+	const getLTVLabel = (value: number) => {
+		if (value <= 60) return "Excellent (≤60%)";
+		if (value <= 80) return "Good (≤80%)";
 		return "High Risk (>80%)";
 	};
 
@@ -195,92 +198,92 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 				<MetricCard
 					colorClass={valueChange >= 0 ? "text-green-600" : "text-red-600"}
 					icon="lucide:home"
+					isHighlighted
 					label="Current Market Price"
 					sublabel={
 						financials.currentValue
 							? `${valueChangePercent >= 0 ? "+" : ""}${valueChangePercent.toFixed(1)}% from purchase`
 							: "Estimated value"
 					}
-					value={formatCurrency(currentValue)}
 					trend={valueChange >= 0 ? "up" : "down"}
-					isHighlighted
+					value={formatCurrency(currentValue)}
 				/>
 
 				{/* LTV Ratio */}
 				<MetricCard
+					colorClass={getLTVColorClass(ltv)}
 					icon="lucide:percent-circle"
 					label="Loan-to-Value (LTV)"
-					value={formatLTV(ltv)}
 					sublabel={
 						financials.principalLoanAmount && financials.currentValue
 							? getLTVLabel(ltv)
 							: "Estimated value"
 					}
-					colorClass={getLTVColorClass(ltv)}
 					trend={ltv <= 80 ? "up" : "down"}
+					value={formatLTV(ltv)}
 				/>
 
 				{/* Interest Rate */}
 				<MetricCard
+					colorClass="text-purple-600"
 					icon="lucide:percent"
 					label="Interest Rate"
 					value={formatPercentage(financials.interestRate)}
-					colorClass="text-purple-600"
 				/>
 
 				{/* Principal Loan Amount */}
 				<MetricCard
+					colorClass="text-indigo-600"
 					icon="lucide:banknote"
 					label="Principal Loan Amount"
-					value={formatCurrency(principalLoanAmount)}
 					sublabel={
 						financials.principalLoanAmount ? undefined : "Estimated value"
 					}
-					colorClass="text-indigo-600"
+					value={formatCurrency(principalLoanAmount)}
 				/>
 
 				{/* Mortgage Type */}
 				<MetricCard
+					colorClass="text-cyan-600"
 					icon="lucide:credit-card"
 					label="Mortgage Type"
 					value={financials.mortgageType || "1st Position"}
-					colorClass="text-cyan-600"
 				/>
 
 				{/* Property Type */}
 				<MetricCard
+					colorClass="text-teal-600"
 					icon="lucide:building"
 					label="Property Type"
-					value={subType}
 					sublabel={`${category}${financials.propertyType ? "" : " (Default)"}`}
-					colorClass="text-teal-600"
+					value={subType}
 				/>
 
 				{/* Monthly Payment */}
 				<MetricCard
+					colorClass="text-emerald-600"
 					icon="lucide:calendar-days"
+					isHighlighted
 					label="Monthly Payment"
 					value={formatCurrency(financials.monthlyPayment)}
-					colorClass="text-emerald-600"
-					isHighlighted
 				/>
 
 				{/* Loan Term */}
 				<MetricCard
+					colorClass="text-amber-600"
 					icon="lucide:clock"
 					label="Loan Term"
 					value={loanTermText}
-					colorClass="text-amber-600"
 				/>
 
 				{/* Maturity Date - Takes 2 columns */}
 				<Card.Root className="transition-all duration-300 hover:shadow-lg sm:col-span-2 lg:col-span-3 xl:col-span-3">
 					<CardContent className="relative overflow-hidden p-5">
 						{/* Animated background gradient */}
-						<div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5" />
+						<div className="absolute inset-0 bg-linear-to-br from-orange-500/5 to-amber-500/5" />
 
 						<div className="relative z-10 flex items-start gap-3">
-							<div className="rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 p-3 text-orange-600 shadow-sm transition-all duration-300 hover:scale-110 dark:from-orange-900/30 dark:to-amber-900/30">
+							<div className="rounded-xl bg-linear-to-br from-orange-100 to-amber-100 p-3 text-orange-600 shadow-sm transition-all duration-300 hover:scale-110 dark:from-orange-900/30 dark:to-amber-900/30">
 								<Icon className="h-6 w-6" icon="lucide:calendar-check" />
 							</div>
 							<div className="flex-1">
@@ -320,10 +323,10 @@ export function FinancialMetrics({ financials }: FinancialMetricsProps) {
 					<Card.Root className="transition-all duration-300 hover:shadow-lg sm:col-span-2 lg:col-span-2 xl:col-span-2">
 						<CardContent className="relative overflow-hidden p-5">
 							{/* Animated background gradient */}
-							<div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-pink-500/5" />
+							<div className="absolute inset-0 bg-linear-to-br from-red-500/5 to-pink-500/5" />
 
 							<div className="relative z-10 flex items-start gap-3">
-								<div className="rounded-xl bg-gradient-to-br from-red-100 to-pink-100 p-3 text-red-600 shadow-sm transition-all duration-300 hover:scale-110 dark:from-red-900/30 dark:to-pink-900/30">
+								<div className="rounded-xl bg-linear-to-br from-red-100 to-pink-100 p-3 text-red-600 shadow-sm transition-all duration-300 hover:scale-110 dark:from-red-900/30 dark:to-pink-900/30">
 									<Icon className="h-6 w-6" icon="lucide:shield-alert" />
 								</div>
 								<div className="flex-1">

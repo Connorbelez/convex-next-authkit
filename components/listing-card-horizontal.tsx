@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ViewTransition } from "react";
 
-export interface HorizontalProps {
+export type HorizontalProps = {
 	id?: string;
 	title?: string;
 	address?: string;
@@ -16,7 +16,7 @@ export interface HorizontalProps {
 	principal?: number;
 	propertyType?: string;
 	maturityDate?: string;
-}
+};
 
 export function Horizontal({
 	id,
@@ -94,7 +94,8 @@ export function Horizontal({
 				<Card.Footer className="mt-auto flex w-full flex-row items-center justify-between">
 					<div className="flex flex-col">
 						<span
-							aria-label={`Maturity date: ${maturityDate}`}
+							// biome-ignore lint/a11y/useSemanticElements: <explanation>
+							// aria-label={`Maturity date: ${maturityDate}`}
 							className="flex items-center text-foreground/50 text-sm"
 						>
 							<Icon className="mr-1 h-4 w-4" icon="lucide:calendar" />

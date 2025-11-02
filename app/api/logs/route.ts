@@ -32,7 +32,10 @@ export async function POST(req: Request) {
 			// swallow errors - ingestion should be best-effort
 			try {
 				logger.warn("Failed to ingest client log", { err: e });
-			} catch {}
+			} catch (err) {
+				// swallow errors - ingestion should be best-effort
+				console.error("Failed to ingest client log", { err });
+			}
 		}
 	}
 
