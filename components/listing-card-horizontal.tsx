@@ -34,7 +34,7 @@ export function Horizontal({
 			className="w-full items-stretch transition-all duration-300 hover:scale-103 hover:shadow-black/10 hover:shadow-lg md:flex-row"
 			variant="flat"
 		>
-			<div className="relative aspect-video w-full overflow-hidden rounded-panel sm:aspect-square sm:max-w-[180px]">
+			<div className="relative aspect-video w-full overflow-hidden rounded-panel md:aspect-square md:max-w-[180px]">
 				<Image
 					alt={`${title} thumbnail`}
 					className="pointer-events-none select-none object-cover"
@@ -61,7 +61,7 @@ export function Horizontal({
 								<p className="font-bold text-sm">{ltv}</p>
 							</span>
 						</span>
-						<div className="84rem:hidden h-8 w-px shrink-0 bg-foreground/30 lg:hidden xl:block" />
+						<div className="84rem:hidden h-8 w-px shrink-0 bg-foreground/30 xl:block" />
 						<span className="flex items-center">
 							<Icon className="h-5 w-5" icon="lucide:percent-circle" />
 							<span className="ml-2 flex flex-col justify-around py-1 align-middle">
@@ -69,7 +69,7 @@ export function Horizontal({
 								<p className="font-bold text-sm">{apr}</p>
 							</span>
 						</span>
-						<div className="84rem:hidden hidden h-8 w-px shrink-0 bg-foreground/30 xl:block" />
+						<div className="84rem:hidden h-8 w-px shrink-0 bg-foreground/30 xl:block" />
 						<span className="flex items-center">
 							<Icon className="h-5 w-5" icon="lucide:circle-dollar-sign" />
 							<span className="ml-2 flex flex-col justify-around py-1 align-middle">
@@ -79,7 +79,7 @@ export function Horizontal({
 								</p>
 							</span>
 						</span>
-						<div className="84rem:hidden hidden h-8 w-px shrink-0 bg-foreground/30 xl:block" />
+						<div className="84rem:hidden hidden h-8 w-px shrink-0 bg-foreground/30 lg:block xl:block" />
 						<span className="hidden lg:flex lg:items-center">
 							<Icon className="h-5 w-5" icon="lucide:circle-dollar-sign" />
 							<span className="ml-2 flex flex-col justify-around py-1 align-middle">
