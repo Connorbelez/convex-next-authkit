@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Info } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
 	Select,
 	SelectContent,
@@ -10,7 +11,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import {
 	Tooltip,
 	TooltipContent,
@@ -60,39 +60,39 @@ export const ContentCarousel = ({
 			<div className="relative z-10 flex h-full flex-col items-center justify-center px-4">
 				<div className="mb-8 text-center">
 					<motion.h1
-						className="text-4xl font-bold text-primary drop-shadow-md sm:text-5xl md:text-6xl"
-						initial={{ opacity: 0, y: -20 }}
 						animate={{ opacity: 1, y: 0 }}
+						className="font-bold text-4xl text-primary drop-shadow-md sm:text-5xl md:text-6xl"
+						initial={{ opacity: 0, y: -20 }}
 						transition={{ duration: 0.5 }}
 					>
 						{items[currentIndex].name}
 					</motion.h1>
 
 					<motion.p
+						animate={{ opacity: 1, y: 0 }}
 						className="mt-4 text-lg text-muted-foreground sm:text-xl md:text-2xl"
 						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5 }}
 					>
 						{items[currentIndex].description}
 					</motion.p>
 				</div>
 
-				<div className="bg-background/80 backdrop-blur-md rounded-full p-2 border border-primary/10 flex items-center gap-2">
+				<div className="flex items-center gap-2 rounded-full border border-primary/10 bg-background/80 p-2 backdrop-blur-md">
 					<div className="flex items-center gap-2">
 						<Button
-							variant="outline"
-							size="icon"
-							onClick={() => handleIndexChange(currentIndex - 1)}
 							className="rounded-full"
 							disabled={currentIndex === 0}
+							onClick={() => handleIndexChange(currentIndex - 1)}
+							size="icon"
+							variant="outline"
 						>
 							<ChevronLeft className="h-4 w-4" />
 						</Button>
 
 						<Select
-							value={items[currentIndex].name}
 							onValueChange={handleSelectChange}
+							value={items[currentIndex].name}
 						>
 							<SelectTrigger className="w-[180px]">
 								<SelectValue />
@@ -108,7 +108,7 @@ export const ContentCarousel = ({
 
 						<Tooltip>
 							<TooltipTrigger asChild>
-								<Button variant="ghost" size="icon" className="rounded-full">
+								<Button className="rounded-full" size="icon" variant="ghost">
 									<Info className="h-4 w-4" />
 								</Button>
 							</TooltipTrigger>
@@ -118,11 +118,11 @@ export const ContentCarousel = ({
 						</Tooltip>
 
 						<Button
-							variant="outline"
-							size="icon"
-							onClick={() => handleIndexChange(currentIndex + 1)}
 							className="rounded-full"
 							disabled={currentIndex === items.length - 1}
+							onClick={() => handleIndexChange(currentIndex + 1)}
+							size="icon"
+							variant="outline"
 						>
 							<ChevronRight className="h-4 w-4" />
 						</Button>

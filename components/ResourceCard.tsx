@@ -12,8 +12,8 @@ export function ResourceCard({
 	href: string;
 }) {
 	return (
-		<div className="flex flex-col gap-2 bg-slate-200 dark:bg-slate-800 p-4 rounded-md h-28 overflow-auto">
-			<Link href={href} className="text-sm underline hover:no-underline">
+		<div className="flex h-28 flex-col gap-2 overflow-auto rounded-md bg-slate-200 p-4 dark:bg-slate-800">
+			<Link className="text-sm underline hover:no-underline" href={href}>
 				{title}
 			</Link>
 			<p className="text-xs">{description}</p>

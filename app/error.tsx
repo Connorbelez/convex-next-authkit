@@ -20,10 +20,10 @@ export default function ErrorPage({
 	}, [error]);
 
 	return (
-		<div className="min-h-screen flex items-center justify-center p-8">
-			<div className="max-w-md w-full space-y-6 text-center">
+		<div className="flex min-h-screen items-center justify-center p-8">
+			<div className="w-full max-w-md space-y-6 text-center">
 				<div className="space-y-2">
-					<h1 className="text-4xl font-bold text-red-600">
+					<h1 className="font-bold text-4xl text-red-600">
 						Something went wrong!
 					</h1>
 					<p className="text-muted-foreground">
@@ -32,30 +32,30 @@ export default function ErrorPage({
 				</div>
 
 				{error.message && (
-					<div className="p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
-						<p className="text-sm text-red-800 dark:text-red-200 font-mono">
+					<div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950/20">
+						<p className="font-mono text-red-800 text-sm dark:text-red-200">
 							{error.message}
 						</p>
 					</div>
 				)}
 
 				<div className="flex flex-col gap-3">
-					<Button variant="default" size="lg" onClick={reset}>
+					<Button onClick={reset} size="lg" variant="default">
 						Try again
 					</Button>
 					<Button
-						variant="outline"
-						size="lg"
 						onClick={() => {
 							window.location.href = "/";
 						}}
+						size="lg"
+						variant="outline"
 					>
 						Go to home
 					</Button>
 				</div>
 
 				{error.digest && (
-					<p className="text-xs text-muted-foreground">
+					<p className="text-muted-foreground text-xs">
 						Error ID: {error.digest}
 					</p>
 				)}

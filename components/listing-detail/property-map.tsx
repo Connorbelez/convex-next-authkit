@@ -1,11 +1,222 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
+import { useEffect, useRef, useState } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { Icon } from "@iconify/react";
+import type { LngLatLike } from "mapbox-gl";
 
-interface PropertyMapProps {
+// Compute destination point from start point, bearing and distance on WGS84
+function destinationPoint(
+	longitude: number,
+	latitude: number,
+	distanceMeters: number,
+	bearingDegrees: number
+): [number, number] {
+	const earthRadiusMeters = 6371000;
+	const angularDistance = distanceMeters / earthRadiusMeters;
+	const bearing = (bearingDegrees * Math.PI) / 180;
+	const lat1 = (latitude * Math.PI) / 180;
+	const lon1 = (longitude * Math.PI) / 180;
+
+	const sinLat1 = Math.sin(lat1);
+	const cosLat1 = Math.cos(lat1);
+	const sinAngular = Math.sin(angularDistance);
+	const cosAngular = Math.cos(angularDistance);
+
+	const sinLat2 =
+		sinLat1 * cosAngular + cosLat1 * sinAngular * Math.cos(bearing);
+	const lat2 = Math.asin(sinLat2);
+	const y = Math.sin(bearing) * sinAngular * cosLat1;
+	const x = cosAngular - sinLat1 * sinLat2;
+	const lon2 = lon1 + Math.atan2(y, x);
+
+	// Normalize lon to -180..+180
+	const lonDeg = (((lon2 * 180) / Math.PI + 540) % 360) - 180;
+	const latDeg = (lat2 * 180) / Math.PI;
+	return [lonDeg, latDeg];
+}
+
+// Create a GeoJSON polygon approximating a geodesic circle
+function createGeodesicCircle(
+	longitude: number,
+	latitude: number,
+	radiusMeters: number,
+	steps = 128
+) {
+	const coordinates: [number, number][] = [];
+	let firstCoord: [number, number] | null = null;
+	for (let i = 0; i < steps; i++) {
+		const bearing = (i / steps) * 360;
+		const coord = destinationPoint(longitude, latitude, radiusMeters, bearing);
+		if (i === 0) firstCoord = coord;
+		coordinates.push(coord);
+	}
+	// Close the ring
+	if (firstCoord) coordinates.push(firstCoord);
+	return {
+		type: "FeatureCollection",
+		features: [
+			{
+				type: "Feature",
+				geometry: {
+					type: "Polygon",
+					coordinates: [coordinates],
+				},
+				properties: {},
+			},
+		],
+	} as GeoJSON.FeatureCollection;
+}
+
+type MapProps = {
+	latitude: number;
+	longitude: number;
+	zoom: number;
+	wrapperClassName: string;
+};
+const Map = ({ latitude, longitude, zoom, wrapperClassName }: MapProps) => {
+	const mapContainerRef = useRef<HTMLDivElement>(null);
+
+	// Generate a small random offset for privacy (between -0.0005 and 0.0005 degrees)
+	// This is roughly 25-50 meters depending on location
+	const randomizeCoordinate = (coord: number): number => {
+		const offset = (Math.random() - 0.5) * 0.001; // Random value between -0.0005 and 0.0005
+		return coord + offset;
+	};
+
+	// Apply privacy offset to coordinates
+	const [lt, setLt] = useState(latitude);
+	const [lng, setLng] = useState(longitude);
+	const [offsetLt, setOffsetLt] = useState(randomizeCoordinate(latitude));
+	const [offsetLng, setOffsetLng] = useState(randomizeCoordinate(longitude));
+
+	const mlat = latitude.valueOf();
+	const mlng = longitude.valueOf();
+	console.log("mlng, mlat", mlng, mlat);
+	const popupRef = useRef<mapboxgl.Popup | null>(null);
+
+	// Update offset values when latitude/longitude props change
+	useEffect(() => {
+		setLt(latitude);
+		setLng(longitude);
+		setOffsetLt(randomizeCoordinate(latitude));
+		setOffsetLng(randomizeCoordinate(longitude));
+	}, [latitude, longitude]);
+
+	useEffect(() => {
+		mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+
+		const map = new mapboxgl.Map({
+			container: mapContainerRef.current as HTMLDivElement,
+			center: [offsetLng, offsetLt] as LngLatLike, // Use offset coordinates for centering
+			zoom,
+			//   style: 'mapbox://styles/mapbox/streets-v11'
+		});
+
+		// Draw a geodesic circle (fixed physical radius) at the true location
+		map.on("load", () => {
+			const sourceId = "location-radius-source";
+			const fillLayerId = "location-radius-fill";
+			const outlineLayerId = "location-radius-outline";
+
+			const radiusMeters = 200; // adjust as desired (e.g., 50m)
+			const circleData = createGeodesicCircle(lng, lt, radiusMeters);
+
+			if (map.getSource(sourceId)) {
+				const src = map.getSource(sourceId) as mapboxgl.GeoJSONSource;
+				src.setData(circleData);
+			} else {
+				map.addSource(sourceId, {
+					type: "geojson",
+					data: circleData,
+				});
+			}
+
+			if (!map.getLayer(fillLayerId)) {
+				map.addLayer({
+					id: fillLayerId,
+					type: "fill",
+					source: sourceId,
+					paint: {
+						"fill-color": "#3b82f6",
+						"fill-opacity": 0.2,
+					},
+				});
+			}
+
+			if (!map.getLayer(outlineLayerId)) {
+				map.addLayer({
+					id: outlineLayerId,
+					type: "line",
+					source: sourceId,
+					paint: {
+						"line-color": "#3b82f6",
+						"line-width": 2,
+						"line-opacity": 0.6,
+					},
+				});
+			}
+		});
+
+		// Create Street View URL
+		const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lt},${lng}`;
+
+		// Create popup with Street View link
+		// const popup = new mapboxgl.Popup({
+		//   closeOnClick: false,
+		//   anchor: "bottom",
+		//   offset: [0, -10],
+		//   maxWidth: "300px",
+		//   focusAfterOpen: false,
+		// }).setLngLat([lng, lt] as LngLatLike).setHTML(`
+		//     <div style="text-align: center;">
+		//       <h3 style="margin-bottom: 8px;">Location</h3>
+		//       <a href="${streetViewUrl}" target="_blank" rel="noopener noreferrer"
+		//          style="display: inline-block; padding: 8px 16px; background: #4285f4; color: white;
+		//                 text-decoration: none; border-radius: 4px; font-size: 14px;">
+		//         Open Street View
+		//       </a>
+		//     </div>
+		//   `);
+
+		// popupRef.current = popup;
+
+		// // Add popup after map loads
+		// map.on("load", () => {
+		//   popup.addTo(map);
+		// });
+
+		// // Update popup position on move
+		// map.on("move", () => {
+		//   popup.setLngLat([lng, lt] as LngLatLike);
+		// });
+
+		return () => {
+			if (popupRef.current) {
+				popupRef.current.remove();
+			}
+			map.remove();
+		};
+	}, [lng, lt, zoom]);
+
+	return (
+		<div>
+			<div className="sidebar">
+				{/* Longitude: {lng} | Latitude: {lt} | Zoom: {zoom} */}
+				{/* <p>Center Point not representative of exact location, this is a privacy feature</p> */}
+			</div>
+			<div
+				className="map-container relative aspect-10/9 w-full rounded-lg"
+				ref={mapContainerRef}
+				aria-label="Map showing approximate property location"
+				data-testid="listing-map"
+			/>
+		</div>
+	);
+};
+
+// Wrapper component that matches the expected PropertyMap interface
+export interface PropertyMapProps {
 	location: {
 		lat: number;
 		lng: number;
@@ -17,125 +228,13 @@ interface PropertyMapProps {
 	};
 }
 
-export function PropertyMap({ location, address }: PropertyMapProps) {
-	const mapContainer = useRef<HTMLDivElement>(null);
-	const map = useRef<mapboxgl.Map | null>(null);
-	const [mapError, setMapError] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-
-	useEffect(() => {
-		// Get Mapbox token from environment
-		const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
-
-		if (!mapboxToken) {
-			setMapError("Mapbox token not configured");
-			setIsLoading(false);
-			return;
-		}
-
-		if (!mapContainer.current) return;
-		if (map.current) return; // Initialize map only once
-
-		mapboxgl.accessToken = mapboxToken;
-
-		try {
-			// Initialize map
-			map.current = new mapboxgl.Map({
-				container: mapContainer.current,
-				style: "mapbox://styles/mapbox/streets-v12",
-				center: [location.lng, location.lat],
-				zoom: 14,
-				// Disable interactions for simpler static-like display
-				interactive: true,
-				attributionControl: true,
-			});
-
-			// Add navigation controls
-			map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
-
-			// Add marker at property location
-			const marker = new mapboxgl.Marker({ color: "#ef4444" })
-				.setLngLat([location.lng, location.lat])
-				.setPopup(
-					new mapboxgl.Popup({ offset: 25 }).setHTML(
-						`<div class="p-2">
-							<p class="font-semibold">${address.street}</p>
-							<p class="text-sm text-gray-600">${address.city}, ${address.state}</p>
-						</div>`,
-					),
-				)
-				.addTo(map.current);
-
-			// Show popup on load
-			marker.togglePopup();
-
-			map.current.on("load", () => {
-				setIsLoading(false);
-			});
-
-			map.current.on("error", (e) => {
-				console.error("Mapbox error:", e);
-				setMapError("Failed to load map");
-				setIsLoading(false);
-			});
-
-			// Set timeout for slow loading
-			const timeout = setTimeout(() => {
-				if (isLoading) {
-					setMapError("Map loading timeout");
-					setIsLoading(false);
-				}
-			}, 10000);
-
-			return () => {
-				clearTimeout(timeout);
-				map.current?.remove();
-				map.current = null;
-			};
-		} catch (error) {
-			console.error("Map initialization error:", error);
-			setMapError("Failed to initialize map");
-			setIsLoading(false);
-		}
-	}, [location.lat, location.lng, address.street, address.city, address.state]);
-
-	if (mapError) {
-		return (
-			<div className="relative aspect-4/3 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 lg:aspect-auto lg:h-full">
-				<div className="flex h-full flex-col items-center justify-center p-6 text-center">
-					<Icon icon="lucide:map-pin-off" className="h-12 w-12 text-gray-400" />
-					<p className="mt-3 font-medium text-gray-700 dark:text-gray-300">
-						Map Unavailable
-					</p>
-					<p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-						{mapError}
-					</p>
-					<p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-						{address.street}
-						<br />
-						{address.city}, {address.state}
-					</p>
-				</div>
-			</div>
-		);
-	}
-
+export function PropertyMap({ location }: PropertyMapProps) {
 	return (
-		<div className="relative aspect-4/3 w-full overflow-hidden rounded-lg lg:aspect-auto lg:h-full">
-			{isLoading && (
-				<div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-					<div className="flex flex-col items-center">
-						<Icon
-							icon="lucide:loader-2"
-							className="h-8 w-8 animate-spin text-primary"
-						/>
-						<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-							Loading map...
-						</p>
-					</div>
-				</div>
-			)}
-			<div ref={mapContainer} className="h-full w-full" />
-		</div>
+		<Map
+			latitude={location.lat}
+			longitude={location.lng}
+			zoom={15}
+			wrapperClassName="w-full h-full"
+		/>
 	);
 }

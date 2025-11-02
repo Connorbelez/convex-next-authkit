@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import {
-	ListingGridShell,
 	type FilterableItem,
+	ListingGridShell,
 } from "@/components/ListingGridShell";
 import { Horizontal } from "@/components/listing-card-horizontal";
 import { ListingMapPopup } from "@/components/listing-map-popup";
@@ -30,39 +30,38 @@ export function ListingsClient({ listings }: ListingsClientProps) {
 	return (
 		<ListingGridShell
 			items={listings}
+			mapProps={{
+				initialCenter: { lat: 43.6532, lng: -79.3832 }, // Toronto
+				initialZoom: 11, // City-level view
+			}}
 			renderCard={(listing) => (
 				<Horizontal
-					id={listing.id}
-					title={listing.title}
 					address={listing.address}
+					apr={listing.apr}
+					id={listing.id}
 					imageSrc={listing.imageSrc}
 					ltv={listing.ltv}
-					apr={listing.apr}
-					principal={listing.principal}
-					propertyType={listing.propertyType}
 					maturityDate={listing.maturityDate?.toLocaleDateString("en-US", {
 						month: "2-digit",
 						day: "2-digit",
 						year: "numeric",
 					})}
+					principal={listing.principal}
+					propertyType={listing.propertyType}
+					title={listing.title}
 				/>
 			)}
 			renderMapPopup={(listing) => (
 				<ListingMapPopup
-					id={listing.id!}
-					title={listing.title!}
 					address={listing.address!}
-					principal={listing.principal!}
 					apr={listing.apr!}
+					id={listing.id!}
 					imageSrc={listing.imageSrc}
+					principal={listing.principal!}
+					title={listing.title!}
 				/>
 			)}
 			showFilters={true}
-			mapProps={{
-				initialCenter: { lat: 43.6532, lng: -79.3832 }, // Toronto
-				initialZoom: 11, // City-level view
-			}}
 		/>
 	);
 }
-

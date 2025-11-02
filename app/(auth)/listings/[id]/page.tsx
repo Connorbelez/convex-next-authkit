@@ -1,17 +1,21 @@
-import { notFound } from "next/navigation";
-import { Metadata } from "next";
-import { generateListing, generatePayments, generateComparables } from "@/lib/mock-data/listings";
+import type { Metadata } from "next";
 import { ViewTransition } from "react";
-import { RequestListingSection } from "@/components/listing-detail/request-listing-section";
 import {
-	ImageCarousel,
-	PropertyMap,
-	PropertyInfo,
-	FinancialMetrics,
-	PaymentHistory,
 	AppraisalData,
 	ComparableProperties,
+	DocumentViewer,
+	FinancialMetrics,
+	ImageCarousel,
+	PaymentHistory,
+	PropertyInfo,
+	PropertyMap,
 } from "@/components/listing-detail";
+import { RequestListingSection } from "@/components/listing-detail/request-listing-section";
+import {
+	generateComparables,
+	generateListing,
+	generatePayments,
+} from "@/lib/mock-data/listings";
 
 interface ListingDetailPageProps {
 	params: Promise<{
@@ -19,7 +23,9 @@ interface ListingDetailPageProps {
 	}>;
 }
 
-export async function generateMetadata({ params }: ListingDetailPageProps): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: ListingDetailPageProps): Promise<Metadata> {
 	const { id } = await params;
 
 	try {
@@ -44,7 +50,9 @@ export async function generateMetadata({ params }: ListingDetailPageProps): Prom
 	}
 }
 
-export default async function ListingDetailPage({ params }: ListingDetailPageProps) {
+export default async function ListingDetailPage({
+	params,
+}: ListingDetailPageProps) {
 	const { id } = await params;
 
 	// Generate mock data based on ID (consistent across page loads)
@@ -52,52 +60,65 @@ export default async function ListingDetailPage({ params }: ListingDetailPagePro
 	const payments = generatePayments(id, 12);
 	const comparables = generateComparables(id, 6);
 
-    return (
-        <ViewTransition name={`listing-${listing._id}`}>
+	return (
+		<ViewTransition name={`listing-${listing._id}`}>
 			<div className="container mx-auto max-w-7xl px-4 py-8">
-			{/* Property Info */}
-			<div className="mb-8">
-				<PropertyInfo
-					title={listing.title}
-					address={listing.address}
-					investorBrief={listing.investorBrief}
-					status={listing.status}
-				/>
-			</div>
-
-			{/* Image Carousel and Map Grid */}
-			<div className="mb-12 grid gap-6 lg:grid-cols-2">
-				<ImageCarousel images={listing.images} propertyTitle={listing.title} />
-				<PropertyMap location={listing.location} address={listing.address} />
-			</div>
-
-			{/* Financial Metrics */}
-			<div className="mb-12">
-				<FinancialMetrics financials={listing.financials} />
-			</div>
-
-			{/* Payment History */}
-			<div className="mb-12">
-				<PaymentHistory payments={payments} />
-			</div>
-
-			{/* Appraisal Data (only if available) */}
-			{listing.appraisal && (
-				<div className="mb-12">
-					<AppraisalData appraisal={listing.appraisal} currentValue={listing.financials.currentValue} />
+				{/* Property Info */}
+				<div className="mb-8">
+					<PropertyInfo
+						address={listing.address}
+						investorBrief={listing.investorBrief}
+						status={listing.status}
+						title={listing.title}
+					/>
 				</div>
-			)}
 
-			{/* Comparable Properties */}
-			{comparables.length > 0 && (
-				<div className="mb-12">
-					<ComparableProperties comparables={comparables} />
+				{/* Image Carousel and Map Grid */}
+				<div className="mb-12 grid gap-6 lg:grid-cols-2">
+					<ImageCarousel
+						images={listing.images}
+						propertyTitle={listing.title}
+					/>
+					<PropertyMap address={listing.address} location={listing.location} />
 				</div>
-			)}
 
-			{/* Request Listing Section */}
-			<RequestListingSection listing={listing} />
-        </div>
-        </ViewTransition>
+				{/* Financial Metrics */}
+				<div className="mb-12">
+					<FinancialMetrics financials={listing.financials} />
+				</div>
+
+				{/* Payment History */}
+				<div className="mb-12">
+					<PaymentHistory payments={payments} />
+				</div>
+
+				{/* Document Viewer */}
+				{listing.documents && listing.documents.length > 0 && (
+					<div className="mb-12">
+						<DocumentViewer documents={listing.documents} />
+					</div>
+				)}
+
+				{/* Appraisal Data (only if available) */}
+				{listing.appraisal && (
+					<div className="mb-12">
+						<AppraisalData
+							appraisal={listing.appraisal}
+							currentValue={listing.financials.currentValue}
+						/>
+					</div>
+				)}
+
+				{/* Comparable Properties */}
+				{comparables.length > 0 && (
+					<div className="mb-12">
+						<ComparableProperties comparables={comparables} />
+					</div>
+				)}
+
+				{/* Request Listing Section */}
+				<RequestListingSection listing={listing} />
+			</div>
+		</ViewTransition>
 	);
 }

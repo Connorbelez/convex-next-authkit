@@ -1,11 +1,11 @@
 "use client";
 
-import * as React from "react";
 import mapboxgl from "mapbox-gl";
+import type * as React from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useEffect, useRef, useState } from "react";
+import { createRoot, type Root } from "react-dom/client";
 import { cn } from "@/lib/utils";
-import { createRoot, Root } from "react-dom/client";
-import { useRef, useEffect, useState } from "react";
 
 export type LatLng = {
 	lat: number;
@@ -122,7 +122,7 @@ export function ListingMap<T extends LatLng>({
 
 	// Update markers when items change
 	useEffect(() => {
-		if (!mapRef.current || !isMapLoaded) return;
+		if (!(mapRef.current && isMapLoaded)) return;
 
 		// Clear existing markers
 		markersRef.current.forEach(({ marker, popup, root }) => {
@@ -211,8 +211,8 @@ export function ListingMap<T extends LatLng>({
 	return (
 		<div className={cn("relative h-full w-full", containerClassName)}>
 			<div
-				ref={mapContainerRef}
 				className={cn("h-full w-full rounded-xl", mapClassName, className)}
+				ref={mapContainerRef}
 				style={style}
 			/>
 		</div>

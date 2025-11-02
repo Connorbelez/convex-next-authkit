@@ -10,8 +10,11 @@
  * @github: https://github.com/kokonut-labs/kokonutui
  */
 
-import * as React from "react";
-
+import { Fingerprint } from "lucide-react";
+import { motion } from "motion/react";
+import Image from "next/image";
+import Link from "next/link";
+import type * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Drawer,
@@ -23,10 +26,6 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@/components/ui/drawer";
-import Image from "next/image";
-import Link from "next/link";
-import { motion } from "motion/react";
-import { Fingerprint } from "lucide-react";
 
 interface PriceTagProps {
 	price: number;
@@ -35,17 +34,17 @@ interface PriceTagProps {
 
 function PriceTag({ price, discountedPrice }: PriceTagProps) {
 	return (
-		<div className="flex items-center justify-around gap-4 max-w-fit mx-auto">
+		<div className="mx-auto flex max-w-fit items-center justify-around gap-4">
 			<div className="flex items-baseline gap-2">
-				<span className="text-4xl font-bold bg-gradient-to-br from-zinc-900 to-zinc-700 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
+				<span className="bg-gradient-to-br from-zinc-900 to-zinc-700 bg-clip-text font-bold text-4xl text-transparent dark:from-white dark:to-zinc-300">
 					${discountedPrice}
 				</span>
-				<span className="text-lg line-through text-zinc-400 dark:text-zinc-500">
+				<span className="text-lg text-zinc-400 line-through dark:text-zinc-500">
 					${price}
 				</span>
 			</div>
 			<div className="flex flex-col items-center gap-0.5">
-				<span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+				<span className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
 					Lifetime access
 				</span>
 				<span className="text-xs text-zinc-700 dark:text-zinc-300">
@@ -133,31 +132,31 @@ export default function SmoothDrawer({
 			<DrawerTrigger asChild>
 				<Button variant="outline">Open Drawer</Button>
 			</DrawerTrigger>
-			<DrawerContent className="max-w-fit mx-auto p-6 rounded-2xl shadow-xl">
+			<DrawerContent className="mx-auto max-w-fit rounded-2xl p-6 shadow-xl">
 				<motion.div
-					variants={drawerVariants as any}
-					initial="hidden"
 					animate="visible"
 					className="mx-auto w-full max-w-[340px] space-y-6"
+					initial="hidden"
+					variants={drawerVariants as any}
 				>
 					<motion.div variants={itemVariants as any}>
-						<DrawerHeader className="px-0 space-y-2.5">
-							<DrawerTitle className="text-2xl font-semibold flex items-center gap-2.5 tracking-tighter">
+						<DrawerHeader className="space-y-2.5 px-0">
+							<DrawerTitle className="flex items-center gap-2.5 font-semibold text-2xl tracking-tighter">
 								<motion.div variants={itemVariants as any}>
-									<div className="p-1.5 rounded-xl bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900 shadow-inner">
+									<div className="rounded-xl bg-gradient-to-br from-zinc-100 to-zinc-200 p-1.5 shadow-inner dark:from-zinc-800 dark:to-zinc-900">
 										<Image
-											src="/logo.svg"
 											alt="Logo"
-											width={32}
-											height={32}
 											className="hidden dark:block"
+											height={32}
+											src="/logo.svg"
+											width={32}
 										/>
 										<Image
-											src="/logo-black.svg"
 											alt="Logo"
-											width={32}
-											height={32}
 											className="block dark:hidden"
+											height={32}
+											src="/logo-black.svg"
+											width={32}
 										/>
 									</div>
 								</motion.div>
@@ -166,7 +165,7 @@ export default function SmoothDrawer({
 								</motion.span>
 							</DrawerTitle>
 							<motion.div variants={itemVariants as any}>
-								<DrawerDescription className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 tracking-tighter">
+								<DrawerDescription className="text-sm text-zinc-600 leading-relaxed tracking-tighter dark:text-zinc-400">
 									{description}
 								</DrawerDescription>
 							</motion.div>
@@ -174,33 +173,33 @@ export default function SmoothDrawer({
 					</motion.div>
 
 					<motion.div variants={itemVariants as any}>
-						<PriceTag price={price} discountedPrice={discountedPrice} />
+						<PriceTag discountedPrice={discountedPrice} price={price} />
 					</motion.div>
 
 					<motion.div variants={itemVariants as any}>
 						<DrawerFooter className="flex flex-col gap-3 px-0">
 							<div className="w-full">
 								<Link
+									className="group relative inline-flex h-11 w-full items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 font-semibold text-sm text-white tracking-wide shadow-lg shadow-rose-500/20 transition-all duration-500 hover:from-rose-600 hover:to-pink-600 hover:shadow-rose-500/30 hover:shadow-xl dark:from-rose-600 dark:to-pink-600 dark:hover:from-rose-500 dark:hover:to-pink-500"
 									href="https://kokonutui.pro/#pricing"
 									target="_blank"
-									className="group w-full relative overflow-hidden inline-flex items-center justify-center h-11 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 dark:from-rose-600 dark:to-pink-600 text-white text-sm font-semibold tracking-wide shadow-lg shadow-rose-500/20 transition-all duration-500 hover:shadow-xl hover:shadow-rose-500/30 hover:from-rose-600 hover:to-pink-600 dark:hover:from-rose-500 dark:hover:to-pink-500"
 								>
 									<motion.span
-										className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%]"
-										whileHover={{
-											x: ["-200%", "200%"],
-										}}
+										className="absolute inset-0 translate-x-[-200%] bg-gradient-to-r from-transparent via-white/20 to-transparent"
 										transition={{
 											duration: 1.5,
 											ease: "easeInOut",
 											repeat: 0,
 										}}
+										whileHover={{
+											x: ["-200%", "200%"],
+										}}
 									/>
 									<motion.div
-										initial={{ opacity: 0 }}
 										animate={{ opacity: 1 }}
-										transition={{ duration: 0.3 }}
 										className="relative flex items-center gap-2 tracking-tighter"
+										initial={{ opacity: 0 }}
+										transition={{ duration: 0.3 }}
 									>
 										{primaryButtonText}
 										<motion.div
@@ -215,16 +214,16 @@ export default function SmoothDrawer({
 												repeatDelay: 1,
 											}}
 										>
-											<Fingerprint className="w-4 h-4" />
+											<Fingerprint className="h-4 w-4" />
 										</motion.div>
 									</motion.div>
 								</Link>
 							</div>
 							<DrawerClose asChild>
 								<Button
-									variant="outline"
+									className="h-11 w-full rounded-xl border-zinc-200 font-semibold text-sm tracking-tighter transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800/80"
 									onClick={handleSecondaryClick}
-									className="w-full h-11 rounded-xl border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 text-sm font-semibold transition-colors tracking-tighter"
+									variant="outline"
 								>
 									{secondaryButtonText}
 								</Button>

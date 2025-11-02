@@ -33,8 +33,8 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 		return (
 			<div className="space-y-4">
 				<div className="flex items-center gap-2">
-					<Icon icon="lucide:file-x" className="h-6 w-6 text-gray-400" />
-					<h2 className="text-2xl font-bold text-gray-500">
+					<Icon className="h-6 w-6 text-gray-400" icon="lucide:file-x" />
+					<h2 className="font-bold text-2xl text-gray-500">
 						No Appraisal Data Available
 					</h2>
 				</div>
@@ -43,7 +43,7 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 						<p className="text-gray-500">
 							No appraisal information available for this property.
 						</p>
-						<div className="mt-4 text-sm text-gray-400">
+						<div className="mt-4 text-gray-400 text-sm">
 							Current Value: {formatCurrency(currentValue)}
 						</div>
 					</CardContent>
@@ -60,8 +60,8 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center gap-2">
-				<Icon icon="lucide:file-check" className="h-6 w-6 text-primary" />
-				<h2 className="text-2xl font-bold">Appraisal Data</h2>
+				<Icon className="h-6 w-6 text-primary" icon="lucide:file-check" />
+				<h2 className="font-bold text-2xl">Appraisal Data</h2>
 			</div>
 
 			<div className="grid gap-4 md:grid-cols-2">
@@ -70,16 +70,16 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 					<CardContent className="p-4">
 						<div className="flex items-start gap-3">
 							<div className="rounded-lg bg-blue-100 p-2 text-blue-600 dark:bg-blue-900/30">
-								<Icon icon="lucide:clipboard-check" className="h-5 w-5" />
+								<Icon className="h-5 w-5" icon="lucide:clipboard-check" />
 							</div>
 							<div className="flex-1">
-								<p className="text-sm text-gray-600 dark:text-gray-400">
+								<p className="text-gray-600 text-sm dark:text-gray-400">
 									Appraised Value
 								</p>
-								<p className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">
+								<p className="mt-1 font-bold text-3xl text-gray-900 dark:text-white">
 									{formatCurrency(appraisal.value)}
 								</p>
-								<p className="mt-2 text-xs text-gray-500 dark:text-gray-500">
+								<p className="mt-2 text-gray-500 text-xs dark:text-gray-500">
 									As of {format(appraisalDate, "MMMM d, yyyy")}
 								</p>
 							</div>
@@ -95,30 +95,30 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 								className={`rounded-lg p-2 ${isPositiveChange ? "bg-green-100 text-green-600 dark:bg-green-900/30" : "bg-red-100 text-red-600 dark:bg-red-900/30"}`}
 							>
 								<Icon
+									className="h-5 w-5"
 									icon={
 										isPositiveChange
 											? "lucide:trending-up"
 											: "lucide:trending-down"
 									}
-									className="h-5 w-5"
 								/>
 							</div>
 							<div className="flex-1">
-								<p className="text-sm text-gray-600 dark:text-gray-400">
+								<p className="text-gray-600 text-sm dark:text-gray-400">
 									Value Change
 								</p>
 								<p
-									className={`mt-1 text-3xl font-bold ${isPositiveChange ? "text-green-600" : "text-red-600"}`}
+									className={`mt-1 font-bold text-3xl ${isPositiveChange ? "text-green-600" : "text-red-600"}`}
 								>
 									{isPositiveChange ? "+" : ""}
 									{formatCurrency(valueChange)}
 								</p>
-								<p className="mt-2 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-500">
+								<p className="mt-2 flex items-center gap-1 text-gray-500 text-xs dark:text-gray-500">
 									<Icon
+										className="h-3 w-3"
 										icon={
 											isPositiveChange ? "lucide:arrow-up" : "lucide:arrow-down"
 										}
-										className="h-3 w-3"
 									/>
 									{isPositiveChange ? "+" : ""}
 									{valueChangePercent.toFixed(1)}% from appraisal
@@ -134,11 +134,11 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 						<div className="grid gap-4 sm:grid-cols-2">
 							<div className="flex items-start gap-3">
 								<Icon
-									icon="lucide:user"
 									className="mt-0.5 h-5 w-5 text-gray-500"
+									icon="lucide:user"
 								/>
 								<div>
-									<p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+									<p className="font-medium text-gray-600 text-sm dark:text-gray-400">
 										Appraiser
 									</p>
 									<p className="mt-1 text-gray-900 dark:text-white">
@@ -149,11 +149,11 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 
 							<div className="flex items-start gap-3">
 								<Icon
-									icon="lucide:clipboard-list"
 									className="mt-0.5 h-5 w-5 text-gray-500"
+									icon="lucide:clipboard-list"
 								/>
 								<div>
-									<p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+									<p className="font-medium text-gray-600 text-sm dark:text-gray-400">
 										Method
 									</p>
 									<p className="mt-1 text-gray-900 dark:text-white">

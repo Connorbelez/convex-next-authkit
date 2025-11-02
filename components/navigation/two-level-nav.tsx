@@ -1,24 +1,18 @@
 "use client";
 
-import * as React from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, Bell, ChevronDown, Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { CommandPalette } from "./command-palette";
-import { BreadcrumbNav } from "@/components/breadcrumb-nav";
-import { UserAvatarMenu } from "@/components/auth/UserAvatarMenu";
-import { cn } from "@/lib/utils";
-import {
-	navigationItems,
-	isNavItemActive,
-	type NavItem,
-} from "@/lib/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import { Bell, ChevronDown, Menu, Search, X } from "lucide-react";
 import Link from "next/link";
-import { useFiltersStore } from "../contexts/listingContext";
+import * as React from "react";
+import { UserAvatarMenu } from "@/components/auth/UserAvatarMenu";
+import { BreadcrumbNav } from "@/components/breadcrumb-nav";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { isNavItemActive, navigationItems } from "@/lib/navigation";
+import { cn } from "@/lib/utils";
 import { FilterBar } from "../filter-bar";
-import { ViewTransition } from "react";
+import { CommandPalette } from "./command-palette";
+
 interface TwoLevelNavProps {
 	breadcrumbs?: { label: string; href?: string }[];
 	pathname?: string;
@@ -50,26 +44,26 @@ export function TwoLevelNav({
 
 	return (
 		<>
-			<div className="fixed top-0 left-0 right-0 z-50">
-				<div className="bg-background/80 backdrop-blur-xl border-b border-border">
-					<div className="flex items-center justify-between h-16 px-4 md:px-6">
+			<div className="fixed top-0 right-0 left-0 z-50">
+				<div className="border-border border-b bg-background/80 backdrop-blur-xl">
+					<div className="flex h-16 items-center justify-between px-4 md:px-6">
 						{/* Left Side - Logo and Project Selector */}
 						<div className="flex items-center gap-2 md:gap-4">
 							{/* Logo */}
 							<div className="flex items-center gap-2 md:gap-3">
-								<div className="size-6 bg-primary rounded-sm flex items-center justify-center">
-									<div className="size-3 bg-background rounded-sm" />
+								<div className="flex size-6 items-center justify-center rounded-sm bg-primary">
+									<div className="size-3 rounded-sm bg-background" />
 								</div>
 								<span className="font-semibold text-foreground">FairLend</span>
 							</div>
 
 							{/* Project Selector - Hidden on mobile */}
-							<div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-md bg-secondary/50 hover:bg-secondary transition-colors cursor-pointer">
+							<div className="hidden cursor-pointer items-center gap-2 rounded-md bg-secondary/50 px-3 py-1.5 transition-colors hover:bg-secondary md:flex">
 								<div className="size-2 rounded-full bg-primary" />
-								<span className="text-sm text-foreground">Main Project</span>
+								<span className="text-foreground text-sm">Main Project</span>
 								<Badge
+									className="border-0 bg-primary/20 text-primary text-xs"
 									variant="secondary"
-									className="text-xs bg-primary/20 text-primary border-0"
 								>
 									Pro
 								</Badge>
@@ -78,43 +72,43 @@ export function TwoLevelNav({
 						</div>
 
 						{/* Center - Tubelight Tabs (Desktop only) */}
-						<div className="hidden lg:flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
+						<div className="hidden items-center gap-3 rounded-full border border-border bg-background/5 px-1 py-1 shadow-lg backdrop-blur-lg lg:flex">
 							{navigationItems.map((navItem) => {
 								const Icon = navItem.icon;
 								const isActive = isNavItemActive(navItem, pathname);
 
 								return (
 									<Link
+										href={navItem.href}
 										key={`nav-link-${navItem.id}`}
 										prefetch={true}
-										href={navItem.href}
 									>
 										<button
-											type="button"
+											className={cn(
+												"relative cursor-pointer rounded-full px-6 py-2 font-semibold text-sm transition-colors",
+												"text-foreground/80 hover:text-primary",
+												isActive && "bg-muted text-primary"
+											)}
 											key={navItem.id}
 											// onClick={() => handleNavClick(navItem)}
-											className={cn(
-												"relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
-												"text-foreground/80 hover:text-primary",
-												isActive && "bg-muted text-primary",
-											)}
+											type="button"
 										>
 											<span>{navItem.label}</span>
 											{isActive && (
 												<motion.div
-													layoutId="lamp"
-													className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"
+													className="-z-10 absolute inset-0 w-full rounded-full bg-primary/5"
 													initial={false}
+													layoutId="lamp"
 													transition={{
 														type: "spring",
 														stiffness: 300,
 														damping: 30,
 													}}
 												>
-													<div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
-														<div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
-														<div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
-														<div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
+													<div className="-top-2 -translate-x-1/2 absolute left-1/2 h-1 w-8 rounded-t-full bg-primary">
+														<div className="-top-2 -left-2 absolute h-6 w-12 rounded-full bg-primary/20 blur-md" />
+														<div className="-top-1 absolute h-6 w-8 rounded-full bg-primary/20 blur-md" />
+														<div className="absolute top-0 left-2 h-4 w-4 rounded-full bg-primary/20 blur-sm" />
 													</div>
 												</motion.div>
 											)}
@@ -126,19 +120,19 @@ export function TwoLevelNav({
 						{/* Right Side - User Controls */}
 						<div className="flex items-center gap-2 md:gap-3">
 							{/* Notifications - Visible on all screen sizes */}
-							<Button variant="ghost" size="icon" className="relative">
+							<Button className="relative" size="icon" variant="ghost">
 								<Bell className="size-4" />
-								<span className="absolute top-1.5 right-1.5 size-2 bg-primary rounded-full" />
+								<span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-primary" />
 							</Button>
 
 							{/* User Avatar - Visible on all screen sizes */}
 							<UserAvatarMenu />
 
 							<Button
-								variant="ghost"
-								size="icon"
 								className="lg:hidden"
 								onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+								size="icon"
+								variant="ghost"
 							>
 								{mobileMenuOpen ? (
 									<X className="size-5" />
@@ -152,22 +146,22 @@ export function TwoLevelNav({
 
 				<div
 					className={cn(
-						"bg-background/95 backdrop-blur-xl border-b border-border",
-						mobileMenuOpen && "lg:block hidden",
+						"border-border border-b bg-background/95 backdrop-blur-xl",
+						mobileMenuOpen && "hidden lg:block"
 					)}
 				>
-					<div className="flex items-center h-12 px-4 md:px-6 relative">
+					<div className="relative flex h-12 items-center px-4 md:px-6">
 						{/* Breadcrumbs - Left */}
 						<BreadcrumbNav items={breadcrumbs} />
 
 						{/* Filters - Absolutely Centered */}
-						<div className="md:absolute md:left-1/2 md:-translate-x-1/2 flex items-center gap-2">
+						<div className="md:-translate-x-1/2 flex items-center gap-2 md:absolute md:left-1/2">
 							{isListingsPage(pathname) && <FilterBar />}
 						</div>
 
 						{/* Search/Feedback - Right */}
 						{!isListingsPage(pathname) && (
-							<div className="flex items-center gap-2 md:gap-3 ml-auto">
+							<div className="ml-auto flex items-center gap-2 md:gap-3">
 								{/* ... search content ... */}
 							</div>
 						)}
@@ -175,19 +169,19 @@ export function TwoLevelNav({
 							<div className="flex items-center gap-2 md:gap-3">
 								{/* Search */}
 								<Button
-									variant="ghost"
+									className="flex items-center gap-2 rounded-lg bg-secondary/50 px-2 py-1.5 text-muted-foreground text-sm transition-colors hover:bg-secondary md:px-3"
 									onClick={() => setCommandOpen(true)}
-									className="flex items-center gap-2 px-2 md:px-3 py-1.5 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors text-sm text-muted-foreground"
+									variant="ghost"
 								>
 									<Search className="size-4" />
-									<span className="text-xs hidden sm:inline">Search...</span>
+									<span className="hidden text-xs sm:inline">Search...</span>
 								</Button>
 
 								{/* Feedback - Hidden on small mobile */}
 								<Button
-									variant="ghost"
+									className="hidden h-8 text-sm sm:flex"
 									size="sm"
-									className="text-sm h-8 hidden sm:flex"
+									variant="ghost"
 								>
 									Feedback
 								</Button>
@@ -201,23 +195,23 @@ export function TwoLevelNav({
 						<>
 							{/* Backdrop */}
 							<motion.div
-								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
+								className="fixed inset-0 z-40 bg-background/80 backdrop-blur-md lg:hidden"
 								exit={{ opacity: 0 }}
-								transition={{ duration: 0.2 }}
-								className="fixed inset-0 bg-background/80 backdrop-blur-md z-40 lg:hidden"
+								initial={{ opacity: 0 }}
 								onClick={() => setMobileMenuOpen(false)}
+								transition={{ duration: 0.2 }}
 							/>
 
 							{/* Menu Content */}
 							<motion.div
-								initial={{ opacity: 0, y: -20 }}
 								animate={{ opacity: 1, y: 0 }}
+								className="fixed top-16 right-0 left-0 z-50 border-border border-b bg-background/95 shadow-2xl backdrop-blur-xl lg:hidden"
 								exit={{ opacity: 0, y: -20 }}
+								initial={{ opacity: 0, y: -20 }}
 								transition={{ duration: 0.3, ease: "easeOut" }}
-								className="fixed top-16 left-0 right-0 bg-background/95 backdrop-blur-xl border-b border-border shadow-2xl z-50 lg:hidden"
 							>
-								<div className="px-4 py-6 space-y-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
+								<div className="max-h-[calc(100vh-4rem)] space-y-1 overflow-y-auto px-4 py-6">
 									{/* Navigation Items */}
 									{navigationItems.map((navItem) => {
 										const Icon = navItem.icon;
@@ -225,26 +219,26 @@ export function TwoLevelNav({
 
 										return (
 											<Link
-												key={navItem.id}
 												href={navItem.href}
+												key={navItem.id}
 												prefetch={true}
 											>
 												<Button
-													variant="ghost"
-													key={navItem.id}
 													className={cn(
-														"w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left",
+														"flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors",
 														isActive
-															? "bg-primary/10 text-primary font-semibold"
-															: "text-foreground/80 hover:bg-secondary hover:text-foreground",
+															? "bg-primary/10 font-semibold text-primary"
+															: "text-foreground/80 hover:bg-secondary hover:text-foreground"
 													)}
+													key={navItem.id}
+													variant="ghost"
 												>
 													<Icon className="size-5" />
 													<span className="text-base">{navItem.label}</span>
 													{isActive && (
 														<motion.div
-															layoutId="mobile-active"
 															className="ml-auto size-2 rounded-full bg-primary"
+															layoutId="mobile-active"
 															transition={{
 																type: "spring",
 																stiffness: 300,
@@ -258,24 +252,24 @@ export function TwoLevelNav({
 									})}
 
 									{/* Divider */}
-									<div className="h-px bg-border my-4" />
+									<div className="my-4 h-px bg-border" />
 
 									{/* Mobile-only actions */}
 									<Button
-										variant="ghost"
+										className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-foreground/80 transition-colors hover:bg-secondary hover:text-foreground"
 										onClick={() => {
 											setCommandOpen(true);
 											setMobileMenuOpen(false);
 										}}
-										className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-foreground/80 hover:bg-secondary hover:text-foreground transition-colors text-left"
+										variant="ghost"
 									>
 										<Search className="size-5" />
 										<span className="text-base">Search</span>
 									</Button>
 
 									<Button
+										className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-foreground/80 transition-colors hover:bg-secondary hover:text-foreground sm:hidden"
 										variant="ghost"
-										className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-foreground/80 hover:bg-secondary hover:text-foreground transition-colors text-left sm:hidden"
 									>
 										<Bell className="size-5" />
 										<span className="text-base">Notifications</span>
@@ -289,7 +283,7 @@ export function TwoLevelNav({
 			</div>
 
 			{/* Command Palette */}
-			<CommandPalette open={commandOpen} onOpenChange={setCommandOpen} />
+			<CommandPalette onOpenChange={setCommandOpen} open={commandOpen} />
 		</>
 	);
 }

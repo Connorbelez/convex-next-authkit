@@ -15,23 +15,23 @@ export function ListingsGridSkeleton() {
 
 				{/* Header section */}
 				<div className="mb-6">
-					<Skeleton className="h-9 w-64 mb-2" />
-					<Skeleton className="h-5 w-96 mb-1" />
+					<Skeleton className="mb-2 h-9 w-64" />
+					<Skeleton className="mb-1 h-5 w-96" />
 					<Skeleton className="h-4 w-72" />
 				</div>
 
 				{/* FilterBar skeleton */}
 				<div className="mb-4 space-y-3">
 					{/* Search and filter controls row */}
-					<div className="flex gap-3 items-center">
-						<Skeleton className="h-10 flex-1 max-w-md" />
+					<div className="flex items-center gap-3">
+						<Skeleton className="h-10 max-w-md flex-1" />
 						<Skeleton className="h-10 w-32" />
 						<Skeleton className="h-10 w-32" />
 					</div>
 					{/* Active filters chips */}
 					<div className="flex gap-2">
 						{[1, 2, 3].map((i) => (
-							<Skeleton key={i} className="h-8 w-24" />
+							<Skeleton className="h-8 w-24" key={i} />
 						))}
 					</div>
 				</div>
@@ -40,9 +40,9 @@ export function ListingsGridSkeleton() {
 				<section className="flex gap-x-4 px-4 pt-4">
 					{/* Left column: Listing cards grid */}
 					<div className="flex-1">
-						<div className="grid grid-cols-1 84rem:grid-cols-2">
+						<div className="grid 84rem:grid-cols-2 grid-cols-1">
 							{[1, 2, 3, 4, 5, 6].map((i) => (
-								<div key={i} className="border rounded-lg p-4 space-y-3">
+								<div className="space-y-3 rounded-lg border p-4" key={i}>
 									<div className="flex gap-4">
 										{/* Image skeleton */}
 										<Skeleton className="h-32 w-48 flex-shrink-0 rounded-md" />
@@ -51,11 +51,11 @@ export function ListingsGridSkeleton() {
 										<div className="flex-1 space-y-2">
 											<Skeleton className="h-6 w-3/4" />
 											<Skeleton className="h-4 w-1/2" />
-											<div className="flex gap-2 mt-2">
+											<div className="mt-2 flex gap-2">
 												<Skeleton className="h-4 w-16" />
 												<Skeleton className="h-4 w-16" />
 											</div>
-											<div className="flex gap-4 mt-3">
+											<div className="mt-3 flex gap-4">
 												<Skeleton className="h-5 w-20" />
 												<Skeleton className="h-5 w-20" />
 												<Skeleton className="h-5 w-20" />
@@ -68,7 +68,7 @@ export function ListingsGridSkeleton() {
 					</div>
 
 					{/* Right column: Sticky map */}
-					<div className="w-[40%] 84rem:w-[35%]">
+					<div className="84rem:w-[35%] w-[40%]">
 						<div className="sticky top-4 h-[calc(100vh-7rem)]">
 							<Skeleton className="h-full w-full rounded-lg" />
 							{/* Map controls overlay */}

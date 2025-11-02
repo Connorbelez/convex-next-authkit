@@ -1,17 +1,10 @@
-import React from "react";
 import { Icon } from "@iconify/react";
-
-import { FILTER_BOUNDS } from "./types/listing-filters";
-import FilterModal from "./filter-modal";
-import {
-	type FilterState,
-	type MortgageType,
-	type PropertyType,
-} from "./types/listing-filters";
-import { Input } from "@/components/ui/input";
+import type React from "react";
 import { Button } from "@/components/ui/button";
-import type { FilterableItem } from "./ListingGridShell";
+import { Input } from "@/components/ui/input";
 import { useFiltersStore } from "./contexts/listingContext";
+import FilterModal from "./filter-modal";
+import { FILTER_BOUNDS, type FilterState } from "./types/listing-filters";
 
 export function FilterBar() {
 	const { filters, setFilters, items, setItems } = useFiltersStore();
@@ -61,30 +54,30 @@ export function FilterBar() {
 
 	return (
 		<div className="z-[10] flex flex-col justify-center gap-x-4">
-			<div className="flex items-center justify-start gap-2 flex-nowrap">
+			<div className="flex flex-nowrap items-center justify-start gap-2">
 				<div className="relative md:w-64">
 					<Icon
-						className="text-foreground absolute left-3 top-1/2 -translate-y-1/2"
+						className="-translate-y-1/2 absolute top-1/2 left-3 text-foreground"
 						icon="lucide:search"
 					/>
 					<Input
-						type="text"
-						placeholder="Search ..."
-						className="pl-10 rounded-full border-input shadow-md"
-						value={safeFilters.searchQuery}
+						className="rounded-full border-input pl-10 shadow-md"
 						onChange={handleSearchChange}
+						placeholder="Search ..."
+						type="text"
+						value={safeFilters.searchQuery}
 					/>
 				</div>
 
 				<FilterModal
 					filters={filters}
-					onFiltersChange={setFilters}
 					items={items}
+					onFiltersChange={setFilters}
 				/>
 
 				{hasActiveFilters && (
-					<Button variant="destructive" onClick={handleClearFilters}>
-						<Icon icon="lucide:x" className="mr-2" />
+					<Button onClick={handleClearFilters} variant="destructive">
+						<Icon className="mr-2" icon="lucide:x" />
 						Clear Filters
 					</Button>
 				)}

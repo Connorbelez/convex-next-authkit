@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { motion } from "framer-motion";
 import {
+	Building2,
 	Check,
 	ChevronsUpDown,
-	Building2,
-	User,
-	Mail,
 	FileText,
+	Mail,
+	User,
 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -21,13 +21,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
 import {
 	Command,
 	CommandEmpty,
@@ -36,6 +29,13 @@ import {
 	CommandItem,
 	CommandList,
 } from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 // Mock lawyer data
@@ -85,7 +85,7 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 
 	// Find selected lawyer data
 	const selectedLawyerData = MOCK_LAWYERS.find(
-		(lawyer) => lawyer.name === selectedLawyer,
+		(lawyer) => lawyer.name === selectedLawyer
 	);
 
 	// Form validation
@@ -129,20 +129,20 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 							{/* Recommended Lawyers Autocomplete */}
 							<div className="space-y-2">
 								<Label htmlFor="lawyer-search">Recommended Lawyers</Label>
-								<Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+								<Popover onOpenChange={setIsPopoverOpen} open={isPopoverOpen}>
 									<PopoverTrigger asChild>
 										<Button
-											id="lawyer-search"
-											variant="outline"
-											role="combobox"
 											aria-expanded={isPopoverOpen}
 											className="w-full justify-between"
+											id="lawyer-search"
+											role="combobox"
+											variant="outline"
 										>
 											{selectedLawyer || "Select a lawyer..."}
 											<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 										</Button>
 									</PopoverTrigger>
-									<PopoverContent className="w-full p-0" align="start">
+									<PopoverContent align="start" className="w-full p-0">
 										<Command>
 											<CommandInput placeholder="Search lawyers..." />
 											<CommandList>
@@ -151,28 +151,28 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 													{MOCK_LAWYERS.map((lawyer) => (
 														<CommandItem
 															key={lawyer.id}
-															value={lawyer.name}
 															onSelect={(currentValue) => {
 																setSelectedLawyer(
 																	currentValue === selectedLawyer
 																		? ""
-																		: currentValue,
+																		: currentValue
 																);
 																setLawyerLSONumber(lawyer.lsoNumber);
 																setIsPopoverOpen(false);
 															}}
+															value={lawyer.name}
 														>
 															<Check
 																className={cn(
 																	"mr-2 h-4 w-4",
 																	selectedLawyer === lawyer.name
 																		? "opacity-100"
-																		: "opacity-0",
+																		: "opacity-0"
 																)}
 															/>
 															<div className="flex flex-col">
 																<span>{lawyer.name}</span>
-																<span className="text-xs text-muted-foreground">
+																<span className="text-muted-foreground text-xs">
 																	LSO: {lawyer.lsoNumber}
 																</span>
 															</div>
@@ -190,10 +190,10 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 								<Label htmlFor="lso-number">Lawyer LSO Number</Label>
 								<Input
 									id="lso-number"
-									type="text"
-									placeholder="Enter LSO number"
-									value={lawyerLSONumber}
 									onChange={(e) => setLawyerLSONumber(e.target.value)}
+									placeholder="Enter LSO number"
+									type="text"
+									value={lawyerLSONumber}
 								/>
 							</div>
 
@@ -202,10 +202,10 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 								<Label htmlFor="lawyer-email">Lawyer Email</Label>
 								<Input
 									id="lawyer-email"
-									type="email"
-									placeholder="lawyer@example.com"
-									value={lawyerEmail}
 									onChange={(e) => setLawyerEmail(e.target.value)}
+									placeholder="lawyer@example.com"
+									type="email"
+									value={lawyerEmail}
 								/>
 							</div>
 
@@ -217,12 +217,12 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 										"relative cursor-pointer rounded-xl border-2 p-4 transition-colors",
 										disclosureAccepted
 											? "border-primary bg-primary/5"
-											: "border-border bg-background hover:bg-muted/50",
+											: "border-border bg-background hover:bg-muted/50"
 									)}
 									onClick={() => setDisclosureAccepted(!disclosureAccepted)}
+									transition={{ type: "spring", stiffness: 300, damping: 20 }}
 									whileHover={{ scale: 1.01 }}
 									whileTap={{ scale: 0.99 }}
-									transition={{ type: "spring", stiffness: 300, damping: 20 }}
 								>
 									<div className="flex items-start space-x-3">
 										<div
@@ -230,13 +230,13 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 												"mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors",
 												disclosureAccepted
 													? "border-primary bg-primary"
-													: "border-muted-foreground bg-background",
+													: "border-muted-foreground bg-background"
 											)}
 										>
 											{disclosureAccepted && (
 												<motion.div
-													initial={{ scale: 0 }}
 													animate={{ scale: 1 }}
+													initial={{ scale: 0 }}
 													transition={{
 														type: "spring",
 														stiffness: 500,
@@ -251,7 +251,7 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 											<p className="font-medium">
 												I agree to the disclosure policy
 											</p>
-											<p className="text-sm text-muted-foreground mt-1">
+											<p className="mt-1 text-muted-foreground text-sm">
 												I confirm that all information provided is accurate and
 												I have read and understood the investment disclosure
 												policy and terms of service.
@@ -263,7 +263,7 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 						</div>
 
 						{/* Right Column - Preview */}
-						<div className="lg:sticky lg:top-8 h-fit">
+						<div className="h-fit lg:sticky lg:top-8">
 							<Card>
 								<CardHeader>
 									<CardTitle>Request Summary</CardTitle>
@@ -274,7 +274,7 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 								<CardContent className="space-y-6">
 									{/* User Information */}
 									<div className="space-y-3">
-										<div className="flex items-center space-x-2 text-sm font-medium">
+										<div className="flex items-center space-x-2 font-medium text-sm">
 											<User className="h-4 w-4 text-muted-foreground" />
 											<span>Your Information</span>
 										</div>
@@ -292,7 +292,7 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 
 									{/* Listing Information */}
 									<div className="space-y-3">
-										<div className="flex items-center space-x-2 text-sm font-medium">
+										<div className="flex items-center space-x-2 font-medium text-sm">
 											<Building2 className="h-4 w-4 text-muted-foreground" />
 											<span>Property Details</span>
 										</div>
@@ -319,7 +319,7 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 
 									{/* Lawyer Information */}
 									<div className="space-y-3">
-										<div className="flex items-center space-x-2 text-sm font-medium">
+										<div className="flex items-center space-x-2 font-medium text-sm">
 											<FileText className="h-4 w-4 text-muted-foreground" />
 											<span>Legal Representative</span>
 										</div>
@@ -360,9 +360,9 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 									{/* Submit Button */}
 									<Button
 										className="w-full"
-										size="lg"
 										disabled={!isFormValid}
 										onClick={handleSubmit}
+										size="lg"
 									>
 										Request Listing
 									</Button>

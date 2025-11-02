@@ -27,9 +27,7 @@ export const HomeOnly: Story = {
  */
 export const ListingsPage: Story = {
 	args: {
-		items: [
-			{ label: "Listings" }
-		],
+		items: [{ label: "Listings" }],
 	},
 };
 
@@ -40,7 +38,7 @@ export const ListingDetailPage: Story = {
 	args: {
 		items: [
 			{ label: "Listings", href: "/listings" },
-			{ label: "123 Main St - Toronto Investment Property" }
+			{ label: "123 Main St - Toronto Investment Property" },
 		],
 	},
 };
@@ -54,7 +52,7 @@ export const DeepNavigation: Story = {
 			{ label: "Portfolio", href: "/portfolio" },
 			{ label: "Properties", href: "/portfolio/properties" },
 			{ label: "Toronto", href: "/portfolio/properties/toronto" },
-			{ label: "123 Main Street" }
+			{ label: "123 Main Street" },
 		],
 	},
 };
@@ -66,7 +64,10 @@ export const LongTitle: Story = {
 	args: {
 		items: [
 			{ label: "Listings", href: "/listings" },
-			{ label: "Premium Waterfront Investment Property with Stunning Lake Views and Modern Amenities - Toronto Downtown Core" }
+			{
+				label:
+					"Premium Waterfront Investment Property with Stunning Lake Views and Modern Amenities - Toronto Downtown Core",
+			},
 		],
 	},
 };

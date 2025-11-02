@@ -1,73 +1,89 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.2.7/schema.json",
-	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
-	"files": {
-		"ignoreUnknown": false,
-		"includes": [
-			"app",
-			"app/",
-			"app/*",
-			"components",
-			"components/*",
-			"components/**",
-			"!node_modules/",
-			"!dist/",
-			"!.convex/",
-			"!.next/",
-			"!convex/_generated",
-			"!convex/_generated/*"
-		]
-	},
-	"formatter": {
-		"enabled": true,
-		"formatWithErrors": false,
-		"attributePosition": "auto",
-		"indentStyle": "tab",
-		"indentWidth": 2,
-		"lineWidth": 80,
-		"lineEnding": "lf"
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"style": {
-				"noMagicNumbers": "off",
-				"noNestedTernary": "off",
-				"useNumericSeparators": "off",
-				"useBlockStatements": "off",
-				"useFilenamingConvention": "off"
-			},
-			"suspicious": {
-				"noTsIgnore": "off",
-				"noConsole": "off",
-				"useAwait": "off",
-				"noExplicitAny": "off",
-				"noUnknownAtRules": "off"
-			},
-			"complexity": {
-				"noExcessiveCognitiveComplexity": "off"
-			},
-			"a11y": {
-				"useSemanticElements": "off"
-			},
-			"recommended": true
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "double"
-		}
-	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	}
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "app",
+      "app/",
+      "app/*",
+      "app/**",
+      "components",
+      "components/*",
+      "components/**",
+      "hooks",
+      "hooks/*",
+      "hooks/**",
+      "lib",
+      "lib/*",
+      "lib/**",
+      "types",
+      "types/*",
+      "types/**",
+      "!node_modules/",
+      "!dist/",
+      "!.convex/",
+      "!.next/",
+      "!convex/_generated",
+      "!convex/tsconfig.json",
+	  "!convex",
+	  "!convex/*",
+	  "!vitest.config.mts",
+	  "!biome.json",
+      "!convex/_generated/*"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "attributePosition": "auto",
+    "indentStyle": "tab",
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "lineEnding": "lf"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "style": {
+        "noMagicNumbers": "off",
+        "noNestedTernary": "off",
+        "useNumericSeparators": "off",
+        "useBlockStatements": "off",
+        "useFilenamingConvention": "off"
+      },
+      "suspicious": {
+        "noTsIgnore": "off",
+        "noConsole": "off",
+        "useAwait": "off",
+        "noExplicitAny": "off",
+        "noUnknownAtRules": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off"
+      },
+      "a11y": {
+        "useSemanticElements": "off"
+      },
+      "recommended": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "extends": ["ultracite/core", "ultracite/next", "ultracite/react"]
 }

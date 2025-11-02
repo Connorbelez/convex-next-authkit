@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Button } from "@heroui/react";
+import { Icon } from "@iconify/react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-import { Icon } from "@iconify/react";
-import { Button } from "@heroui/react";
+import { useCallback, useEffect, useState } from "react";
 
 interface ImageCarouselProps {
 	images: Array<{
@@ -32,7 +32,7 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 		(index: number) => {
 			if (emblaApi) emblaApi.scrollTo(index);
 		},
-		[emblaApi],
+		[emblaApi]
 	);
 
 	const onSelect = useCallback(() => {
@@ -78,7 +78,7 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 		return (
 			<div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
 				<div className="flex h-full items-center justify-center">
-					<Icon icon="lucide:image-off" className="h-16 w-16 text-gray-400" />
+					<Icon className="h-16 w-16 text-gray-400" icon="lucide:image-off" />
 					<p className="ml-3 text-gray-500">No images available</p>
 				</div>
 			</div>
@@ -89,24 +89,24 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 
 	return (
 		<div
+			aria-label="Property image carousel"
 			className="relative w-full"
 			role="region"
-			aria-label="Property image carousel"
 		>
 			{/* Main carousel */}
 			<div className="overflow-hidden rounded-lg" ref={emblaRef}>
 				<div className="flex touch-pan-y">
 					{sortedImages.map((image, index) => (
-						<div key={index} className="relative min-w-0 flex-[0_0_100%]">
+						<div className="relative min-w-0 flex-[0_0_100%]" key={index}>
 							<div className="relative aspect-[4/3] w-full">
 								<Image
-									src={image.url}
 									alt={image.alt || `${propertyTitle} - Image ${index + 1}`}
-									fill
 									className="object-cover"
-									sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+									fill
 									priority={index === 0}
 									quality={index === 0 ? 90 : 75}
+									sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+									src={image.url}
 								/>
 							</div>
 						</div>
@@ -118,27 +118,27 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 			{showNavigation && (
 				<>
 					<Button
-						isIconOnly
-						className="absolute left-4 top-1/2 z-10 -translate-y-1/2 bg-white/90 shadow-lg hover:bg-white dark:bg-gray-900/90 dark:hover:bg-gray-900"
-						onClick={scrollPrev}
 						aria-label="Previous image"
+						className="-translate-y-1/2 absolute top-1/2 left-4 z-10 bg-white/90 shadow-lg hover:bg-white dark:bg-gray-900/90 dark:hover:bg-gray-900"
+						isIconOnly
+						onClick={scrollPrev}
 					>
-						<Icon icon="lucide:chevron-left" className="h-6 w-6" />
+						<Icon className="h-6 w-6" icon="lucide:chevron-left" />
 					</Button>
 					<Button
-						isIconOnly
-						className="absolute right-4 top-1/2 z-10 -translate-y-1/2 bg-white/90 shadow-lg hover:bg-white dark:bg-gray-900/90 dark:hover:bg-gray-900"
-						onClick={scrollNext}
 						aria-label="Next image"
+						className="-translate-y-1/2 absolute top-1/2 right-4 z-10 bg-white/90 shadow-lg hover:bg-white dark:bg-gray-900/90 dark:hover:bg-gray-900"
+						isIconOnly
+						onClick={scrollNext}
 					>
-						<Icon icon="lucide:chevron-right" className="h-6 w-6" />
+						<Icon className="h-6 w-6" icon="lucide:chevron-right" />
 					</Button>
 				</>
 			)}
 
 			{/* Image counter */}
 			{showNavigation && (
-				<div className="absolute right-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-sm text-white">
+				<div className="absolute top-4 right-4 z-10 rounded-full bg-black/60 px-3 py-1 text-sm text-white">
 					{selectedIndex + 1} / {sortedImages.length}
 				</div>
 			)}
@@ -148,23 +148,23 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 				<div className="mt-4 flex gap-2 overflow-x-auto pb-2">
 					{sortedImages.map((image, index) => (
 						<button
-							key={index}
-							type="button"
-							onClick={() => scrollTo(index)}
+							aria-current={index === selectedIndex}
+							aria-label={`View image ${index + 1}`}
 							className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md transition-all ${
 								index === selectedIndex
 									? "ring-2 ring-primary ring-offset-2"
 									: "opacity-60 hover:opacity-100"
 							}`}
-							aria-label={`View image ${index + 1}`}
-							aria-current={index === selectedIndex}
+							key={index}
+							onClick={() => scrollTo(index)}
+							type="button"
 						>
 							<Image
-								src={image.url}
 								alt={image.alt || `Thumbnail ${index + 1}`}
-								fill
 								className="object-cover"
+								fill
 								sizes="80px"
+								src={image.url}
 							/>
 						</button>
 					))}
@@ -173,10 +173,10 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 
 			{/* Screen reader announcements */}
 			<div
+				aria-atomic="true"
+				aria-live="polite"
 				className="sr-only"
 				role="status"
-				aria-live="polite"
-				aria-atomic="true"
 			>
 				Viewing image {selectedIndex + 1} of {sortedImages.length}
 			</div>

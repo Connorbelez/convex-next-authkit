@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
-import { Card, CardContent } from "./card";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { AnimatePresence, motion } from "motion/react";
+import type React from "react";
+import { Card, CardContent } from "./card";
 
 const MotionCard = motion(Card);
 
@@ -15,37 +15,37 @@ const EmptyResult = () => {
 
 	return (
 		<MotionCard
-			className="max-w-sm mx-auto shadow-lg"
-			initial="initial"
 			animate="animate"
+			className="mx-auto max-w-sm shadow-lg"
+			initial="initial"
 		>
 			<CardContent className="flex flex-col items-center p-6">
-				<div className="w-32 h-32">
-					<DotLottieReact src="/dot-lottie/empty.lottie" loop autoplay />
+				<div className="h-32 w-32">
+					<DotLottieReact autoplay loop src="/dot-lottie/empty.lottie" />
 				</div>
 
 				{/* Animated Heading */}
 				<motion.h2
-					initial="initial"
 					animate="animate"
-					variants={textVariants}
+					className="mt-4 text-center font-semibold text-xl"
+					initial="initial"
 					transition={{ duration: 0.6, ease: "easeOut" }}
-					className="mt-4 text-xl font-semibold text-center"
+					variants={textVariants}
 				>
 					No Data Found
 				</motion.h2>
 
 				{/* Animated Description */}
 				<motion.p
-					initial="initial"
 					animate="animate"
-					variants={textVariants}
+					className="mt-2 text-center text-gray-600"
+					initial="initial"
 					transition={{
 						duration: 0.8,
 						ease: "easeOut",
 						delay: 0.2,
 					}}
-					className="mt-2 text-center text-gray-600"
+					variants={textVariants}
 				>
 					It looks like there&apos;s nothing here yet!
 				</motion.p>
@@ -77,38 +77,38 @@ const ErrorResult = () => {
 
 	return (
 		<MotionCardError
-			className="max-w-sm mx-auto shadow-lg"
-			variants={cardShake}
-			initial="initial"
 			animate="animate"
+			className="mx-auto max-w-sm shadow-lg"
+			initial="initial"
+			variants={cardShake}
 		>
 			<CardContent className="flex flex-col items-center p-6">
-				<div className="w-32 h-32">
-					<DotLottieReact src="/dot-lottie/error.lottie" loop autoplay />
+				<div className="h-32 w-32">
+					<DotLottieReact autoplay loop src="/dot-lottie/error.lottie" />
 				</div>
 
 				{/* Animated Heading */}
 				<motion.h2
-					initial="initial"
 					animate="animate"
-					variants={textVariants}
+					className="mt-4 text-center font-semibold text-red-600 text-xl"
+					initial="initial"
 					transition={{ duration: 0.6, ease: "easeOut" }}
-					className="mt-4 text-xl font-semibold text-center text-red-600"
+					variants={textVariants}
 				>
 					Error Occurred!
 				</motion.h2>
 
 				{/* Animated Description */}
 				<motion.p
-					initial="initial"
 					animate="animate"
-					variants={textVariants}
+					className="mt-2 text-center text-gray-600"
+					initial="initial"
 					transition={{
 						duration: 0.8,
 						ease: "easeOut",
 						delay: 0.2,
 					}}
-					className="mt-2 text-center text-gray-600"
+					variants={textVariants}
 				>
 					There was a problem processing your request. Please try again.
 				</motion.p>
@@ -126,34 +126,34 @@ const SuccessResult: React.FC = () => {
 
 	return (
 		<AnimatePresence>
-			<Card className="max-w-sm mx-auto shadow-lg">
+			<Card className="mx-auto max-w-sm shadow-lg">
 				<CardContent className="flex flex-col items-center p-6">
-					<div className="w-32 h-32">
-						<DotLottieReact src="/dot-lottie/success.lottie" loop autoplay />
+					<div className="h-32 w-32">
+						<DotLottieReact autoplay loop src="/dot-lottie/success.lottie" />
 					</div>
 
 					{/* Animated Heading */}
 					<motion.h2
-						initial="initial"
 						animate="animate"
-						variants={textVariants}
+						className="mt-4 text-center font-semibold text-blue-600 text-xl"
+						initial="initial"
 						transition={{ duration: 0.6, ease: "easeOut" }}
-						className="mt-4 text-xl font-semibold text-center text-blue-600"
+						variants={textVariants}
 					>
 						Success!
 					</motion.h2>
 
 					{/* Animated Description */}
 					<motion.p
-						initial="initial"
 						animate="animate"
-						variants={textVariants}
+						className="mt-2 text-center text-gray-600"
+						initial="initial"
 						transition={{
 							duration: 0.8,
 							ease: "easeOut",
 							delay: 0.2, // Staggered animation
 						}}
-						className="mt-2 text-center text-gray-600"
+						variants={textVariants}
 					>
 						Your operation was completed successfully.
 					</motion.p>

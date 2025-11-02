@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const cardDecoratorVariants = cva("", {
@@ -46,21 +46,21 @@ export const CardDecorator = ({ variant, className }: CardDecoratorProps) => {
 // Default L-shaped corners (original implementation)
 const DefaultDecorator = ({ className }: { className?: string }) => (
 	<div className={cn("pointer-events-none absolute inset-0", className)}>
-		<span className="border-primary absolute -left-px -top-px block size-2 border-l-2 border-t-2"></span>
-		<span className="border-primary absolute -right-px -top-px block size-2 border-r-2 border-t-2"></span>
-		<span className="border-primary absolute -bottom-px -left-px block size-2 border-b-2 border-l-2"></span>
-		<span className="border-primary absolute -bottom-px -right-px block size-2 border-b-2 border-r-2"></span>
+		<span className="-left-px -top-px absolute block size-2 border-primary border-t-2 border-l-2" />
+		<span className="-right-px -top-px absolute block size-2 border-primary border-t-2 border-r-2" />
+		<span className="-bottom-px -left-px absolute block size-2 border-primary border-b-2 border-l-2" />
+		<span className="-bottom-px -right-px absolute block size-2 border-primary border-r-2 border-b-2" />
 	</div>
 );
 
 // Dashed border decorator
 const DashedDecorator = ({ className }: { className?: string }) => (
 	<div className={cn("pointer-events-none absolute inset-0", className)}>
-		<div className="absolute inset-0 border-2 border-dashed border-primary/50 rounded-sm"></div>
-		<span className="border-primary absolute -left-px -top-px block size-3 border-l-2 border-t-2 bg-background"></span>
-		<span className="border-primary absolute -right-px -top-px block size-3 border-r-2 border-t-2 bg-background"></span>
-		<span className="border-primary absolute -bottom-px -left-px block size-3 border-b-2 border-l-2 bg-background"></span>
-		<span className="border-primary absolute -bottom-px -right-px block size-3 border-b-2 border-r-2 bg-background"></span>
+		<div className="absolute inset-0 rounded-sm border-2 border-primary/50 border-dashed" />
+		<span className="-left-px -top-px absolute block size-3 border-primary border-t-2 border-l-2 bg-background" />
+		<span className="-right-px -top-px absolute block size-3 border-primary border-t-2 border-r-2 bg-background" />
+		<span className="-bottom-px -left-px absolute block size-3 border-primary border-b-2 border-l-2 bg-background" />
+		<span className="-bottom-px -right-px absolute block size-3 border-primary border-r-2 border-b-2 bg-background" />
 	</div>
 );
 
@@ -83,72 +83,72 @@ const DashedDecorator = ({ className }: { className?: string }) => (
 // Dots corner decorator
 const DotsDecorator = ({ className }: { className?: string }) => (
 	<div className={cn("pointer-events-none absolute inset-0", className)}>
-		<div className="absolute -left-[3px] -top-[3px] flex flex-col gap-[3px]">
+		<div className="-left-[3px] -top-[3px] absolute flex flex-col gap-[3px]">
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary" />
 			</div>
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary/60"></span>
-				<span className="block size-1.5 rounded-full bg-primary/30"></span>
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary/60" />
+				<span className="block size-1.5 rounded-full bg-primary/30" />
 			</div>
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary/30"></span>
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
-			</div>
-		</div>
-		<div className="absolute -right-[3px] -top-[3px] flex flex-col gap-[3px]">
-			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary/30"></span>
-				<span className="block size-1.5 rounded-full bg-primary/60"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-			</div>
-			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
-				<span className="block size-1.5 rounded-full bg-primary/30"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-			</div>
-			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary/30" />
+				<span className="block size-1.5 rounded-full bg-primary/0" />
 			</div>
 		</div>
-		<div className="absolute -bottom-[3px] -left-[3px] flex flex-col gap-[3px]">
+		<div className="-right-[3px] -top-[3px] absolute flex flex-col gap-[3px]">
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary/30"></span>
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
+				<span className="block size-1.5 rounded-full bg-primary/30" />
+				<span className="block size-1.5 rounded-full bg-primary/60" />
+				<span className="block size-1.5 rounded-full bg-primary" />
 			</div>
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary/60"></span>
-				<span className="block size-1.5 rounded-full bg-primary/30"></span>
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
+				<span className="block size-1.5 rounded-full bg-primary/0" />
+				<span className="block size-1.5 rounded-full bg-primary/30" />
+				<span className="block size-1.5 rounded-full bg-primary" />
 			</div>
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
+				<span className="block size-1.5 rounded-full bg-primary/0" />
+				<span className="block size-1.5 rounded-full bg-primary/0" />
+				<span className="block size-1.5 rounded-full bg-primary/0" />
 			</div>
 		</div>
-		<div className="absolute -bottom-[3px] -right-[3px] flex flex-col gap-[3px]">
+		<div className="-bottom-[3px] -left-[3px] absolute flex flex-col gap-[3px]">
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
-				<span className="block size-1.5 rounded-full bg-primary/30"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary/30" />
+				<span className="block size-1.5 rounded-full bg-primary/0" />
 			</div>
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary/0"></span>
-				<span className="block size-1.5 rounded-full bg-primary/30"></span>
-				<span className="block size-1.5 rounded-full bg-primary/60"></span>
+				<span className="block size-1.5 rounded-full bg-primary/60" />
+				<span className="block size-1.5 rounded-full bg-primary/30" />
+				<span className="block size-1.5 rounded-full bg-primary/0" />
 			</div>
 			<div className="flex gap-[3px]">
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
-				<span className="block size-1.5 rounded-full bg-primary"></span>
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary" />
+			</div>
+		</div>
+		<div className="-bottom-[3px] -right-[3px] absolute flex flex-col gap-[3px]">
+			<div className="flex gap-[3px]">
+				<span className="block size-1.5 rounded-full bg-primary/0" />
+				<span className="block size-1.5 rounded-full bg-primary/30" />
+				<span className="block size-1.5 rounded-full bg-primary" />
+			</div>
+			<div className="flex gap-[3px]">
+				<span className="block size-1.5 rounded-full bg-primary/0" />
+				<span className="block size-1.5 rounded-full bg-primary/30" />
+				<span className="block size-1.5 rounded-full bg-primary/60" />
+			</div>
+			<div className="flex gap-[3px]">
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary" />
+				<span className="block size-1.5 rounded-full bg-primary" />
 			</div>
 		</div>
 	</div>
@@ -200,15 +200,15 @@ const DotsDecorator = ({ className }: { className?: string }) => (
 const GlowDecorator = ({ className }: { className?: string }) => (
 	<div className={cn("pointer-events-none absolute inset-0", className)}>
 		<div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-			<div className="absolute -left-px -top-px size-4 bg-primary/20 blur-sm"></div>
-			<div className="absolute -right-px -top-px size-4 bg-primary/20 blur-sm"></div>
-			<div className="absolute -bottom-px -left-px size-4 bg-primary/20 blur-sm"></div>
-			<div className="absolute -bottom-px -right-px size-4 bg-primary/20 blur-sm"></div>
+			<div className="-left-px -top-px absolute size-4 bg-primary/20 blur-sm" />
+			<div className="-right-px -top-px absolute size-4 bg-primary/20 blur-sm" />
+			<div className="-bottom-px -left-px absolute size-4 bg-primary/20 blur-sm" />
+			<div className="-bottom-px -right-px absolute size-4 bg-primary/20 blur-sm" />
 		</div>
-		<span className="border-primary absolute -left-px -top-px block size-3 border-l-2 border-t-2 transition-all duration-300 group-hover:size-4 group-hover:border-l-[3px] group-hover:border-t-[3px]"></span>
-		<span className="border-primary absolute -right-px -top-px block size-3 border-r-2 border-t-2 transition-all duration-300 group-hover:size-4 group-hover:border-r-[3px] group-hover:border-t-[3px]"></span>
-		<span className="border-primary absolute -bottom-px -left-px block size-3 border-b-2 border-l-2 transition-all duration-300 group-hover:size-4 group-hover:border-b-[3px] group-hover:border-l-[3px]"></span>
-		<span className="border-primary absolute -bottom-px -right-px block size-3 border-b-2 border-r-2 transition-all duration-300 group-hover:size-4 group-hover:border-b-[3px] group-hover:border-r-[3px]"></span>
+		<span className="-left-px -top-px absolute block size-3 border-primary border-t-2 border-l-2 transition-all duration-300 group-hover:size-4 group-hover:border-t-[3px] group-hover:border-l-[3px]" />
+		<span className="-right-px -top-px absolute block size-3 border-primary border-t-2 border-r-2 transition-all duration-300 group-hover:size-4 group-hover:border-t-[3px] group-hover:border-r-[3px]" />
+		<span className="-bottom-px -left-px absolute block size-3 border-primary border-b-2 border-l-2 transition-all duration-300 group-hover:size-4 group-hover:border-b-[3px] group-hover:border-l-[3px]" />
+		<span className="-bottom-px -right-px absolute block size-3 border-primary border-r-2 border-b-2 transition-all duration-300 group-hover:size-4 group-hover:border-r-[3px] group-hover:border-b-[3px]" />
 	</div>
 );
 

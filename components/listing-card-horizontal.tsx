@@ -1,10 +1,9 @@
 "use client";
 
-import { Button, Card, Chip } from "@heroui/react";
+import { Button, Card } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import { Badge, badgeVariants } from "@/components/ui/badge";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { ViewTransition } from "react";
 
 export interface HorizontalProps {
@@ -32,10 +31,10 @@ export function Horizontal({
 }: HorizontalProps = {}) {
 	const CardContent = (
 		<Card.Root
+			className="w-full items-stretch transition-all duration-300 hover:scale-103 hover:shadow-black/10 hover:shadow-lg md:flex-row"
 			variant="flat"
-			className="w-full items-stretch md:flex-row hover:scale-103 hover:shadow-lg hover:shadow-black/10 transition-all duration-300"
 		>
-			<div className="relative rounded-panel aspect-video sm:aspect-square w-full sm:max-w-[180px] overflow-hidden">
+			<div className="relative aspect-video w-full overflow-hidden rounded-panel sm:aspect-square sm:max-w-[180px]">
 				<Image
 					alt={`${title} thumbnail`}
 					className="pointer-events-none select-none object-cover"
@@ -47,45 +46,45 @@ export function Horizontal({
 			<div className="flex flex-1 flex-col gap-3">
 				<Card.Header className="gap-1">
 					<Card.Title>{title}</Card.Title>
-					<Card.Description className="text-foreground/70 flex gap-2 align-middle items-center w-full">
-						<Icon icon="lucide:map-pin" className="h-4 w-4" />
+					<Card.Description className="flex w-full items-center gap-2 align-middle text-foreground/70">
+						<Icon className="h-4 w-4" icon="lucide:map-pin" />
 						{address}
 						{propertyType && ` • ${propertyType}`}
 					</Card.Description>
 				</Card.Header>
 				<Card.Content className="text-muted-foreground text-sm">
-					<div className="flex  xl:flex 84rem:grid 84rem:grid-cols-2 lg:gap-2 items-center justify-around">
+					<div className="flex 84rem:grid 84rem:grid-cols-2 items-center justify-around lg:gap-2 xl:flex">
 						<span className="flex items-center">
-							<Icon icon="lucide:percent-circle" className="h-5 w-5" />
-							<span className="flex flex-col ml-2 py-1 justify-around align-middle">
+							<Icon className="h-5 w-5" icon="lucide:percent-circle" />
+							<span className="ml-2 flex flex-col justify-around py-1 align-middle">
 								<p className="text-xs">LTV</p>
-								<p className="text-sm font-bold">{ltv}</p>
+								<p className="font-bold text-sm">{ltv}</p>
 							</span>
 						</span>
-						<div className="lg:hidden xl:block 84rem:hidden h-8 w-px bg-foreground/30 shrink-0" />
+						<div className="84rem:hidden h-8 w-px shrink-0 bg-foreground/30 lg:hidden xl:block" />
 						<span className="flex items-center">
-							<Icon icon="lucide:percent-circle" className="h-5 w-5" />
-							<span className="flex flex-col ml-2 py-1 justify-around align-middle">
+							<Icon className="h-5 w-5" icon="lucide:percent-circle" />
+							<span className="ml-2 flex flex-col justify-around py-1 align-middle">
 								<p className="text-xs">APR</p>
-								<p className="text-sm font-bold">{apr}</p>
+								<p className="font-bold text-sm">{apr}</p>
 							</span>
 						</span>
-						<div className="hidden xl:block 84rem:hidden h-8 w-px bg-foreground/30 shrink-0" />
+						<div className="84rem:hidden hidden h-8 w-px shrink-0 bg-foreground/30 xl:block" />
 						<span className="flex items-center">
-							<Icon icon="lucide:circle-dollar-sign" className="h-5 w-5" />
-							<span className="flex flex-col ml-2 py-1 justify-around align-middle">
+							<Icon className="h-5 w-5" icon="lucide:circle-dollar-sign" />
+							<span className="ml-2 flex flex-col justify-around py-1 align-middle">
 								<p className="text-xs">Principal</p>
-								<p className="text-sm font-bold">
+								<p className="font-bold text-sm">
 									{(principal / 1000).toFixed(0)}K
 								</p>
 							</span>
 						</span>
-						<div className="hidden xl:block 84rem:hidden h-8 w-px bg-foreground/30 shrink-0" />
+						<div className="84rem:hidden hidden h-8 w-px shrink-0 bg-foreground/30 xl:block" />
 						<span className="hidden lg:flex lg:items-center">
-							<Icon icon="lucide:circle-dollar-sign" className="h-5 w-5" />
-							<span className="flex flex-col ml-2 py-1 justify-around align-middle">
+							<Icon className="h-5 w-5" icon="lucide:circle-dollar-sign" />
+							<span className="ml-2 flex flex-col justify-around py-1 align-middle">
 								<p className="text-xs">Market Value</p>
-								<p className="text-sm font-bold">
+								<p className="font-bold text-sm">
 									{(principal / 1000).toFixed(0)}K
 								</p>
 							</span>
@@ -96,16 +95,16 @@ export function Horizontal({
 					<div className="flex flex-col">
 						<span
 							aria-label={`Maturity date: ${maturityDate}`}
-							className="text-foreground/50 text-sm flex items-center"
+							className="flex items-center text-foreground/50 text-sm"
 						>
-							<Icon icon="lucide:calendar" className="h-4 w-4 mr-1" />
+							<Icon className="mr-1 h-4 w-4" icon="lucide:calendar" />
 							Maturity
 						</span>
-						<span className="text-foreground/60 font-medium text-sm">
+						<span className="font-medium text-foreground/60 text-sm">
 							{maturityDate}
 						</span>
 					</div>
-					<Button className="w-full ml-6" variant="primary">
+					<Button className="ml-6 w-full" variant="primary">
 						View details
 					</Button>
 				</Card.Footer>
@@ -116,7 +115,7 @@ export function Horizontal({
 	// Wrap in Link if id is provided, otherwise return card directly
 	if (id) {
 		return (
-			<Link href={`/listings/${id}`} className="block">
+			<Link className="block" href={`/listings/${id}`}>
 				<ViewTransition name={`listing-card-${id}`}>
 					{CardContent}
 				</ViewTransition>
