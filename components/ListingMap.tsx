@@ -20,7 +20,7 @@ export type ViewportBounds = {
 };
 
 export type ListingMapProps<T extends LatLng> = {
-	items: ReadonlyArray<T>;
+	items: readonly T[];
 	renderPopup: (item: T) => React.ReactNode;
 	onViewportChange?: (bounds: ViewportBounds) => void;
 	initialCenter?: { lat: number; lng: number };
@@ -80,6 +80,7 @@ export function ListingMap<T extends LatLng>({
 	useEffect(() => {
 		if (!mapContainerRef.current) return;
 
+		// biome-ignore lint/style/noNonNullAssertion: Dont care
 		mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
 		const map = new mapboxgl.Map({
@@ -125,22 +126,22 @@ export function ListingMap<T extends LatLng>({
 		if (!(mapRef.current && isMapLoaded)) return;
 
 		// Clear existing markers
-		markersRef.current.forEach(({ marker, popup, root }) => {
+		for (const { marker, popup, root } of markersRef.current) {
 			marker.remove();
 			popup?.remove();
 			// Defer unmount to avoid race condition with React rendering
 			if (root) {
 				queueMicrotask(() => root.unmount());
 			}
-		});
+		}
 		markersRef.current = [];
 
 		// Add new markers
-		items.forEach((item) => {
+		for (const item of items) {
 			// Create popup using React
 			const popupContainer = document.createElement("div");
 			const root = createRoot(popupContainer);
-			root.render(<>{renderPopup(item)}</>);
+			root.render(renderPopup(item));
 
 			const popup = new mapboxgl.Popup({
 				offset: 25,
@@ -179,10 +180,10 @@ export function ListingMap<T extends LatLng>({
 			const marker = new mapboxgl.Marker(markerElement)
 				.setLngLat([item.lng, item.lat])
 				.setPopup(popup)
-				.addTo(mapRef.current!);
+				.addTo(mapRef.current as mapboxgl.Map);
 
 			markersRef.current.push({ marker, popup, root });
-		});
+		}
 
 		// Fit map to show all markers if there are any (only on initial load)
 		if (items.length > 0 && !hasSetInitialViewRef.current) {
@@ -190,11 +191,11 @@ export function ListingMap<T extends LatLng>({
 				preventFitBoundsRef.current = false; // Reset for next time
 			} else {
 				const bounds = new mapboxgl.LngLatBounds();
-				items.forEach((item) => {
+				for (const item of items) {
 					if (Number.isFinite(item.lat) && Number.isFinite(item.lng)) {
 						bounds.extend([item.lng, item.lat]);
 					}
-				});
+				}
 
 				if (!bounds.isEmpty()) {
 					mapRef.current.fitBounds(bounds, {

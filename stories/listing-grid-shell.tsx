@@ -50,9 +50,9 @@ export default function PageShell() {
 		})
 	);
 
-	const [filters, setFilters] = React.useState<FilterState>(DEFAULT_FILTERS);
+	const [_filters, setFilters] = React.useState<FilterState>(DEFAULT_FILTERS);
 
-	const handleFiltersChange = (newFilters: FilterState) => {
+	const _handleFiltersChange = (newFilters: FilterState) => {
 		setFilters(newFilters);
 	};
 

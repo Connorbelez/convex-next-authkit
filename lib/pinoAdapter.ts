@@ -3,7 +3,7 @@ let pino: any = null;
 try {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	pino = require("pino");
-} catch (e) {
+} catch (_e) {
 	pino = null;
 }
 
@@ -92,7 +92,7 @@ export function createPinoAdapter() {
 				timestamp: pino.stdTimeFunctions.isoTime,
 			});
 		}
-	} catch (err) {
+	} catch (_err) {
 		// On any error while configuring pino, fall back to console adapter
 		return createConsoleAdapter();
 	}

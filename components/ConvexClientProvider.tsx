@@ -11,6 +11,7 @@ import { logger } from "../lib/logger";
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
 	const [convex] = useState(
+		// biome-ignore lint/style/noNonNullAssertion: its fine
 		() => new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!)
 	);
 	return (

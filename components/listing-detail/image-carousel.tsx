@@ -6,19 +6,19 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
-interface ImageCarouselProps {
+type ImageCarouselProps = {
 	images: Array<{
 		url: string;
 		alt?: string;
 		order: number;
 	}>;
 	propertyTitle: string;
-}
+};
 
 export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 	const [selectedIndex, setSelectedIndex] = useState(0);
-	const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+	// const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
 	const scrollPrev = useCallback(() => {
 		if (emblaApi) emblaApi.scrollPrev();
@@ -44,7 +44,7 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 		if (!emblaApi) return;
 
 		onSelect();
-		setScrollSnaps(emblaApi.scrollSnapList());
+		// setScrollSnaps(emblaApi.scrollSnapList());
 		emblaApi.on("select", onSelect);
 		emblaApi.on("reInit", onSelect);
 
@@ -76,7 +76,7 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 	// Handle single image case
 	if (sortedImages.length === 0) {
 		return (
-			<div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
+			<div className="relative aspect-4/3 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
 				<div className="flex h-full items-center justify-center">
 					<Icon className="h-16 w-16 text-gray-400" icon="lucide:image-off" />
 					<p className="ml-3 text-gray-500">No images available</p>
@@ -97,8 +97,8 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 			<div className="overflow-hidden rounded-lg" ref={emblaRef}>
 				<div className="flex touch-pan-y">
 					{sortedImages.map((image, index) => (
-						<div className="relative min-w-0 flex-[0_0_100%]" key={index}>
-							<div className="relative aspect-[4/3] w-full">
+						<div className="relative min-w-0 flex-[0_0_100%]" key={image.url}>
+							<div className="relative aspect-4/3 w-full">
 								<Image
 									alt={image.alt || `${propertyTitle} - Image ${index + 1}`}
 									className="object-cover"
@@ -150,12 +150,12 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 						<button
 							aria-current={index === selectedIndex}
 							aria-label={`View image ${index + 1}`}
-							className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md transition-all ${
+							className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-md transition-all ${
 								index === selectedIndex
 									? "ring-2 ring-primary ring-offset-2"
 									: "opacity-60 hover:opacity-100"
 							}`}
-							key={index}
+							key={image.url}
 							onClick={() => scrollTo(index)}
 							type="button"
 						>

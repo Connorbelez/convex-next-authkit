@@ -14,19 +14,19 @@ import { DEFAULT_FILTERS } from "../types/listing-filters";
 
 type State = {
 	filters: FilterState;
-	items: ReadonlyArray<FilterableItem>;
+	items: readonly FilterableItem[];
 };
 
 type Actions = {
 	setFilters: (filters: FilterState) => void;
-	setItems: (items: ReadonlyArray<FilterableItem>) => void;
+	setItems: (items: readonly FilterableItem[]) => void;
 };
 
 export const useFiltersStore = create<State & Actions>((set) => ({
 	filters: DEFAULT_FILTERS,
-	items: [] as ReadonlyArray<FilterableItem>,
+	items: [] as readonly FilterableItem[],
 	setFilters: (filters: FilterState) => set({ filters }),
-	setItems: (items: ReadonlyArray<FilterableItem>) => set({ items }),
+	setItems: (items: readonly FilterableItem[]) => set({ items }),
 }));
 
 // const useFiltersStore = create(combine(

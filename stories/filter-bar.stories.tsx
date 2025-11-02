@@ -46,7 +46,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	render: () => {
 		const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
-		return <FilterBar filters={filters} onFiltersChange={setFilters} />;
+		return <FilterBar />;
 	},
 	parameters: {
 		docs: {
@@ -65,7 +65,7 @@ export const WithActiveFilters: Story = {
 			interestRateRange: [5, 10],
 			mortgageTypes: ["First"],
 		});
-		return <FilterBar filters={filters} onFiltersChange={setFilters} />;
+		return <FilterBar />;
 	},
 	parameters: {
 		docs: {
@@ -83,7 +83,7 @@ export const WithSearchQuery: Story = {
 			...DEFAULT_FILTERS,
 			searchQuery: "Toronto",
 		});
-		return <FilterBar filters={filters} onFiltersChange={setFilters} />;
+		return <FilterBar />;
 	},
 	parameters: {
 		docs: {
@@ -100,7 +100,7 @@ export const WithMaturityDate: Story = {
 			...DEFAULT_FILTERS,
 			maturityDate: new Date("2025-12-31"),
 		});
-		return <FilterBar filters={filters} onFiltersChange={setFilters} />;
+		return <FilterBar />;
 	},
 	parameters: {
 		docs: {
@@ -124,7 +124,7 @@ export const FullyFiltered: Story = {
 			searchQuery: "Downtown",
 			maturityDate: new Date("2026-06-30"),
 		});
-		return <FilterBar filters={filters} onFiltersChange={setFilters} />;
+		return <FilterBar />;
 	},
 	parameters: {
 		docs: {
@@ -142,7 +142,7 @@ export const Interactive: Story = {
 
 		return (
 			<div className="space-y-4">
-				<FilterBar filters={filters} onFiltersChange={setFilters} />
+				<FilterBar />
 				<div className="rounded-lg bg-muted p-4">
 					<h3 className="mb-2 font-semibold">Current Filters:</h3>
 					<pre className="text-xs">{JSON.stringify(filters, null, 2)}</pre>

@@ -18,7 +18,7 @@ import {
 	Video,
 	X,
 } from "lucide-react";
-import * as React from "react";
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import {
 	Breadcrumb,
@@ -335,7 +335,7 @@ export function SettingsDialog() {
 						{activeSection === "messages" && (
 							<div className="scrollbar-hide flex gap-2 overflow-x-auto pt-3">
 								{messageSubTabs.map((tab) => (
-									<button
+									<Button
 										className={cn(
 											"flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 font-medium text-xs transition-colors",
 											activeSubTab === tab.id
@@ -344,10 +344,11 @@ export function SettingsDialog() {
 										)}
 										key={tab.id}
 										onClick={() => setActiveSubTab(tab.id)}
+										type="button"
 									>
 										<tab.icon className="h-4 w-4" />
 										<span>{tab.name}</span>
-									</button>
+									</Button>
 								))}
 							</div>
 						)}
@@ -356,7 +357,7 @@ export function SettingsDialog() {
 					<div className="border-t bg-background">
 						<div className="scrollbar-hide flex gap-2 overflow-x-auto p-3">
 							{sections.map((section) => (
-								<button
+								<Button
 									className={cn(
 										"relative flex min-w-[80px] shrink-0 flex-col items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-6 py-3 font-medium text-xs transition-colors",
 										activeSection === section.id
@@ -370,6 +371,7 @@ export function SettingsDialog() {
 											setActiveSubTab("messages-list");
 										}
 									}}
+									type="button"
 								>
 									<div className="relative">
 										<section.icon className="h-5 w-5" />
@@ -386,7 +388,7 @@ export function SettingsDialog() {
 									<span className="text-center leading-tight">
 										{section.name}
 									</span>
-								</button>
+								</Button>
 							))}
 						</div>
 					</div>
@@ -415,7 +417,7 @@ export function SettingsDialog() {
 					>
 						<nav className="flex-1 overflow-y-auto p-2">
 							{sections.map((section) => (
-								<button
+								<Button
 									className={cn(
 										"relative mb-1 flex w-full items-center gap-3 rounded-md px-3 py-2 font-medium text-sm transition-colors",
 										activeSection === section.id
@@ -431,6 +433,7 @@ export function SettingsDialog() {
 										}
 									}}
 									title={sidebarCollapsed ? section.name : undefined}
+									type="button"
 								>
 									<div className="relative">
 										<section.icon className="h-5 w-5 shrink-0" />
@@ -457,7 +460,7 @@ export function SettingsDialog() {
 												{section.notificationCount}
 											</Badge>
 										)}
-								</button>
+								</Button>
 							))}
 						</nav>
 					</aside>
@@ -490,7 +493,7 @@ export function SettingsDialog() {
 							{activeSection === "messages" && (
 								<div className="mb-1 flex gap-2 border-b pb-3">
 									{messageSubTabs.map((tab) => (
-										<button
+										<Button
 											className={cn(
 												"flex items-center gap-2 rounded-md px-3 py-1.5 font-medium text-sm transition-colors",
 												activeSubTab === tab.id
@@ -502,7 +505,7 @@ export function SettingsDialog() {
 										>
 											<tab.icon className="h-4 w-4" />
 											<span>{tab.name}</span>
-										</button>
+										</Button>
 									))}
 								</div>
 							)}

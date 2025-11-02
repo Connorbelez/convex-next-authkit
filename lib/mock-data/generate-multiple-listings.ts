@@ -16,7 +16,7 @@ export function generateMultipleListings(
 ): MockListing[] {
 	const listings: MockListing[] = [];
 
-	for (let i = 1; i <= count; i++) {
+	for (let i = 1; i <= count; i += 1) {
 		const id = `${prefix}_${i}`;
 		listings.push(generateListing(id));
 	}

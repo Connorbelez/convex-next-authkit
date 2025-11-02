@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
  * Listing detail page error boundary
  * Catches errors while loading individual listing data
  */
-export default function Error({
+export default function ErrorBoundary({
 	error,
 	reset,
 }: {

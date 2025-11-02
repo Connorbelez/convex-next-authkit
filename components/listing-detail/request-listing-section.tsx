@@ -50,7 +50,9 @@ const MOCK_LAWYERS = [
 	{ id: "8", name: "James Patterson", lsoNumber: "89012" },
 ];
 
-interface RequestListingSectionProps {
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+type RequestListingSectionProps = {
 	listing: {
 		title: string;
 		address: {
@@ -63,7 +65,7 @@ interface RequestListingSectionProps {
 			currentValue: number;
 		};
 	};
-}
+};
 
 export function RequestListingSection({ listing }: RequestListingSectionProps) {
 	const { user } = useAuth();
@@ -84,9 +86,9 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 	const userEmail = user?.email ?? "";
 
 	// Find selected lawyer data
-	const selectedLawyerData = MOCK_LAWYERS.find(
-		(lawyer) => lawyer.name === selectedLawyer
-	);
+	// const selectedLawyerData = MOCK_LAWYERS.find(
+	// 	(lawyer) => lawyer.name === selectedLawyer
+	// );
 
 	// Form validation
 	const isFormValid =
@@ -94,7 +96,7 @@ export function RequestListingSection({ listing }: RequestListingSectionProps) {
 		lawyerLSONumber.trim() !== "" &&
 		lawyerEmail.trim() !== "" &&
 		disclosureAccepted &&
-		/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lawyerEmail); // Basic email validation
+		emailRegex.test(lawyerEmail); // Basic email validation
 
 	// Handle form submission
 	const handleSubmit = () => {

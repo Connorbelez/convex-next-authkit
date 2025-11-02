@@ -30,8 +30,8 @@
 
 import { Card, CardContent } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
+import { useEffect, useRef, useState } from "react";
 import {
 	Select,
 	SelectContent,
@@ -41,12 +41,13 @@ import {
 } from "@/components/ui/select";
 import type { MockDocument } from "@/lib/mock-data/listings";
 
-interface DocumentViewerProps {
+type DocumentViewerProps = {
 	documents: MockDocument[];
-}
+};
 
 // Declare Adobe DC View types
 declare global {
+	// biome-ignore lint/style/useConsistentTypeDefinitions: DONT CARE
 	interface Window {
 		AdobeDC?: {
 			View: new (config: {
@@ -116,7 +117,7 @@ export function DocumentViewer({ documents }: DocumentViewerProps) {
 
 	// Initialize viewer when document changes or SDK becomes ready
 	useEffect(() => {
-		if (!((sdkReady && selectedDocument ) && apiKey)) {
+		if (!(sdkReady && selectedDocument && apiKey)) {
 			return;
 		}
 
@@ -235,7 +236,8 @@ export function DocumentViewer({ documents }: DocumentViewerProps) {
 		return `${mb.toFixed(2)} MB`;
 	};
 
-	const formatDate = (isoDate: string) => new Date(isoDate).toLocaleDateString("en-US", {
+	const formatDate = (isoDate: string) =>
+		new Date(isoDate).toLocaleDateString("en-US", {
 			year: "numeric",
 			month: "long",
 			day: "numeric",
@@ -259,12 +261,12 @@ export function DocumentViewer({ documents }: DocumentViewerProps) {
 	return (
 		<>
 			<Script
-				src="https://acrobatservices.adobe.com/view-sdk/viewer.js"
-				strategy="lazyOnload"
 				onError={() => {
 					setError("Failed to load Adobe PDF Embed API");
 					setIsLoading(false);
 				}}
+				src="https://acrobatservices.adobe.com/view-sdk/viewer.js"
+				strategy="lazyOnload"
 			/>
 
 			<div className="space-y-4">
@@ -284,12 +286,15 @@ export function DocumentViewer({ documents }: DocumentViewerProps) {
 						<div className="space-y-4">
 							<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 								<div className="flex-1">
-									<label className="mb-2 block font-medium text-sm">
+									<label
+										className="mb-2 block font-medium text-sm"
+										htmlFor="document-selector"
+									>
 										Select Document
 									</label>
 									<Select
-										value={selectedDocId}
 										onValueChange={(value) => setSelectedDocId(value)}
+										value={selectedDocId}
 									>
 										<SelectTrigger className="max-w-md">
 											<SelectValue placeholder="Choose a document" />
@@ -361,8 +366,8 @@ export function DocumentViewer({ documents }: DocumentViewerProps) {
 								</div>
 							)}
 							<div
-								ref={viewerRef}
 								className="min-h-[600px] w-full"
+								ref={viewerRef}
 								style={{ height: "700px" }}
 							/>
 						</div>

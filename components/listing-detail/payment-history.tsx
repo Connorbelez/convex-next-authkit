@@ -14,7 +14,7 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 
-interface Payment {
+type Payment = {
 	_id: string;
 	_creationTime: number;
 	listingId: string;
@@ -22,12 +22,12 @@ interface Payment {
 	date: string;
 	status: "paid" | "pending" | "late";
 	type: "principal" | "interest" | "escrow";
-}
+};
 
-interface PaymentHistoryProps {
+type PaymentHistoryProps = {
 	payments: Payment[];
 	itemsPerPage?: number;
-}
+};
 
 const statusConfig: Record<
 	Payment["status"],
@@ -103,7 +103,7 @@ export function PaymentHistory({
 
 		if (totalPages <= 7) {
 			// Show all pages if 7 or fewer
-			for (let i = 1; i <= totalPages; i++) {
+			for (let i = 1; i <= totalPages; i += 1) {
 				pages.push(i);
 			}
 		} else {
@@ -118,7 +118,7 @@ export function PaymentHistory({
 			const start = Math.max(2, currentPage - 1);
 			const end = Math.min(totalPages - 1, currentPage + 1);
 
-			for (let i = start; i <= end; i++) {
+			for (let i = start; i <= end; i += 1) {
 				pages.push(i);
 			}
 
@@ -249,9 +249,9 @@ export function PaymentHistory({
 								/>
 							</PaginationItem>
 
-							{getPageNumbers().map((page, idx) => (
-								<PaginationItem key={`${page}-${idx}`}>
-									{page === "ellipsis" ? (
+							{getPageNumbers().map((page) => (
+								<PaginationItem key={page}>
+									{page === "ellipsis" || typeof page !== "number" ? (
 										<PaginationEllipsis />
 									) : (
 										<PaginationLink

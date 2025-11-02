@@ -11,12 +11,12 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-interface DatePickerProps {
+type DatePickerProps = {
 	date?: Date;
 	onDateChange?: (date?: Date) => void;
 	placeholder?: string;
 	className?: string;
-}
+};
 
 export function DatePicker({
 	date,

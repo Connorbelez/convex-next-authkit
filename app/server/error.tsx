@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
  * Server page error boundary
  * Catches errors in the server example page
  */
-export default function Error({
+export default function ServerError({
 	error,
 	reset,
 }: {

@@ -11,7 +11,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-interface RangeSliderWithHistogramProps {
+type RangeSliderWithHistogramProps = {
 	min?: number;
 	max?: number;
 	step?: number;
@@ -31,7 +31,7 @@ interface RangeSliderWithHistogramProps {
 	targetBarCount?: number;
 	showCard?: boolean;
 	showTitle?: boolean;
-}
+};
 
 const RangeSliderWithHistogram: React.FC<RangeSliderWithHistogramProps> = ({
 	min = 50000,

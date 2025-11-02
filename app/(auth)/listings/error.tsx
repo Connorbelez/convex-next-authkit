@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
  * Listings page error boundary
  * Catches errors while loading the listings grid
  */
-export default function Error({
+export default function ErrorBoundary({
 	error,
 	reset,
 }: {

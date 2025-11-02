@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
 
-export interface ListingProps {
+export type ListingProps = {
 	id: string;
 	title: string;
 	location: string;
@@ -20,7 +21,7 @@ export interface ListingProps {
 	isSuperhost?: boolean;
 	isNew?: boolean;
 	category?: string;
-}
+};
 
 export function AirbnbListingCard({
 	title,
@@ -92,7 +93,7 @@ export function AirbnbListingCard({
 					{images.map((image, index) => (
 						<div
 							className="relative h-full min-w-full flex-shrink-0"
-							key={index}
+							key={image}
 						>
 							<Image
 								alt={`${title} - Image ${index + 1}`}
@@ -107,12 +108,13 @@ export function AirbnbListingCard({
 				{images.length > 1 && (
 					<>
 						{/* Navigation buttons */}
-						<button
+						<Button
 							aria-label="Previous image"
 							className="-translate-y-1/2 absolute top-1/2 left-2 rounded-full bg-white p-1 opacity-0 shadow-md transition-opacity group-hover:opacity-100"
 							onClick={prevImage}
 						>
 							<svg
+								aria-label="Previous image"
 								className="text-black"
 								fill="none"
 								height="16"
@@ -120,6 +122,7 @@ export function AirbnbListingCard({
 								width="16"
 								xmlns="http://www.w3.org/2000/svg"
 							>
+								<title>Previous image</title>
 								<path
 									d="M10 12L6 8L10 4"
 									stroke="currentColor"
@@ -128,13 +131,14 @@ export function AirbnbListingCard({
 									strokeWidth="2"
 								/>
 							</svg>
-						</button>
-						<button
+						</Button>
+						<Button
 							aria-label="Next image"
 							className="-translate-y-1/2 absolute top-1/2 right-2 rounded-full bg-white p-1 opacity-0 shadow-md transition-opacity group-hover:opacity-100"
 							onClick={nextImage}
 						>
 							<svg
+								aria-label="Next image"
 								className="text-black"
 								fill="none"
 								height="16"
@@ -142,6 +146,7 @@ export function AirbnbListingCard({
 								width="16"
 								xmlns="http://www.w3.org/2000/svg"
 							>
+								<title>Next image</title>
 								<path
 									d="M6 12L10 8L6 4"
 									stroke="currentColor"
@@ -150,11 +155,11 @@ export function AirbnbListingCard({
 									strokeWidth="2"
 								/>
 							</svg>
-						</button>
+						</Button>
 
 						{/* Image position indicators */}
 						<div className="-translate-x-1/2 absolute bottom-2 left-1/2 flex gap-1">
-							{images.map((_, index) => (
+							{images.map((image, index) => (
 								<div
 									className={cn(
 										"h-1.5 rounded-full transition-all",
@@ -162,7 +167,7 @@ export function AirbnbListingCard({
 											? "w-6 bg-white"
 											: "w-1.5 bg-white/60"
 									)}
-									key={index}
+									key={image}
 								/>
 							))}
 						</div>
@@ -170,7 +175,7 @@ export function AirbnbListingCard({
 				)}
 
 				{/* Favorite button */}
-				<button
+				<Button
 					aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
 					className="absolute top-3 right-3 text-white transition-transform hover:scale-110"
 					onClick={() => setIsFavorite(!isFavorite)}
@@ -181,7 +186,7 @@ export function AirbnbListingCard({
 						stroke={isFavorite ? "#FF385C" : "white"}
 						strokeWidth={2}
 					/>
-				</button>
+				</Button>
 
 				{/* Badges for superhost/new listing */}
 				{(isSuperhost || isNew) && (

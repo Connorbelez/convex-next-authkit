@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 import type { ViewportBounds } from "@/components/ListingMap";
 
@@ -8,9 +8,9 @@ export type WithLatLng = {
 };
 
 export function useViewportFilteredItems<T extends WithLatLng>(
-	items: ReadonlyArray<T>,
+	items: readonly T[],
 	bounds: ViewportBounds | undefined
-): ReadonlyArray<T> {
+): readonly T[] {
 	return React.useMemo(() => {
 		if (!bounds) {
 			return items;

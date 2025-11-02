@@ -2,7 +2,7 @@ import { Card, CardContent } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { format, parseISO } from "date-fns";
 
-interface AppraisalDataProps {
+type AppraisalDataProps = {
 	appraisal: {
 		value: number;
 		date: string;
@@ -10,7 +10,7 @@ interface AppraisalDataProps {
 		method: string;
 	};
 	currentValue: number;
-}
+};
 
 function formatCurrency(amount: number): string {
 	return new Intl.NumberFormat("en-US", {

@@ -6,7 +6,7 @@ export type MockOrganization = {
 	isMock?: true;
 };
 
-export const MOCK_ORGS: Array<MockOrganization> = [
+export const MOCK_ORGS: MockOrganization[] = [
 	{
 		id: "org_verdant",
 		name: "Verdant Capital",

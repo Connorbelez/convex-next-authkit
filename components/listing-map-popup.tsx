@@ -2,16 +2,17 @@
 
 import { Button } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import Image from "next/image";
 import Link from "next/link";
 
-interface ListingMapPopupProps {
+type ListingMapPopupProps = {
 	id: string;
 	title: string;
 	address: string;
 	principal: number;
 	apr: number;
 	imageSrc?: string;
-}
+};
 
 /**
  * Compact popup component for map markers
@@ -30,9 +31,10 @@ export function ListingMapPopup({
 			{/* Image thumbnail */}
 			{imageSrc && (
 				<div className="relative h-32 w-full">
-					<img
+					<Image
 						alt={title}
 						className="h-full w-full object-cover"
+						fill
 						src={imageSrc}
 					/>
 				</div>

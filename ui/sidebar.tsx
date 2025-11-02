@@ -3,7 +3,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
-import * as React from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -30,6 +30,26 @@ const SIDEBAR_WIDTH = "16rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
+
+// Secure cookie utility to avoid direct document.cookie assignment
+function setCookie(
+	name: string,
+	value: string,
+	options: { path?: string; maxAge?: number } = {}
+) {
+	const encodedValue = encodeURIComponent(value);
+	let cookie = `${name}=${encodedValue}`;
+
+	if (options.path) {
+		cookie += `; path=${options.path}`;
+	}
+	if (options.maxAge) {
+		cookie += `; max-age=${options.maxAge}`;
+	}
+
+	// biome-ignore lint: Direct assigning to document.cookie is necessary for sidebar state persistence
+	document.cookie = cookie;
+}
 
 type SidebarContextProps = {
 	state: "expanded" | "collapsed";
@@ -89,7 +109,10 @@ const SidebarProvider = React.forwardRef<
 				}
 
 				// This sets the cookie to keep the sidebar state.
-				document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+				setCookie(SIDEBAR_COOKIE_NAME, String(openState), {
+					path: "/",
+					maxAge: SIDEBAR_COOKIE_MAX_AGE,
+				});
 			},
 			[setOpenProp, open]
 		);
@@ -98,7 +121,7 @@ const SidebarProvider = React.forwardRef<
 		const toggleSidebar = React.useCallback(
 			() =>
 				isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open),
-			[isMobile, setOpen, setOpenMobile]
+			[isMobile, setOpen]
 		);
 
 		// Adds a keyboard shortcut to toggle the sidebar.
@@ -131,7 +154,7 @@ const SidebarProvider = React.forwardRef<
 				setOpenMobile,
 				toggleSidebar,
 			}),
-			[state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+			[state, open, setOpen, isMobile, openMobile, toggleSidebar]
 		);
 
 		return (

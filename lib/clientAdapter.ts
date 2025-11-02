@@ -22,14 +22,17 @@ export function createClientAdapter() {
 				navigator.sendBeacon("/api/logs", body);
 				return;
 			}
-		} catch (e) {
+		} catch (_e) {
 			// ignore
 		}
 		fetch("/api/logs", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
 			body,
-		}).catch(() => {});
+		}).catch(() => {
+			// ignore
+			console.error("Failed to send logs to server");
+		});
 	}
 
 	function scheduleFlush() {
@@ -91,7 +94,7 @@ export function createClientAdapter() {
 			if (queue.length >= MAX_BATCH) flush();
 			else scheduleFlush();
 		},
-		child: (ctx: Record<string, any>) => adapter,
+		child: (_ctx: Record<string, any>) => adapter,
 	};
 
 	return adapter;

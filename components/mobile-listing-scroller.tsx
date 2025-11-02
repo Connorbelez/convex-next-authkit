@@ -2,15 +2,15 @@
 
 import type * as React from "react";
 
-export interface MobileListingSection<T> {
+export type MobileListingSection<T> = {
 	title: string;
 	items: readonly T[];
-}
+};
 
-interface MobileListingScrollerProps<T> {
+type MobileListingScrollerProps<T> = {
 	sections: MobileListingSection<T>[];
 	renderCard: (item: T) => React.ReactNode;
-}
+};
 
 export function MobileListingScroller<T>({
 	sections,
@@ -23,12 +23,12 @@ export function MobileListingScroller<T>({
 
 	return (
 		<div className="flex flex-col gap-8 pb-4">
-			{sections.map((section, sectionIndex) => {
+			{sections.map((section) => {
 				// Skip if no items in this section
 				if (!section.items || section.items.length === 0) return null;
 
 				return (
-					<section className="mt-8 flex flex-col gap-3" key={sectionIndex}>
+					<section className="mt-8 flex flex-col gap-3" key={section.title}>
 						{/* Section Title */}
 						<h2 className="pl-6 font-semibold text-lg">{section.title}</h2>
 
@@ -40,12 +40,12 @@ export function MobileListingScroller<T>({
 								msOverflowStyle: "none",
 							}}
 						>
-							{section.items.map((item, itemIndex) => (
+							{section.items.map((item) => (
 								<div
 									className="w-[280px] flex-shrink-0 snap-start"
-									key={itemIndex}
+									key={JSON.stringify(item)}
 								>
-									{renderCard(item)}
+									{renderCard(item as T)}
 								</div>
 							))}
 						</div>

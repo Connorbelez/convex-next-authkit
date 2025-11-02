@@ -17,7 +17,7 @@ import {
 import { formatPercent, formatUsdAbbrev, formatUsdFull } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
-export interface InvestmentListingProps {
+export type InvestmentListingProps = {
 	id: string;
 	title: string;
 	city: string;
@@ -29,7 +29,7 @@ export interface InvestmentListingProps {
 	imageAlt?: string;
 	badges?: Array<"New" | "Verified" | string>;
 	onClick?: () => void;
-}
+};
 
 type MetricProps = {
 	icon: React.ReactNode;
@@ -122,10 +122,10 @@ export function InvestmentListingRow(props: InvestmentListingProps) {
 				</div>
 				{badges && badges.length > 0 && (
 					<div className="mt-1 flex flex-wrap gap-1.5">
-						{badges.map((b, i) => (
+						{badges.map((b) => (
 							<span
 								className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground"
-								key={i}
+								key={b}
 							>
 								{b}
 							</span>
