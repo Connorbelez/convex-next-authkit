@@ -34,11 +34,15 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 			<div className="space-y-4">
 				<div className="flex items-center gap-2">
 					<Icon icon="lucide:file-x" className="h-6 w-6 text-gray-400" />
-					<h2 className="text-2xl font-bold text-gray-500">No Appraisal Data Available</h2>
+					<h2 className="text-2xl font-bold text-gray-500">
+						No Appraisal Data Available
+					</h2>
 				</div>
 				<Card.Root>
 					<CardContent className="p-8 text-center">
-						<p className="text-gray-500">No appraisal information available for this property.</p>
+						<p className="text-gray-500">
+							No appraisal information available for this property.
+						</p>
 						<div className="mt-4 text-sm text-gray-400">
 							Current Value: {formatCurrency(currentValue)}
 						</div>
@@ -69,7 +73,9 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 								<Icon icon="lucide:clipboard-check" className="h-5 w-5" />
 							</div>
 							<div className="flex-1">
-								<p className="text-sm text-gray-600 dark:text-gray-400">Appraised Value</p>
+								<p className="text-sm text-gray-600 dark:text-gray-400">
+									Appraised Value
+								</p>
 								<p className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">
 									{formatCurrency(appraisal.value)}
 								</p>
@@ -89,12 +95,18 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 								className={`rounded-lg p-2 ${isPositiveChange ? "bg-green-100 text-green-600 dark:bg-green-900/30" : "bg-red-100 text-red-600 dark:bg-red-900/30"}`}
 							>
 								<Icon
-									icon={isPositiveChange ? "lucide:trending-up" : "lucide:trending-down"}
+									icon={
+										isPositiveChange
+											? "lucide:trending-up"
+											: "lucide:trending-down"
+									}
 									className="h-5 w-5"
 								/>
 							</div>
 							<div className="flex-1">
-								<p className="text-sm text-gray-600 dark:text-gray-400">Value Change</p>
+								<p className="text-sm text-gray-600 dark:text-gray-400">
+									Value Change
+								</p>
 								<p
 									className={`mt-1 text-3xl font-bold ${isPositiveChange ? "text-green-600" : "text-red-600"}`}
 								>
@@ -103,7 +115,9 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 								</p>
 								<p className="mt-2 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-500">
 									<Icon
-										icon={isPositiveChange ? "lucide:arrow-up" : "lucide:arrow-down"}
+										icon={
+											isPositiveChange ? "lucide:arrow-up" : "lucide:arrow-down"
+										}
 										className="h-3 w-3"
 									/>
 									{isPositiveChange ? "+" : ""}
@@ -119,17 +133,29 @@ export function AppraisalData({ appraisal, currentValue }: AppraisalDataProps) {
 					<CardContent className="p-4">
 						<div className="grid gap-4 sm:grid-cols-2">
 							<div className="flex items-start gap-3">
-								<Icon icon="lucide:user" className="mt-0.5 h-5 w-5 text-gray-500" />
+								<Icon
+									icon="lucide:user"
+									className="mt-0.5 h-5 w-5 text-gray-500"
+								/>
 								<div>
-									<p className="text-sm font-medium text-gray-600 dark:text-gray-400">Appraiser</p>
-									<p className="mt-1 text-gray-900 dark:text-white">{appraisal.appraiser}</p>
+									<p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+										Appraiser
+									</p>
+									<p className="mt-1 text-gray-900 dark:text-white">
+										{appraisal.appraiser}
+									</p>
 								</div>
 							</div>
 
 							<div className="flex items-start gap-3">
-								<Icon icon="lucide:clipboard-list" className="mt-0.5 h-5 w-5 text-gray-500" />
+								<Icon
+									icon="lucide:clipboard-list"
+									className="mt-0.5 h-5 w-5 text-gray-500"
+								/>
 								<div>
-									<p className="text-sm font-medium text-gray-600 dark:text-gray-400">Method</p>
+									<p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+										Method
+									</p>
 									<p className="mt-1 text-gray-900 dark:text-white">
 										{methodLabels[appraisal.method] || appraisal.method}
 									</p>

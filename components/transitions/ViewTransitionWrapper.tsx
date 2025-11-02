@@ -7,55 +7,55 @@ import { ReactNode } from "react";
 export type TransitionType = "slide" | "cross-fade" | "none";
 
 export interface ViewTransitionWrapperProps {
-  children: ReactNode;
-  type?: TransitionType;
-  sharedElements?: string[];
-  className?: string;
-  name?: string;
+	children: ReactNode;
+	type?: TransitionType;
+	sharedElements?: string[];
+	className?: string;
+	name?: string;
 }
 
 /**
  * ViewTransitionWrapper - Central wrapper for React 19 View Transitions
- * 
+ *
  * Provides automatic route detection and transition type selection
  * Integrates with Next.js App Router using startTransition
  * Supports shared element transitions for smooth animations
  */
 export function AppViewTransition({
-  children,
-  type = "slide",
-  sharedElements = [],
-  className = "",
-  name,
+	children,
+	type = "slide",
+	sharedElements = [],
+	className = "",
+	name,
 }: ViewTransitionWrapperProps) {
-  const pathname = usePathname();
-  
-  // Determine transition type based on route hierarchy
-  const getTransitionType = (): TransitionType => {
-    // Main navigation routes use slide transitions
-    if (pathname === "/" || pathname.startsWith("/listings")) {
-      return "slide";
-    }
-    // Content changes within same page use cross-fade
-    return "cross-fade";
-  };
+	const pathname = usePathname();
 
-  const transitionType = type || getTransitionType();
+	// Determine transition type based on route hierarchy
+	const getTransitionType = (): TransitionType => {
+		// Main navigation routes use slide transitions
+		if (pathname === "/" || pathname.startsWith("/listings")) {
+			return "slide";
+		}
+		// Content changes within same page use cross-fade
+		return "cross-fade";
+	};
 
-  // Handle navigation with startTransition for smooth transitions
-  const handleNavigation = (callback: () => void) => {
-    startTransition(callback);
-  };
+	const transitionType = type || getTransitionType();
 
-  return (
-    <div
-      className={`${className} transition-${transitionType}`}
-      data-shared-elements={sharedElements.join(",")}
-      data-vt-name={name ?? ""}
-    >
-      {children}
-    </div>
-  );
+	// Handle navigation with startTransition for smooth transitions
+	const handleNavigation = (callback: () => void) => {
+		startTransition(callback);
+	};
+
+	return (
+		<div
+			className={`${className} transition-${transitionType}`}
+			data-shared-elements={sharedElements.join(",")}
+			data-vt-name={name ?? ""}
+		>
+			{children}
+		</div>
+	);
 }
 
 /**
@@ -63,11 +63,11 @@ export function AppViewTransition({
  * Wraps navigation callbacks with startTransition
  */
 export function useNavigationTransition() {
-  const handleNavigation = (callback: () => void) => {
-    startTransition(callback);
-  };
+	const handleNavigation = (callback: () => void) => {
+		startTransition(callback);
+	};
 
-  return { handleNavigation };
+	return { handleNavigation };
 }
 
 // Backwards compatibility alias

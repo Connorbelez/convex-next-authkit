@@ -42,10 +42,7 @@ export function ListingsGridSkeleton() {
 					<div className="flex-1">
 						<div className="grid grid-cols-1 84rem:grid-cols-2">
 							{[1, 2, 3, 4, 5, 6].map((i) => (
-								<div
-									key={i}
-									className="border rounded-lg p-4 space-y-3"
-								>
+								<div key={i} className="border rounded-lg p-4 space-y-3">
 									<div className="flex gap-4">
 										{/* Image skeleton */}
 										<Skeleton className="h-32 w-48 flex-shrink-0 rounded-md" />

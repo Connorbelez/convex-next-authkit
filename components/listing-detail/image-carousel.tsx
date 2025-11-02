@@ -88,7 +88,11 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 	const showNavigation = sortedImages.length > 1;
 
 	return (
-		<div className="relative w-full" role="region" aria-label="Property image carousel">
+		<div
+			className="relative w-full"
+			role="region"
+			aria-label="Property image carousel"
+		>
 			{/* Main carousel */}
 			<div className="overflow-hidden rounded-lg" ref={emblaRef}>
 				<div className="flex touch-pan-y">
@@ -168,7 +172,12 @@ export function ImageCarousel({ images, propertyTitle }: ImageCarouselProps) {
 			)}
 
 			{/* Screen reader announcements */}
-			<div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+			<div
+				className="sr-only"
+				role="status"
+				aria-live="polite"
+				aria-atomic="true"
+			>
 				Viewing image {selectedIndex + 1} of {sortedImages.length}
 			</div>
 		</div>

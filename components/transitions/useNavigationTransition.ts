@@ -9,34 +9,36 @@ import { startTransition } from "react";
  * Detects navigation direction for appropriate slide transitions
  */
 export function useNavigationTransition() {
-  const router = useRouter();
-  const pathname = usePathname();
+	const router = useRouter();
+	const pathname = usePathname();
 
-  const handleNavigation = (href: string) => {
-    startTransition(() => {
-      router.push(href);
-    });
-  };
+	const handleNavigation = (href: string) => {
+		startTransition(() => {
+			router.push(href);
+		});
+	};
 
-  const getNavigationDirection = (targetPath: string): "left" | "right" | "none" => {
-    const currentPath = pathname;
-    
-    // Simple direction detection based on path hierarchy
-    if (currentPath === "/" && targetPath.startsWith("/listings")) {
-      return "right";
-    }
-    if (targetPath === "/listings" && currentPath.startsWith("/listings/")) {
-      return "left";
-    }
-    if (targetPath.startsWith("/listings/") && currentPath === "/") {
-      return "right";
-    }
-    
-    return "none";
-  };
+	const getNavigationDirection = (
+		targetPath: string,
+	): "left" | "right" | "none" => {
+		const currentPath = pathname;
 
-  return {
-    handleNavigation,
-    getNavigationDirection,
-  };
+		// Simple direction detection based on path hierarchy
+		if (currentPath === "/" && targetPath.startsWith("/listings")) {
+			return "right";
+		}
+		if (targetPath === "/listings" && currentPath.startsWith("/listings/")) {
+			return "left";
+		}
+		if (targetPath.startsWith("/listings/") && currentPath === "/") {
+			return "right";
+		}
+
+		return "none";
+	};
+
+	return {
+		handleNavigation,
+		getNavigationDirection,
+	};
 }

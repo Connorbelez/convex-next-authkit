@@ -50,7 +50,10 @@ const statusConfig: Record<
 	},
 };
 
-const typeConfig: Record<Payment["type"], { label: string; icon: string; color: string }> = {
+const typeConfig: Record<
+	Payment["type"],
+	{ label: string; icon: string; color: string }
+> = {
 	principal: {
 		label: "Principal",
 		icon: "lucide:home",
@@ -77,7 +80,10 @@ function formatCurrency(amount: number): string {
 	}).format(amount);
 }
 
-export function PaymentHistory({ payments, itemsPerPage = 5 }: PaymentHistoryProps) {
+export function PaymentHistory({
+	payments,
+	itemsPerPage = 5,
+}: PaymentHistoryProps) {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	// Calculate pagination
@@ -136,8 +142,13 @@ export function PaymentHistory({ payments, itemsPerPage = 5 }: PaymentHistoryPro
 				</div>
 				<Card.Root>
 					<CardContent className="py-12 text-center">
-						<Icon icon="lucide:inbox" className="mx-auto h-12 w-12 text-gray-400" />
-						<p className="mt-3 font-medium text-gray-700 dark:text-gray-300">No Payment History</p>
+						<Icon
+							icon="lucide:inbox"
+							className="mx-auto h-12 w-12 text-gray-400"
+						/>
+						<p className="mt-3 font-medium text-gray-700 dark:text-gray-300">
+							No Payment History
+						</p>
 						<p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
 							Payments will appear here after the first payment is made.
 						</p>
@@ -152,9 +163,7 @@ export function PaymentHistory({ payments, itemsPerPage = 5 }: PaymentHistoryPro
 			<div className="flex items-center gap-2">
 				<Icon icon="lucide:receipt" className="h-6 w-6 text-primary" />
 				<h2 className="text-2xl font-bold">Payment History</h2>
-				<Chip>
-					{payments.length} payments
-				</Chip>
+				<Chip>{payments.length} payments</Chip>
 			</div>
 
 			<div className="space-y-3">
@@ -190,12 +199,13 @@ export function PaymentHistory({ payments, itemsPerPage = 5 }: PaymentHistoryPro
 												<p className="font-semibold text-gray-900 dark:text-white">
 													{format(paymentDate, "MMMM d, yyyy")}
 												</p>
-												<Chip color={statusInfo.color}>
-													{statusInfo.label}
-												</Chip>
+												<Chip color={statusInfo.color}>{statusInfo.label}</Chip>
 											</div>
 											<div className="mt-1 flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-												<Icon icon={typeInfo.icon} className={`h-4 w-4 ${typeInfo.color}`} />
+												<Icon
+													icon={typeInfo.icon}
+													className={`h-4 w-4 ${typeInfo.color}`}
+												/>
 												<span>{typeInfo.label}</span>
 											</div>
 										</div>
@@ -232,7 +242,9 @@ export function PaymentHistory({ payments, itemsPerPage = 5 }: PaymentHistoryPro
 										}
 									}}
 									className={
-										currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
+										currentPage === 1
+											? "pointer-events-none opacity-50"
+											: "cursor-pointer"
 									}
 								/>
 							</PaginationItem>

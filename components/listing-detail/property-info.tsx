@@ -35,7 +35,12 @@ const statusConfig: Record<
 	},
 };
 
-export function PropertyInfo({ title, address, investorBrief, status }: PropertyInfoProps) {
+export function PropertyInfo({
+	title,
+	address,
+	investorBrief,
+	status,
+}: PropertyInfoProps) {
 	const statusInfo = statusConfig[status] || statusConfig.active;
 
 	return (
@@ -50,14 +55,21 @@ export function PropertyInfo({ title, address, investorBrief, status }: Property
 						color={statusInfo.color}
 						className="flex-shrink-0 flex items-center gap-1"
 					>
-						<Icon icon={statusInfo.icon} className="h-4 w-4" aria-hidden="true" />
+						<Icon
+							icon={statusInfo.icon}
+							className="h-4 w-4"
+							aria-hidden="true"
+						/>
 						<span>{statusInfo.label}</span>
 					</Chip>
 				</div>
 
 				{/* Address */}
 				<div className="flex items-start gap-2 text-lg text-gray-600 dark:text-gray-400">
-					<Icon icon="lucide:map-pin" className="mt-0.5 h-5 w-5 flex-shrink-0" />
+					<Icon
+						icon="lucide:map-pin"
+						className="mt-0.5 h-5 w-5 flex-shrink-0"
+					/>
 					<address className="not-italic">
 						{address.street}, {address.city}, {address.state} {address.zip}
 					</address>
@@ -70,11 +82,16 @@ export function PropertyInfo({ title, address, investorBrief, status }: Property
 					<CardContent>
 						<div className="space-y-3">
 							<div className="flex items-center gap-2">
-								<Icon icon="lucide:file-text" className="h-5 w-5 text-primary" />
+								<Icon
+									icon="lucide:file-text"
+									className="h-5 w-5 text-primary"
+								/>
 								<h2 className="text-lg font-semibold">Investor Brief</h2>
 							</div>
 							<div className="prose prose-sm max-w-none dark:prose-invert">
-								<p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">{investorBrief}</p>
+								<p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
+									{investorBrief}
+								</p>
 							</div>
 						</div>
 					</CardContent>

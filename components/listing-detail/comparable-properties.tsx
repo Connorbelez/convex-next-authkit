@@ -48,7 +48,9 @@ function formatDistance(miles: number): string {
 	return `${miles.toFixed(1)} mi`;
 }
 
-export function ComparableProperties({ comparables }: ComparablePropertiesProps) {
+export function ComparableProperties({
+	comparables,
+}: ComparablePropertiesProps) {
 	if (comparables.length === 0) {
 		return null; // Hide section when no comparables
 	}
@@ -58,9 +60,7 @@ export function ComparableProperties({ comparables }: ComparablePropertiesProps)
 			<div className="flex items-center gap-2">
 				<Icon icon="lucide:building-2" className="h-6 w-6 text-primary" />
 				<h2 className="text-2xl font-bold">Comparable Properties</h2>
-				<Chip>
-					{comparables.length} nearby
-				</Chip>
+				<Chip>{comparables.length} nearby</Chip>
 			</div>
 
 			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -83,7 +83,10 @@ export function ComparableProperties({ comparables }: ComparablePropertiesProps)
 											/>
 										) : (
 											<div className="flex h-full items-center justify-center bg-gray-100 dark:bg-gray-800">
-												<Icon icon="lucide:image" className="h-12 w-12 text-gray-400" />
+												<Icon
+													icon="lucide:image"
+													className="h-12 w-12 text-gray-400"
+												/>
 											</div>
 										)}
 
@@ -102,7 +105,10 @@ export function ComparableProperties({ comparables }: ComparablePropertiesProps)
 
 										{/* Address */}
 										<div className="flex items-start gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-											<Icon icon="lucide:map-pin" className="mt-0.5 h-4 w-4 flex-shrink-0" />
+											<Icon
+												icon="lucide:map-pin"
+												className="mt-0.5 h-4 w-4 flex-shrink-0"
+											/>
 											<p className="line-clamp-1">
 												{comp.address.city}, {comp.address.state}
 											</p>
@@ -119,7 +125,9 @@ export function ComparableProperties({ comparables }: ComparablePropertiesProps)
 										<div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
 											<div className="flex items-center gap-1">
 												<Icon icon="lucide:calendar-days" className="h-4 w-4" />
-												<span>{formatCurrency(comp.financials.monthlyPayment)}/mo</span>
+												<span>
+													{formatCurrency(comp.financials.monthlyPayment)}/mo
+												</span>
 											</div>
 											<div className="flex items-center gap-1">
 												<Icon icon="lucide:percent" className="h-4 w-4" />

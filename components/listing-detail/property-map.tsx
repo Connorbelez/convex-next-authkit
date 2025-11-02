@@ -104,8 +104,12 @@ export function PropertyMap({ location, address }: PropertyMapProps) {
 			<div className="relative aspect-4/3 w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 lg:aspect-auto lg:h-full">
 				<div className="flex h-full flex-col items-center justify-center p-6 text-center">
 					<Icon icon="lucide:map-pin-off" className="h-12 w-12 text-gray-400" />
-					<p className="mt-3 font-medium text-gray-700 dark:text-gray-300">Map Unavailable</p>
-					<p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{mapError}</p>
+					<p className="mt-3 font-medium text-gray-700 dark:text-gray-300">
+						Map Unavailable
+					</p>
+					<p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+						{mapError}
+					</p>
 					<p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
 						{address.street}
 						<br />
@@ -121,8 +125,13 @@ export function PropertyMap({ location, address }: PropertyMapProps) {
 			{isLoading && (
 				<div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
 					<div className="flex flex-col items-center">
-						<Icon icon="lucide:loader-2" className="h-8 w-8 animate-spin text-primary" />
-						<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Loading map...</p>
+						<Icon
+							icon="lucide:loader-2"
+							className="h-8 w-8 animate-spin text-primary"
+						/>
+						<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+							Loading map...
+						</p>
 					</div>
 				</div>
 			)}

@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { generateListing, generatePayments, generateComparables } from "@/lib/mock-data/listings";
-import { BreadcrumbNav } from "@/components/breadcrumb-nav";
 import { ViewTransition } from "react";
 import { RequestListingSection } from "@/components/listing-detail/request-listing-section";
 import {
@@ -56,15 +55,6 @@ export default async function ListingDetailPage({ params }: ListingDetailPagePro
     return (
         <ViewTransition name={`listing-${listing._id}`}>
 			<div className="container mx-auto max-w-7xl px-4 py-8">
-				{/* Breadcrumb Navigation */}
-				<BreadcrumbNav
-					items={[
-						{ label: "Listings", href: "/listings" },
-						{ label: listing.title }
-					]}
-					className="mb-8"
-				/>
-
 			{/* Property Info */}
 			<div className="mb-8">
 				<PropertyInfo
