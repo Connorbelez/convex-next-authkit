@@ -1,5 +1,6 @@
 export { AppraisalData } from "./appraisal-data";
 export { ComparableProperties } from "./comparable-properties";
+export { DocumentViewer } from "./document-viewer";
 export { FinancialMetrics } from "./financial-metrics";
 export { ImageCarousel } from "./image-carousel";
 export { PaymentHistory } from "./payment-history";

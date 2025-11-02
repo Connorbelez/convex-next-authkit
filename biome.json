@@ -29,6 +29,11 @@
       "!.convex/",
       "!.next/",
       "!convex/_generated",
+      "!convex/tsconfig.json",
+	  "!convex",
+	  "!convex/*",
+	  "!vitest.config.mts",
+	  "!biome.json",
       "!convex/_generated/*"
     ]
   },

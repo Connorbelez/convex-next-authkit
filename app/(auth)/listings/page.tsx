@@ -52,9 +52,9 @@ function selectFromArray<T>(arr: readonly T[], seed: string): T {
  */
 function seededRandomNumber(seed: string, min: number, max: number): number {
 	let hash = 0;
-	for (let i = 0; i < seed.length; i++) {
+	for (let i = 0; i < seed.length; i+=1) {
 		hash = (hash << 5) - hash + seed.charCodeAt(i);
-		hash = hash & hash;
+		hash &= hash;
 	}
 	const x = Math.sin(hash) * 10000;
 	const random = x - Math.floor(x);

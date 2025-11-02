@@ -305,9 +305,6 @@ export function ListingGridShell<T extends WithLatLng>({
 
 	return (
 		<div className="flex flex-col">
-			{/* {showFilters && (
-        <FilterBar />
-      )} */}
 			<section className={classNames?.container ?? "flex gap-x-4 px-4 pt-4"}>
 				<div className={classNames?.gridColumn ?? "flex-1"}>
 					<div className="grid 84rem:grid-cols-2 grid-cols-1">

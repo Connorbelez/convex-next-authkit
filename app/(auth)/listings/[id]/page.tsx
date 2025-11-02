@@ -3,6 +3,7 @@ import { ViewTransition } from "react";
 import {
 	AppraisalData,
 	ComparableProperties,
+	DocumentViewer,
 	FinancialMetrics,
 	ImageCarousel,
 	PaymentHistory,
@@ -90,6 +91,13 @@ export default async function ListingDetailPage({
 				<div className="mb-12">
 					<PaymentHistory payments={payments} />
 				</div>
+
+				{/* Document Viewer */}
+				{listing.documents && listing.documents.length > 0 && (
+					<div className="mb-12">
+						<DocumentViewer documents={listing.documents} />
+					</div>
+				)}
 
 				{/* Appraisal Data (only if available) */}
 				{listing.appraisal && (

@@ -1,35 +1,28 @@
 import { Card, CardContent, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import { format, parseISO } from "date-fns";
 import Image from "next/image";
-import Link from "next/link";
 
-interface Comparable {
+interface AppraisalComparable {
 	_id: string;
-	_creationTime: number;
-	title: string;
 	address: {
 		street: string;
 		city: string;
 		state: string;
 		zip: string;
-		country: string;
 	};
-	images: Array<{
-		url: string;
-		alt?: string;
-		order: number;
-	}>;
-	financials: {
-		currentValue: number;
-		monthlyPayment: number;
-		interestRate: number;
-	};
-	status: string;
+	saleAmount: number;
+	saleDate: string; // ISO date
 	distance: number; // in miles
+	squareFeet?: number;
+	bedrooms?: number;
+	bathrooms?: number;
+	propertyType?: string;
+	imageUrl: string;
 }
 
 interface ComparablePropertiesProps {
-	comparables: Comparable[];
+	comparables: AppraisalComparable[];
 }
 
 function formatCurrency(amount: number): string {
@@ -58,102 +51,112 @@ export function ComparableProperties({
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center gap-2">
-				<Icon className="h-6 w-6 text-primary" icon="lucide:building-2" />
-				<h2 className="font-bold text-2xl">Comparable Properties</h2>
-				<Chip>{comparables.length} nearby</Chip>
+				<Icon className="h-6 w-6 text-primary" icon="lucide:file-text" />
+				<h2 className="font-bold text-2xl">Appraisal Comparables</h2>
+				<Chip>{comparables.length} properties</Chip>
 			</div>
+
+			<p className="text-gray-600 text-sm dark:text-gray-400">
+				Recent sales of similar properties used in the appraisal analysis
+			</p>
 
 			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 				{comparables.map((comp) => {
-					const primaryImage = comp.images.sort((a, b) => a.order - b.order)[0];
+					const saleDate = parseISO(comp.saleDate);
 
 					return (
-						<Link href={`/listings/${comp._id}`} key={comp._id}>
-							<Card.Root className="group cursor-pointer transition-shadow hover:shadow-lg">
-								<CardContent className="p-0">
-									{/* Image */}
-									<div className="relative aspect-[16/10] w-full overflow-hidden rounded-t-lg">
-										{primaryImage ? (
-											<Image
-												alt={primaryImage.alt || comp.title}
-												className="object-cover transition-transform group-hover:scale-105"
-												fill
-												sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-												src={primaryImage.url}
-											/>
-										) : (
-											<div className="flex h-full items-center justify-center bg-gray-100 dark:bg-gray-800">
-												<Icon
-													className="h-12 w-12 text-gray-400"
-													icon="lucide:image"
-												/>
-											</div>
-										)}
+						<Card.Root
+							key={comp._id}
+							className="overflow-hidden transition-shadow hover:shadow-md"
+						>
+							<CardContent className="p-0">
+								{/* Property Image */}
+								<div className="relative aspect-video w-full overflow-hidden rounded-lg">
+									<Image
+										alt={`${comp.address.street} - Comparable Property`}
+										className="rounded-lg object-cover transition-transform hover:scale-110"
+										fill
+										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+										src={comp.imageUrl}
+									/>
+									{/* Distance badge */}
+									<div className="absolute top-3 right-3 rounded-full bg-black/60 px-3 py-1 font-medium text-sm text-white backdrop-blur-sm">
+										{formatDistance(comp.distance)}
+									</div>
+								</div>
 
-										{/* Distance badge */}
-										<div className="absolute top-2 right-2 rounded-full bg-black/60 px-2 py-1 text-white text-xs backdrop-blur-sm">
-											{formatDistance(comp.distance)}
+								<div className="space-y-4 p-5">
+									{/* Header: Sale Amount */}
+									<div>
+										<p className="font-bold text-2xl text-gray-900 dark:text-white">
+											{formatCurrency(comp.saleAmount)}
+										</p>
+										<p className="text-gray-500 text-sm dark:text-gray-400">
+											Sale Price
+										</p>
+									</div>
+
+									{/* Address */}
+									<div className="flex items-start gap-2 border-gray-200 border-t pt-3 dark:border-gray-700">
+										<Icon
+											className="mt-0.5 h-5 w-5 shrink-0 text-gray-400"
+											icon="lucide:map-pin"
+										/>
+										<div className="flex-1">
+											<p className="font-medium text-gray-900 dark:text-white">
+												{comp.address.street}
+											</p>
+											<p className="text-gray-600 text-sm dark:text-gray-400">
+												{comp.address.city}, {comp.address.state}{" "}
+												{comp.address.zip}
+											</p>
 										</div>
 									</div>
 
-									{/* Content */}
-									<div className="space-y-3 p-4">
-										{/* Title */}
-										<h3 className="line-clamp-1 font-semibold text-gray-900 group-hover:text-primary dark:text-white">
-											{comp.title}
-										</h3>
-
-										{/* Address */}
-										<div className="flex items-start gap-1.5 text-gray-600 text-sm dark:text-gray-400">
-											<Icon
-												className="mt-0.5 h-4 w-4 flex-shrink-0"
-												icon="lucide:map-pin"
-											/>
-											<p className="line-clamp-1">
-												{comp.address.city}, {comp.address.state}
-											</p>
-										</div>
-
-										{/* Price */}
-										<div className="flex items-baseline gap-1">
-											<p className="font-bold text-2xl text-gray-900 dark:text-white">
-												{formatCurrency(comp.financials.currentValue)}
-											</p>
-										</div>
-
-										{/* Key metrics */}
-										<div className="flex items-center gap-4 text-gray-600 text-sm dark:text-gray-400">
-											<div className="flex items-center gap-1">
-												<Icon className="h-4 w-4" icon="lucide:calendar-days" />
-												<span>
-													{formatCurrency(comp.financials.monthlyPayment)}/mo
-												</span>
-											</div>
-											<div className="flex items-center gap-1">
-												<Icon className="h-4 w-4" icon="lucide:percent" />
-												<span>{comp.financials.interestRate.toFixed(2)}%</span>
-											</div>
-										</div>
+									{/* Sale Date */}
+									<div className="flex items-center gap-2 text-gray-600 text-sm dark:text-gray-400">
+										<Icon className="h-4 w-4" icon="lucide:calendar" />
+										<span>Sold: {format(saleDate, "MMMM d, yyyy")}</span>
 									</div>
-								</CardContent>
-							</Card.Root>
-						</Link>
+
+									{/* Property Details */}
+									{(comp.squareFeet ||
+										comp.bedrooms ||
+										comp.bathrooms ||
+										comp.propertyType) && (
+										<div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-gray-200 border-t pt-3 text-gray-600 text-sm dark:border-gray-700 dark:text-gray-400">
+											{comp.propertyType && (
+												<div className="flex items-center gap-1.5">
+													<Icon className="h-4 w-4" icon="lucide:building" />
+													<span>{comp.propertyType}</span>
+												</div>
+											)}
+											{comp.squareFeet && (
+												<div className="flex items-center gap-1.5">
+													<Icon className="h-4 w-4" icon="lucide:maximize" />
+													<span>{comp.squareFeet.toLocaleString()} sq ft</span>
+												</div>
+											)}
+											{comp.bedrooms && (
+												<div className="flex items-center gap-1.5">
+													<Icon className="h-4 w-4" icon="lucide:bed" />
+													<span>{comp.bedrooms} bed</span>
+												</div>
+											)}
+											{comp.bathrooms && (
+												<div className="flex items-center gap-1.5">
+													<Icon className="h-4 w-4" icon="lucide:bath" />
+													<span>{comp.bathrooms} bath</span>
+												</div>
+											)}
+										</div>
+									)}
+								</div>
+							</CardContent>
+						</Card.Root>
 					);
 				})}
 			</div>
-
-			{/* View more link */}
-			{comparables.length >= 5 && (
-				<div className="text-center">
-					<Link
-						className="inline-flex items-center gap-2 font-medium text-primary text-sm hover:underline"
-						href="/listings"
-					>
-						View more properties
-						<Icon className="h-4 w-4" icon="lucide:arrow-right" />
-					</Link>
-				</div>
-			)}
 		</div>
 	);
 }

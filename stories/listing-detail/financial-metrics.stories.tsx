@@ -51,6 +51,9 @@ export const HighValueProperty: Story = {
 			maturityDate: new Date(
 				Date.now() + 30 * 365 * 24 * 60 * 60 * 1000
 			).toISOString(),
+			principalLoanAmount: 3750000,
+			mortgageType: "1st Position",
+			propertyType: "Residential - Single Family",
 		},
 	},
 	parameters: {
@@ -74,6 +77,9 @@ export const InvestmentMetrics: Story = {
 			maturityDate: new Date(
 				Date.now() + 25 * 365 * 24 * 60 * 60 * 1000
 			).toISOString(),
+			principalLoanAmount: 1000000,
+			mortgageType: "1st Position",
+			propertyType: "Commercial - Office",
 		},
 	},
 	parameters: {
@@ -97,6 +103,9 @@ export const LossScenario: Story = {
 			maturityDate: new Date(
 				Date.now() + 20 * 365 * 24 * 60 * 60 * 1000
 			).toISOString(),
+			principalLoanAmount: 680000,
+			mortgageType: "1st Position",
+			propertyType: "Residential - Condo",
 		},
 	},
 	parameters: {
@@ -120,6 +129,9 @@ export const LowInterestRate: Story = {
 			maturityDate: new Date(
 				Date.now() + 30 * 365 * 24 * 60 * 60 * 1000
 			).toISOString(),
+			principalLoanAmount: 600000,
+			mortgageType: "1st Position",
+			propertyType: "Residential - Townhouse",
 		},
 	},
 	parameters: {
@@ -143,6 +155,9 @@ export const ShortTermLoan: Story = {
 			maturityDate: new Date(
 				Date.now() + 15 * 365 * 24 * 60 * 60 * 1000
 			).toISOString(),
+			principalLoanAmount: 480000,
+			mortgageType: "1st Position",
+			propertyType: "Residential - Multi-Family",
 		},
 	},
 	parameters: {
@@ -166,6 +181,9 @@ export const BreakEvenScenario: Story = {
 			maturityDate: new Date(
 				Date.now() + 25 * 365 * 24 * 60 * 60 * 1000
 			).toISOString(),
+			principalLoanAmount: 740000,
+			mortgageType: "1st Position",
+			propertyType: "Mixed-Use",
 		},
 	},
 	parameters: {
@@ -189,6 +207,9 @@ export const FirstTimeHomeBuyer: Story = {
 			maturityDate: new Date(
 				Date.now() + 30 * 365 * 24 * 60 * 60 * 1000
 			).toISOString(),
+			principalLoanAmount: 280000,
+			mortgageType: "1st Position",
+			propertyType: "Residential - Condo",
 		},
 	},
 	parameters: {
@@ -215,6 +236,9 @@ export const ComparisonView: Story = {
 					maturityDate: new Date(
 						Date.now() + 30 * 365 * 24 * 60 * 60 * 1000
 					).toISOString(),
+					principalLoanAmount: 640000,
+					mortgageType: "1st Position",
+					propertyType: "Residential - Single Family",
 				},
 			},
 			{
@@ -228,6 +252,9 @@ export const ComparisonView: Story = {
 					maturityDate: new Date(
 						Date.now() + 25 * 365 * 24 * 60 * 60 * 1000
 					).toISOString(),
+					principalLoanAmount: 960000,
+					mortgageType: "1st Position",
+					propertyType: "Commercial - Retail",
 				},
 			},
 			{
@@ -241,6 +268,9 @@ export const ComparisonView: Story = {
 					maturityDate: new Date(
 						Date.now() + 20 * 365 * 24 * 60 * 60 * 1000
 					).toISOString(),
+					principalLoanAmount: 1700000,
+					mortgageType: "1st Position",
+					propertyType: "Commercial - Office",
 				},
 			},
 		];
