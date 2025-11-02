@@ -5,15 +5,14 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { type ClassValue, clsx } from "clsx";
 import { Eye, EyeOff } from "lucide-react";
-import * as React from "react";
-import { useEffect, useId, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-export interface TypewriterProps {
+export type TypewriterProps = {
 	text: string | string[];
 	speed?: number;
 	cursor?: string;
@@ -21,7 +20,7 @@ export interface TypewriterProps {
 	deleteSpeed?: number;
 	delay?: number;
 	className?: string;
-}
+};
 
 export function Typewriter({
 	text,
@@ -73,7 +72,7 @@ export function Typewriter({
 		deleteSpeed,
 		delay,
 		displayText,
-		text,
+		textArray.length,
 	]);
 
 	return (
@@ -342,7 +341,7 @@ function AuthFormContainer({
 	);
 }
 
-interface AuthContentProps {
+type AuthContentProps = {
 	image?: {
 		src: string;
 		alt: string;
@@ -351,12 +350,12 @@ interface AuthContentProps {
 		text: string;
 		author: string;
 	};
-}
+};
 
-interface AuthUIProps {
+type AuthUIProps = {
 	signInContent?: AuthContentProps;
 	signUpContent?: AuthContentProps;
-}
+};
 
 const defaultSignInContent = {
 	image: {

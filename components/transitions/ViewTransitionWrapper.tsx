@@ -5,13 +5,13 @@ import { type ReactNode, startTransition } from "react";
 
 export type TransitionType = "slide" | "cross-fade" | "none";
 
-export interface ViewTransitionWrapperProps {
+export type ViewTransitionWrapperProps = {
 	children: ReactNode;
 	type?: TransitionType;
 	sharedElements?: string[];
 	className?: string;
 	name?: string;
-}
+};
 
 /**
  * ViewTransitionWrapper - Central wrapper for React 19 View Transitions
@@ -42,7 +42,7 @@ export function AppViewTransition({
 	const transitionType = type || getTransitionType();
 
 	// Handle navigation with startTransition for smooth transitions
-	const handleNavigation = (callback: () => void) => {
+	const _handleNavigation = (callback: () => void) => {
 		startTransition(callback);
 	};
 

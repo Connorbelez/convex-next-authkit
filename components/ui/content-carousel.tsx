@@ -17,17 +17,17 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export interface CarouselItem {
+export type CarouselItem = {
 	name: string;
 	description: string;
 	[key: string]: unknown;
-}
+};
 
-interface ContentCarouselProps {
+type ContentCarouselProps = {
 	items: CarouselItem[];
 	className?: string;
 	onItemChange?: (item: CarouselItem, index: number) => void;
-}
+};
 
 export const ContentCarousel = ({
 	items,
@@ -40,7 +40,7 @@ export const ContentCarousel = ({
 		if (items.length === 0) return;
 		const clampedIndex = Math.min(Math.max(currentIndex, 0), items.length - 1);
 		if (clampedIndex !== currentIndex) setCurrentIndex(clampedIndex);
-	}, [items.length]);
+	}, [items.length, currentIndex]);
 
 	const handleIndexChange = (newIndex: number) => {
 		const validIndex = Math.min(Math.max(newIndex, 0), items.length - 1);

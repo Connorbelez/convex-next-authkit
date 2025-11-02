@@ -12,7 +12,7 @@ export type PropertyType =
 	| "Mixed-Use"
 	| "Other";
 
-export interface FilterState {
+export type FilterState = {
 	ltvRange: [number, number];
 	interestRateRange: [number, number];
 	loanAmountRange: [number, number];
@@ -22,7 +22,7 @@ export interface FilterState {
 	propertyTypes: PropertyType[];
 	searchQuery: string;
 	maturityDate?: Date;
-}
+};
 
 export const FILTER_BOUNDS = {
 	ltvRange: [30, 80] as [number, number],

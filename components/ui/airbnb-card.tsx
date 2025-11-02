@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-export interface ListingProps {
+export type ListingProps = {
 	id: string;
 	title: string;
 	location: string;
@@ -20,7 +20,7 @@ export interface ListingProps {
 	isSuperhost?: boolean;
 	isNew?: boolean;
 	category?: string;
-}
+};
 
 export function AirbnbListingCard({
 	title,

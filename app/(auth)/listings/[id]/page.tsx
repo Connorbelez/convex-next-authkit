@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
-import {
-	AppraisalData,
-	ComparableProperties,
-	FinancialMetrics,
-	ImageCarousel,
-	PaymentHistory,
-	PropertyInfo,
-	PropertyMapComponent,
-} from "@/components/listing-detail";
+// import {
+// 	AppraisalData,
+// 	ComparableProperties,
+// 	FinancialMetrics,
+// 	ImageCarousel,
+// 	PaymentHistory,
+// 	PropertyInfo,
+// 	PropertyMapComponent,
+// } from "@/components/listing-detail";
+import { AppraisalData } from "@/components/listing-detail/appraisal-data";
+import { ComparableProperties } from "@/components/listing-detail/comparable-properties";
 import { DocumentViewerWrapper } from "@/components/listing-detail/document-viewer-wrapper";
+import { FinancialMetrics } from "@/components/listing-detail/financial-metrics";
+import { ImageCarousel } from "@/components/listing-detail/image-carousel";
+import { PaymentHistory } from "@/components/listing-detail/payment-history";
+import { PropertyInfo } from "@/components/listing-detail/property-info";
+import { PropertyMapComponent } from "@/components/listing-detail/property-map";
 import { RequestListingSection } from "@/components/listing-detail/request-listing-section";
 import {
 	generateComparables,

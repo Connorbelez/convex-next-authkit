@@ -7,7 +7,7 @@ import FilterModal from "./filter-modal";
 import { FILTER_BOUNDS, type FilterState } from "./types/listing-filters";
 
 export function FilterBar() {
-	const { filters, setFilters, items, setItems } = useFiltersStore();
+	const { filters, setFilters, items } = useFiltersStore();
 	const safeFilters: FilterState = filters || {
 		ltvRange: [0, 100] as [number, number],
 		interestRateRange: [0, 10] as [number, number],

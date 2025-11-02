@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Bell, ChevronDown, Menu, Search, X } from "lucide-react";
 import Link from "next/link";
-// import * as React from "react";
+// import React from "react";
 import { useEffect, useState } from "react";
 import { UserAvatarMenu } from "@/components/auth/UserAvatarMenu";
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";

@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Map as MapIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-// import * as React from "react";
+// import React from "react";
 import {
 	ListingMap,
 	type ListingMapProps,

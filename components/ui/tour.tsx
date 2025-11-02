@@ -13,15 +13,15 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export interface TourStep {
+export type TourStep = {
 	target: string;
 	title: string;
 	description: string;
 	placement?: "top" | "bottom" | "left" | "right";
 	offset?: { x?: number; y?: number };
-}
+};
 
-export interface TourProps {
+export type TourProps = {
 	steps: TourStep[];
 	open?: boolean;
 	onClose?: () => void;
@@ -29,7 +29,7 @@ export interface TourProps {
 	className?: string;
 	maskClassName?: string;
 	placement?: "top" | "bottom" | "left" | "right";
-}
+};
 
 const ARROW_SIZE = 8;
 const SPACING = 12;

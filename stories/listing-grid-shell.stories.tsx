@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import * as React from "react";
+import React from "react";
 import {
 	type FilterableItem,
 	ListingGridShell,
@@ -149,7 +149,7 @@ const renderPopup = (item: MockListing) => (
 
 // Group listings by mortgage type for mobile horizontal scrolling
 const groupByMortgageType = (
-	items: ReadonlyArray<MockListing>
+	items: readonly MockListing[]
 ): MobileListingSection<MockListing>[] => {
 	const grouped = items.reduce(
 		(acc, item) => {

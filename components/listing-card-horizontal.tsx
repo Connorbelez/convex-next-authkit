@@ -93,11 +93,7 @@ export function Horizontal({
 				</Card.Content>
 				<Card.Footer className="mt-auto flex w-full flex-row items-center justify-between">
 					<div className="flex flex-col">
-						<span
-							// biome-ignore lint/a11y/useSemanticElements: <explanation>
-							// aria-label={`Maturity date: ${maturityDate}`}
-							className="flex items-center text-foreground/50 text-sm"
-						>
+						<span className="flex items-center text-foreground/50 text-sm">
 							<Icon className="mr-1 h-4 w-4" icon="lucide:calendar" />
 							Maturity
 						</span>

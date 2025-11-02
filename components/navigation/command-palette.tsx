@@ -8,14 +8,15 @@ import {
 	Mail,
 	Search,
 } from "lucide-react";
-import * as React from "react";
+import React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Button } from "../ui/button";
 
-interface CommandPaletteProps {
+type CommandPaletteProps = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-}
+};
 
 const commands = [
 	{ icon: Home, label: "Home", shortcut: "" },
@@ -52,14 +53,14 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 					) : (
 						<div className="space-y-1">
 							{filteredCommands.map((cmd) => (
-								<button
+								<Button
 									className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent"
 									key={cmd.label}
 									onClick={() => onOpenChange(false)}
 								>
 									<cmd.icon className="size-4 text-muted-foreground" />
 									<span>{cmd.label}</span>
-								</button>
+								</Button>
 							))}
 						</div>
 					)}

@@ -1,9 +1,11 @@
 import { expect, test } from "@playwright/test";
 
+const PROFILE_URL = /profile/;
+
 test.describe.skip("Profile Page (auth required)", () => {
 	test("renders layout and controls", async ({ page }) => {
 		await page.goto("/profile");
-		await expect(page).toHaveURL(/profile/);
+		await expect(page).toHaveURL(PROFILE_URL);
 		await expect(page.locator("text=Personal Information")).toBeVisible();
 		await expect(page.locator("label:has-text('First name')")).toBeVisible();
 		await expect(page.locator("label:has-text('Last name')")).toBeVisible();

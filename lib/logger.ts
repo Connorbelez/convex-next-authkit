@@ -27,7 +27,7 @@ const consoleAdapter: Logger = {
 		console.warn("\u001b[33m⚠️ [warn]\u001b[0m", m, meta),
 	error: (m: string | Error, meta?: LogMeta) =>
 		console.error("\u001b[31m🔥 [error]\u001b[0m", m, meta),
-	child: (ctx: Record<string, any>) => consoleAdapter,
+	child: (_ctx: Record<string, any>) => consoleAdapter,
 };
 
 export function setLoggerAdapter(a: Logger) {
@@ -66,7 +66,7 @@ function ensureAdapter(): Logger {
 		const clientAdapter = createClientAdapter();
 		adapter = clientAdapter;
 		return clientAdapter;
-	} catch (e) {
+	} catch (_e) {
 		adapter = consoleAdapter;
 		return adapter;
 	}

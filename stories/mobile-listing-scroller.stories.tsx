@@ -23,15 +23,15 @@ const meta: Meta<typeof MobileListingScroller> = {
 	},
 };
 
-interface MobileListingScrollerProps<T> {
+type MobileListingScrollerProps<T> = {
 	sections: MobileListingSection<T>[];
 	renderCard: (item: T) => React.ReactNode;
-}
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-interface MockListing {
+type MockListing = {
 	id: string;
 	title: string;
 	address: string;
@@ -40,7 +40,7 @@ interface MockListing {
 	apr: number;
 	principal: number;
 	mortgageType: "first" | "second" | "other";
-}
+};
 
 // Sample mortgage listings data
 const firstMortgageListings: MockListing[] = [

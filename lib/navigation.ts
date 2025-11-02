@@ -8,7 +8,7 @@ import {
 	User,
 } from "lucide-react";
 
-export interface NavItem {
+export type NavItem = {
 	id: string;
 	label: string;
 	href: string;
@@ -19,7 +19,7 @@ export interface NavItem {
 	 * If false, requires exact match
 	 */
 	matchPrefix?: boolean;
-}
+};
 
 export const navigationItems: NavItem[] = [
 	{
