@@ -105,7 +105,7 @@ export default async function ListingsPage() {
 	// Transform to ListingItem format
 	const listings = mockListings.map(transformListing);
 	return (
-		<ViewTransition>
+		<ViewTransition name="listings">
 			<div className="min-h-screen">
 				<div className="container mx-auto flex flex-col py-6">
 					<div className="min-w-[90vw]">
