@@ -1,14 +1,14 @@
 import {
-	LayoutDashboard,
-	Users,
-	Settings,
 	Briefcase,
-	FileText,
 	Building2,
-	Shield,
-	PieChart,
-	TrendingUp,
+	FileText,
+	LayoutDashboard,
 	type LucideIcon,
+	PieChart,
+	Settings,
+	Shield,
+	TrendingUp,
+	Users,
 } from "lucide-react";
 
 export type NavItem = {

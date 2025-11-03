@@ -1,8 +1,8 @@
 import {
-	ROLE_NAVIGATION,
-	ROLE_LABELS,
-	type UserRole,
 	type NavItem,
+	ROLE_LABELS,
+	ROLE_NAVIGATION,
+	type UserRole,
 } from "@/lib/navigation/role-navigation";
 
 /**

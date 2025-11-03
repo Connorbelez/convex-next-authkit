@@ -1,4 +1,10 @@
-import { Briefcase, DollarSign, PieChart, Settings, TrendingUp } from "lucide-react";
+import {
+	Briefcase,
+	DollarSign,
+	PieChart,
+	Settings,
+	TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,9 +53,7 @@ export default function InvestorDashboardPage() {
 
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="font-medium text-sm">
-								YTD Returns
-							</CardTitle>
+							<CardTitle className="font-medium text-sm">YTD Returns</CardTitle>
 							<TrendingUp className="h-4 w-4 text-muted-foreground" />
 						</CardHeader>
 						<CardContent>
@@ -103,8 +107,8 @@ export default function InvestorDashboardPage() {
 								},
 							].map((item) => (
 								<div
-									key={item.id}
 									className="flex items-center justify-between rounded-lg border p-4"
+									key={item.id}
 								>
 									<div>
 										<p className="font-medium">{item.company}</p>
@@ -125,7 +129,7 @@ export default function InvestorDashboardPage() {
 												{item.return}
 											</p>
 										</div>
-										<Button variant="ghost" size="sm">
+										<Button size="sm" variant="ghost">
 											Details
 										</Button>
 									</div>
@@ -159,8 +163,8 @@ export default function InvestorDashboardPage() {
 								},
 							].map((item) => (
 								<div
-									key={item.id}
 									className="flex items-center justify-between rounded-lg border p-4"
+									key={item.id}
 								>
 									<div>
 										<p className="font-medium">{item.deal}</p>
@@ -172,7 +176,7 @@ export default function InvestorDashboardPage() {
 										<span className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-xs">
 											{item.stage}
 										</span>
-										<Button variant="outline" size="sm">
+										<Button size="sm" variant="outline">
 											View
 										</Button>
 									</div>
@@ -194,13 +198,13 @@ export default function InvestorDashboardPage() {
 								View Full Portfolio
 							</Link>
 						</Button>
-						<Button variant="secondary" asChild>
+						<Button asChild variant="secondary">
 							<Link href="/dashboard/investor/deals">
 								<Briefcase className="mr-2 h-4 w-4" />
 								Browse Deals
 							</Link>
 						</Button>
-						<Button variant="outline" asChild>
+						<Button asChild variant="outline">
 							<Link href="/dashboard/settings">
 								<Settings className="mr-2 h-4 w-4" />
 								Settings

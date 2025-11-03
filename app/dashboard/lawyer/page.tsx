@@ -100,8 +100,8 @@ export default function LawyerDashboardPage() {
 								},
 							].map((item) => (
 								<div
-									key={item.id}
 									className="flex items-center justify-between rounded-lg border p-4"
+									key={item.id}
 								>
 									<div>
 										<p className="font-medium">{item.client}</p>
@@ -111,7 +111,7 @@ export default function LawyerDashboardPage() {
 										<span className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-xs">
 											{item.status}
 										</span>
-										<Button variant="ghost" size="sm">
+										<Button size="sm" variant="ghost">
 											View
 										</Button>
 									</div>
@@ -143,8 +143,8 @@ export default function LawyerDashboardPage() {
 								},
 							].map((item) => (
 								<div
-									key={item.id}
 									className="flex items-center justify-between rounded-lg border p-4"
+									key={item.id}
 								>
 									<div>
 										<p className="font-medium">{item.client}</p>
@@ -154,7 +154,7 @@ export default function LawyerDashboardPage() {
 										<span className="text-muted-foreground text-xs">
 											{item.date}
 										</span>
-										<Button variant="outline" size="sm">
+										<Button size="sm" variant="outline">
 											Review
 										</Button>
 									</div>
@@ -176,13 +176,13 @@ export default function LawyerDashboardPage() {
 								View All Deals
 							</Link>
 						</Button>
-						<Button variant="secondary" asChild>
+						<Button asChild variant="secondary">
 							<Link href="/dashboard/lawyer/requests">
 								<FileText className="mr-2 h-4 w-4" />
 								Manage Requests
 							</Link>
 						</Button>
-						<Button variant="outline" asChild>
+						<Button asChild variant="outline">
 							<Link href="/dashboard/settings">
 								<Settings className="mr-2 h-4 w-4" />
 								Settings

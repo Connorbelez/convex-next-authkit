@@ -21,7 +21,9 @@ export default function LawyerRequestsPage() {
 						<div className="mb-4 rounded-full bg-primary/10 p-6">
 							<FileText className="h-12 w-12 text-primary" />
 						</div>
-						<h3 className="mb-2 font-semibold text-lg">Representation Requests</h3>
+						<h3 className="mb-2 font-semibold text-lg">
+							Representation Requests
+						</h3>
 						<p className="text-center text-muted-foreground text-sm">
 							Review and respond to new representation requests
 						</p>

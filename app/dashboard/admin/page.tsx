@@ -26,9 +26,7 @@ export default function AdminDashboardPage() {
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="font-medium text-sm">
-								Total Users
-							</CardTitle>
+							<CardTitle className="font-medium text-sm">Total Users</CardTitle>
 							<Users className="h-4 w-4 text-muted-foreground" />
 						</CardHeader>
 						<CardContent>
@@ -103,8 +101,8 @@ export default function AdminDashboardPage() {
 								},
 							].map((item) => (
 								<div
-									key={item.id}
 									className="flex items-center justify-between rounded-lg border p-4"
+									key={item.id}
 								>
 									<div className="flex items-center gap-3">
 										<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -112,7 +110,9 @@ export default function AdminDashboardPage() {
 										</div>
 										<div>
 											<p className="font-medium">{item.name}</p>
-											<p className="text-muted-foreground text-sm">{item.role}</p>
+											<p className="text-muted-foreground text-sm">
+												{item.role}
+											</p>
 										</div>
 									</div>
 									<div className="flex items-center gap-2">
@@ -125,7 +125,7 @@ export default function AdminDashboardPage() {
 										>
 											{item.status}
 										</span>
-										<Button variant="ghost" size="sm">
+										<Button size="sm" variant="ghost">
 											Manage
 										</Button>
 									</div>
@@ -166,8 +166,8 @@ export default function AdminDashboardPage() {
 								},
 							].map((item) => (
 								<div
-									key={item.id}
 									className="flex items-center justify-between rounded-lg border p-4"
+									key={item.id}
 								>
 									<div>
 										<p className="font-medium">{item.deal}</p>
@@ -187,7 +187,7 @@ export default function AdminDashboardPage() {
 										>
 											{item.status}
 										</span>
-										<Button variant="ghost" size="sm">
+										<Button size="sm" variant="ghost">
 											View
 										</Button>
 									</div>
@@ -219,8 +219,8 @@ export default function AdminDashboardPage() {
 								},
 							].map((item) => (
 								<div
-									key={item.id}
 									className="flex items-center justify-between rounded-lg border p-4"
+									key={item.id}
 								>
 									<div>
 										<p className="font-medium">{item.title}</p>
@@ -228,7 +228,7 @@ export default function AdminDashboardPage() {
 											{item.type} • {item.posted}
 										</p>
 									</div>
-									<Button variant="outline" size="sm">
+									<Button size="sm" variant="outline">
 										Review
 									</Button>
 								</div>
@@ -249,31 +249,31 @@ export default function AdminDashboardPage() {
 								Manage Users
 							</Link>
 						</Button>
-						<Button variant="secondary" asChild>
+						<Button asChild variant="secondary">
 							<Link href="/dashboard/admin/deals">
 								<Briefcase className="mr-2 h-4 w-4" />
 								View All Deals
 							</Link>
 						</Button>
-						<Button variant="secondary" asChild>
+						<Button asChild variant="secondary">
 							<Link href="/dashboard/admin/brokers">
 								<Building2 className="mr-2 h-4 w-4" />
 								Manage Brokers
 							</Link>
 						</Button>
-						<Button variant="secondary" asChild>
+						<Button asChild variant="secondary">
 							<Link href="/dashboard/admin/lawyers">
 								<Shield className="mr-2 h-4 w-4" />
 								Manage Lawyers
 							</Link>
 						</Button>
-						<Button variant="outline" asChild>
+						<Button asChild variant="outline">
 							<Link href="/dashboard/admin/listings">
 								<FileText className="mr-2 h-4 w-4" />
 								View Listings
 							</Link>
 						</Button>
-						<Button variant="outline" asChild>
+						<Button asChild variant="outline">
 							<Link href="/dashboard/settings">
 								<Settings className="mr-2 h-4 w-4" />
 								Settings
