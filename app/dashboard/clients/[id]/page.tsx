@@ -11,11 +11,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 import { CheckCircle2, Send, UserX, Archive } from "lucide-react"
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
-  const { toast } = useToast()
   const [kycVerified, setKycVerified] = useState(false)
   const [ltvValue, setLtvValue] = useState([70])
   const [loanAmount, setLoanAmount] = useState([500000])
@@ -23,30 +22,25 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
   const handleAttest = () => {
     setKycVerified(true)
-    toast({
-      title: "KYC Verified",
+    toast.success("KYC Verified", {
       description: "Client has been successfully verified.",
     })
   }
 
   const handleSendOTP = () => {
     if (!kycVerified) {
-      toast({
-        title: "Verification Required",
+      toast.error("Verification Required", {
         description: "Please verify KYC before sending sign-in code.",
-        variant: "destructive",
       })
       return
     }
-    toast({
-      title: "Sign-In Code Sent",
+    toast.success("Sign-In Code Sent", {
       description: "One-time password has been sent to the client.",
     })
   }
 
   const handleSaveFilters = () => {
-    toast({
-      title: "Filters Saved",
+    toast.success("Filters Saved", {
       description: "Client filter preferences have been updated.",
     })
   }

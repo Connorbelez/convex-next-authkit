@@ -10,13 +10,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 export default function NewClientPage() {
   const router = useRouter()
-  const { toast } = useToast()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,8 +25,7 @@ export default function NewClientPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    toast({
-      title: "Client Added",
+    toast.success("Client Added", {
       description: `${formData.name} has been successfully added.`,
     })
     router.push("/dashboard/clients")

@@ -1,58 +1,65 @@
 "use client"
 
-import type * as React from "react"
-import { LayoutDashboard, Users, Settings, Building2 } from "lucide-react"
-
+import React from "react"
+import { useRouter } from "next/navigation"
 import { NavMain } from "@/components/nav-main"
+import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
-import { NavUser } from "@/components/nav-user"
+import {
+  MOCK_AVAILABLE_ROLES,
+  type UserRole
+} from "@/lib/navigation/role-navigation"
+import {
+  getRoleNavigation,
+  getRoleDashboardUrl,
+  getPrimaryRole
+} from "@/lib/utils/role-helpers"
 
-// This is sample data.
-const data = {
-  user: {
-    name: "Broker Admin",
-    email: "admin@fairlend.com",
-    avatar: "/avatars/broker.jpg",
-  },
-  teams: [
-    {
-      name: "FairLend",
-      logo: Building2,
-      plan: "Broker Portal",
-    },
-  ],
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: LayoutDashboard,
-      isActive: true,
-    },
-    {
-      title: "Clients",
-      url: "/dashboard/clients",
-      icon: Users,
-    },
-    {
-      title: "Settings",
-      url: "/dashboard/settings",
-      icon: Settings,
-    },
-  ],
+// This is sample data - in production, user would come from auth
+const userData = {
+  name: "Admin User",
+  email: "admin@fairlend.com",
+  avatar: "/avatars/admin.jpg",
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter();
+
+  // For now, mock all roles as available. In production, this would come from:
+  // const profile = useQuery(api.profile.getCurrentUserProfile);
+  // const userRoles = profile?.roles?.map(r => r.slug) || [];
+  const availableRoles = MOCK_AVAILABLE_ROLES;
+
+  // State for current active role - default to admin
+  const [activeRole, setActiveRole] = React.useState<UserRole>(
+    getPrimaryRole(availableRoles)
+  );
+
+  // Get navigation for current role
+  const navigation = getRoleNavigation(activeRole);
+
+  // Handle role change and navigate to the new role's dashboard
+  const handleRoleChange = React.useCallback((newRole: UserRole) => {
+    setActiveRole(newRole);
+    const dashboardUrl = getRoleDashboardUrl(newRole);
+    router.push(dashboardUrl);
+  }, [router]);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher
+          activeRole={activeRole}
+          availableRoles={availableRoles}
+          onRoleChange={handleRoleChange}
+        />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navigation} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

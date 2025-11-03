@@ -2,6 +2,7 @@ import {
 	BookOpen,
 	FileText,
 	HelpCircle,
+	LayoutDashboard,
 	type LucideIcon,
 	Mail,
 } from "lucide-react";
@@ -60,6 +61,13 @@ export const navigationItems: NavItem[] = [
 		label: "Contact Us",
 		href: "/contact",
 		icon: Mail,
+		matchPrefix: true,
+	},
+	{
+		id: "dashboard",
+		label: "Dashboard",
+		href: "/dashboard",
+		icon: LayoutDashboard,
 		matchPrefix: true,
 	},
 ];

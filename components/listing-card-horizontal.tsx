@@ -34,10 +34,10 @@ export function Horizontal({
 			className="w-full items-stretch transition-all duration-300 hover:scale-103 hover:shadow-black/10 hover:shadow-lg md:flex-row"
 			variant="flat"
 		>
-			<div className="relative aspect-video w-full overflow-hidden rounded-panel md:aspect-square md:max-w-[180px]">
+			<div className="relative aspect-video w-full overflow-hidden rounded-panel md:aspect-square md:max-w-[180px] xl:aspect-auto">
 				<Image
 					alt={`${title} thumbnail`}
-					className="pointer-events-none select-none object-cover"
+					className="pointer-events-none select-none object-cover transition-all duration-300 hover:scale-105"
 					fill
 					sizes="(max-width: 640px) 100vw, 180px"
 					src={imageSrc}

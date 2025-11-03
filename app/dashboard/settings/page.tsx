@@ -8,11 +8,10 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 import { Upload } from "lucide-react"
 
 export default function SettingsPage() {
-  const { toast } = useToast()
   const [brandColor, setBrandColor] = useState("#8CA971")
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
 
@@ -28,8 +27,7 @@ export default function SettingsPage() {
   }
 
   const handleSave = () => {
-    toast({
-      title: "Settings Saved",
+    toast.success("Settings Saved", {
       description: "Your branding preferences have been updated.",
     })
   }

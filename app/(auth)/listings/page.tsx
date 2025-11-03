@@ -108,7 +108,7 @@ export default async function ListingsPage() {
 		<ViewTransition>
 			<div className="min-h-screen">
 				<div className="container mx-auto flex flex-col py-6">
-					<div className="">
+					<div className="min-w-[90vw]">
 						<ListingsClient listings={listings} />
 					</div>
 				</div>
