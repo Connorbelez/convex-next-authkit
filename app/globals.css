@@ -288,6 +288,417 @@
 	}
 }
 
+/* ===========================================
+   NEW COOL TRANSITIONS 
+   =========================================== */
+
+/* 1. ZOOM/SCALE TRANSITIONS */
+::view-transition-old(zoom-out) {
+	animation: 350ms ease-out zoom-out;
+}
+
+::view-transition-new(zoom-in) {
+	animation: 350ms cubic-bezier(0.34, 1.56, 0.64, 1) zoom-in;
+}
+
+@keyframes zoom-out {
+	from {
+		opacity: 1;
+		transform: scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: scale(1.2);
+	}
+}
+
+@keyframes zoom-in {
+	from {
+		opacity: 0;
+		transform: scale(0.8);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+/* 2. BLUR FADE TRANSITIONS */
+::view-transition-old(blur-fade) {
+	animation: 300ms ease-out blur-out;
+}
+
+::view-transition-new(blur-fade) {
+	animation: 300ms ease-in blur-in;
+}
+
+@keyframes blur-out {
+	from {
+		opacity: 1;
+		filter: blur(0px);
+	}
+	to {
+		opacity: 0;
+		filter: blur(10px);
+	}
+}
+
+@keyframes blur-in {
+	from {
+		opacity: 0;
+		filter: blur(10px);
+	}
+	to {
+		opacity: 1;
+		filter: blur(0px);
+	}
+}
+
+/* 3. 3D FLIP TRANSITIONS */
+::view-transition-old(flip) {
+	animation: 400ms ease-in-out flip-out;
+	transform-style: preserve-3d;
+}
+
+::view-transition-new(flip) {
+	animation: 400ms ease-in-out flip-in;
+	transform-style: preserve-3d;
+}
+
+@keyframes flip-out {
+	from {
+		transform: perspective(800px) rotateY(0deg);
+		opacity: 1;
+	}
+	to {
+		transform: perspective(800px) rotateY(90deg);
+		opacity: 0;
+	}
+}
+
+@keyframes flip-in {
+	from {
+		transform: perspective(800px) rotateY(-90deg);
+		opacity: 0;
+	}
+	to {
+		transform: perspective(800px) rotateY(0deg);
+		opacity: 1;
+	}
+}
+
+/* 4. ELASTIC/BOUNCE TRANSITIONS */
+::view-transition-old(bounce-out) {
+	animation: 400ms cubic-bezier(0.6, -0.28, 0.735, 0.045) bounce-out;
+}
+
+::view-transition-new(bounce-in) {
+	animation: 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55) bounce-in;
+}
+
+@keyframes bounce-out {
+	from {
+		transform: scale(1);
+		opacity: 1;
+	}
+	to {
+		transform: scale(0.8);
+		opacity: 0;
+	}
+}
+
+@keyframes bounce-in {
+	from {
+		transform: scale(0.5);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+/* 5. SLIDE + FADE COMBO */
+::view-transition-old(slide-fade-out) {
+	animation: 300ms ease-out both slide-fade-out;
+}
+
+::view-transition-new(slide-fade-in) {
+	animation: 300ms ease-in both slide-fade-in;
+}
+
+@keyframes slide-fade-out {
+	from {
+		transform: translateX(0);
+		opacity: 1;
+	}
+	to {
+		transform: translateX(-30px);
+		opacity: 0;
+	}
+}
+
+@keyframes slide-fade-in {
+	from {
+		transform: translateX(30px);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* 6. ROTATE TRANSITIONS */
+::view-transition-old(rotate-out) {
+	animation: 400ms ease-out rotate-out;
+}
+
+::view-transition-new(rotate-in) {
+	animation: 400ms ease-in rotate-in;
+}
+
+@keyframes rotate-out {
+	from {
+		transform: rotate(0deg) scale(1);
+		opacity: 1;
+	}
+	to {
+		transform: rotate(180deg) scale(0.5);
+		opacity: 0;
+	}
+}
+
+@keyframes rotate-in {
+	from {
+		transform: rotate(-180deg) scale(0.5);
+		opacity: 0;
+	}
+	to {
+		transform: rotate(0deg) scale(1);
+		opacity: 1;
+	}
+}
+
+/* 7. WIPE TRANSITIONS */
+::view-transition-old(wipe-left) {
+	animation: 350ms ease-in-out wipe-out-left;
+}
+
+::view-transition-new(wipe-left) {
+	animation: 350ms ease-in-out wipe-in-left;
+}
+
+::view-transition-old(wipe-right) {
+	animation: 350ms ease-in-out wipe-out-right;
+}
+
+::view-transition-new(wipe-right) {
+	animation: 350ms ease-in-out wipe-in-right;
+}
+
+@keyframes wipe-out-left {
+	from {
+		clip-path: inset(0 0 0 0);
+		opacity: 1;
+	}
+	to {
+		clip-path: inset(0 0 0 100%);
+		opacity: 0;
+	}
+}
+
+@keyframes wipe-in-left {
+	from {
+		clip-path: inset(0 100% 0 0);
+		opacity: 0;
+	}
+	to {
+		clip-path: inset(0 0 0 0);
+		opacity: 1;
+	}
+}
+
+@keyframes wipe-out-right {
+	from {
+		clip-path: inset(0 0 0 0);
+		opacity: 1;
+	}
+	to {
+		clip-path: inset(0 100% 0 0);
+		opacity: 0;
+	}
+}
+
+@keyframes wipe-in-right {
+	from {
+		clip-path: inset(0 0 0 100%);
+		opacity: 0;
+	}
+	to {
+		clip-path: inset(0 0 0 0);
+		opacity: 1;
+	}
+}
+
+/* 8. IRIS/CIRCLE EXPAND */
+::view-transition-old(iris) {
+	animation: 400ms ease-out iris-contract;
+}
+
+::view-transition-new(iris) {
+	animation: 400ms ease-in iris-expand;
+}
+
+@keyframes iris-contract {
+	from {
+		clip-path: circle(100% at 50% 50%);
+		opacity: 1;
+	}
+	to {
+		clip-path: circle(0% at 50% 50%);
+		opacity: 0;
+	}
+}
+
+@keyframes iris-expand {
+	from {
+		clip-path: circle(0% at 50% 50%);
+		opacity: 0;
+	}
+	to {
+		clip-path: circle(100% at 50% 50%);
+		opacity: 1;
+	}
+}
+
+/* ADDITIONAL COOL TRANSITIONS */
+
+/* 9. DISSOLVE (Pixelated fade) */
+::view-transition-old(dissolve) {
+	animation: 400ms ease-out dissolve-out;
+}
+
+::view-transition-new(dissolve) {
+	animation: 400ms ease-in dissolve-in;
+}
+
+@keyframes dissolve-out {
+	from {
+		opacity: 1;
+		filter: blur(0px) brightness(1);
+	}
+	to {
+		opacity: 0;
+		filter: blur(5px) brightness(2);
+	}
+}
+
+@keyframes dissolve-in {
+	from {
+		opacity: 0;
+		filter: blur(5px) brightness(0.5);
+	}
+	to {
+		opacity: 1;
+		filter: blur(0px) brightness(1);
+	}
+}
+
+/* 10. STACK (Card stack effect) */
+::view-transition-old(stack-out) {
+	animation: 350ms ease-out stack-out;
+}
+
+::view-transition-new(stack-in) {
+	animation: 350ms ease-in stack-in;
+}
+
+@keyframes stack-out {
+	from {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+	}
+	to {
+		transform: translateY(-100px) scale(0.9);
+		opacity: 0;
+	}
+}
+
+@keyframes stack-in {
+	from {
+		transform: translateY(100px) scale(0.9);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+	}
+}
+
+/* 11. GLITCH EFFECT */
+::view-transition-old(glitch) {
+	animation: 300ms steps(5) glitch-out;
+}
+
+::view-transition-new(glitch) {
+	animation: 300ms steps(5) glitch-in;
+}
+
+@keyframes glitch-out {
+	0% {
+		transform: translate(0);
+		opacity: 1;
+	}
+	20% {
+		transform: translate(-5px, 2px);
+		opacity: 0.8;
+	}
+	40% {
+		transform: translate(3px, -2px);
+		opacity: 0.6;
+	}
+	60% {
+		transform: translate(-2px, 3px);
+		opacity: 0.4;
+	}
+	80% {
+		transform: translate(4px, -1px);
+		opacity: 0.2;
+	}
+	100% {
+		transform: translate(0);
+		opacity: 0;
+	}
+}
+
+@keyframes glitch-in {
+	0% {
+		transform: translate(0);
+		opacity: 0;
+	}
+	20% {
+		transform: translate(5px, -2px);
+		opacity: 0.2;
+	}
+	40% {
+		transform: translate(-3px, 2px);
+		opacity: 0.4;
+	}
+	60% {
+		transform: translate(2px, -3px);
+		opacity: 0.6;
+	}
+	80% {
+		transform: translate(-4px, 1px);
+		opacity: 0.8;
+	}
+	100% {
+		transform: translate(0);
+		opacity: 1;
+	}
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
 	::view-transition-old(*),
