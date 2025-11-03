@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
 		root: process.cwd(),
 	},
 	cacheComponents: true,
+	experimental: {
+		viewTransition: true,
+	},
 	images: {
 		remotePatterns: [
 			{

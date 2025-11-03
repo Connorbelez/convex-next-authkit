@@ -1,7 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, Plus } from "lucide-react";
-import React from "react";
+import { ChevronsUpDown, Shield } from "lucide-react";
 
 import {
 	DropdownMenu,
@@ -9,7 +8,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
-	DropdownMenuShortcut,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -18,22 +16,19 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import type { UserRole } from "@/lib/navigation/role-navigation";
+import { getRoleLabel } from "@/lib/utils/role-helpers";
 
 export function TeamSwitcher({
-	teams,
+	activeRole,
+	availableRoles,
+	onRoleChange,
 }: {
-	teams: {
-		name: string;
-		logo: React.ElementType;
-		plan: string;
-	}[];
+	activeRole: UserRole;
+	availableRoles: UserRole[];
+	onRoleChange: (role: UserRole) => void;
 }) {
 	const { isMobile } = useSidebar();
-	const [activeTeam, setActiveTeam] = React.useState(teams[0]);
-
-	if (!activeTeam) {
-		return null;
-	}
 
 	return (
 		<SidebarMenu>
@@ -45,11 +40,13 @@ export function TeamSwitcher({
 							size="lg"
 						>
 							<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-								<activeTeam.logo className="size-4" />
+								<Shield className="size-4" />
 							</div>
 							<div className="grid flex-1 text-left text-sm leading-tight">
-								<span className="truncate font-medium">{activeTeam.name}</span>
-								<span className="truncate text-xs">{activeTeam.plan}</span>
+								<span className="truncate font-medium">FairLend</span>
+								<span className="truncate text-xs">
+									{getRoleLabel(activeRole)}
+								</span>
 							</div>
 							<ChevronsUpDown className="ml-auto" />
 						</SidebarMenuButton>
@@ -61,27 +58,35 @@ export function TeamSwitcher({
 						sideOffset={4}
 					>
 						<DropdownMenuLabel className="text-muted-foreground text-xs">
-							Teams
+							Switch Role
 						</DropdownMenuLabel>
-						{teams.map((team, index) => (
+						{availableRoles.map((role) => (
 							<DropdownMenuItem
 								className="gap-2 p-2"
-								key={team.name}
-								onClick={() => setActiveTeam(team)}
+								key={role}
+								onClick={() => onRoleChange(role)}
 							>
 								<div className="flex size-6 items-center justify-center rounded-md border">
-									<team.logo className="size-3.5 shrink-0" />
+									<Shield className="size-3.5 shrink-0" />
 								</div>
-								{team.name}
-								<DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+								<div className="flex flex-col">
+									<span className="font-medium">{getRoleLabel(role)}</span>
+									{role === activeRole && (
+										<span className="text-muted-foreground text-xs">
+											Active
+										</span>
+									)}
+								</div>
 							</DropdownMenuItem>
 						))}
 						<DropdownMenuSeparator />
-						<DropdownMenuItem className="gap-2 p-2">
+						<DropdownMenuItem className="gap-2 p-2" disabled>
 							<div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-								<Plus className="size-4" />
+								<Shield className="size-4" />
 							</div>
-							<div className="font-medium text-muted-foreground">Add team</div>
+							<div className="font-medium text-muted-foreground">
+								Manage Roles
+							</div>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

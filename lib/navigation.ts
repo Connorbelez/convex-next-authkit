@@ -2,10 +2,9 @@ import {
 	BookOpen,
 	FileText,
 	HelpCircle,
-	Home,
+	LayoutDashboard,
 	type LucideIcon,
 	Mail,
-	User,
 } from "lucide-react";
 
 export type NavItem = {
@@ -23,25 +22,11 @@ export type NavItem = {
 
 export const navigationItems: NavItem[] = [
 	{
-		id: "home",
-		label: "Home",
-		href: "/",
-		icon: Home,
-		matchPrefix: false, // Exact match for home
-	},
-	{
 		id: "listings",
 		label: "Listings",
 		href: "/listings",
 		icon: FileText,
 		matchPrefix: true, // Will match /listings, /listings/123, etc.
-	},
-	{
-		id: "profile",
-		label: "Profile",
-		href: "/profile",
-		icon: User,
-		matchPrefix: true, // Will match /profile and any nested routes
 	},
 	{
 		id: "server",
@@ -76,6 +61,13 @@ export const navigationItems: NavItem[] = [
 		label: "Contact Us",
 		href: "/contact",
 		icon: Mail,
+		matchPrefix: true,
+	},
+	{
+		id: "dashboard",
+		label: "Dashboard",
+		href: "/dashboard",
+		icon: LayoutDashboard,
 		matchPrefix: true,
 	},
 ];

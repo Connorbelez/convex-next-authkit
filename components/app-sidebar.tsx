@@ -1,21 +1,8 @@
 "use client";
 
-import {
-	AudioWaveform,
-	BookOpen,
-	Bot,
-	Command,
-	Frame,
-	GalleryVerticalEnd,
-	MapPin,
-	PieChart,
-	Settings2,
-	SquareTerminal,
-} from "lucide-react";
-import type * as React from "react";
-
+import { useRouter } from "next/navigation";
+import React from "react";
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
@@ -25,149 +12,63 @@ import {
 	SidebarHeader,
 	SidebarRail,
 } from "@/components/ui/sidebar";
+import {
+	MOCK_AVAILABLE_ROLES,
+	type UserRole,
+} from "@/lib/navigation/role-navigation";
+import {
+	getPrimaryRole,
+	getRoleDashboardUrl,
+	getRoleNavigation,
+} from "@/lib/utils/role-helpers";
 
-// This is sample data.
-const data = {
-	user: {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
-	teams: [
-		{
-			name: "Acme Inc",
-			logo: GalleryVerticalEnd,
-			plan: "Enterprise",
-		},
-		{
-			name: "Acme Corp.",
-			logo: AudioWaveform,
-			plan: "Startup",
-		},
-		{
-			name: "Evil Corp.",
-			logo: Command,
-			plan: "Free",
-		},
-	],
-	navMain: [
-		{
-			title: "Playground",
-			url: "#",
-			icon: SquareTerminal,
-			isActive: true,
-			items: [
-				{
-					title: "History",
-					url: "#",
-				},
-				{
-					title: "Starred",
-					url: "#",
-				},
-				{
-					title: "Settings",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Models",
-			url: "#",
-			icon: Bot,
-			items: [
-				{
-					title: "Genesis",
-					url: "#",
-				},
-				{
-					title: "Explorer",
-					url: "#",
-				},
-				{
-					title: "Quantum",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Documentation",
-			url: "#",
-			icon: BookOpen,
-			items: [
-				{
-					title: "Introduction",
-					url: "#",
-				},
-				{
-					title: "Get Started",
-					url: "#",
-				},
-				{
-					title: "Tutorials",
-					url: "#",
-				},
-				{
-					title: "Changelog",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Settings",
-			url: "#",
-			icon: Settings2,
-			items: [
-				{
-					title: "General",
-					url: "#",
-				},
-				{
-					title: "Team",
-					url: "#",
-				},
-				{
-					title: "Billing",
-					url: "#",
-				},
-				{
-					title: "Limits",
-					url: "#",
-				},
-			],
-		},
-	],
-	projects: [
-		{
-			name: "Design Engineering",
-			url: "#",
-			icon: Frame,
-		},
-		{
-			name: "Sales & Marketing",
-			url: "#",
-			icon: PieChart,
-		},
-		{
-			name: "Travel",
-			url: "#",
-			icon: MapPin,
-		},
-	],
+// This is sample data - in production, user would come from auth
+const userData = {
+	name: "Admin User",
+	email: "admin@fairlend.com",
+	avatar: "/avatars/admin.jpg",
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const router = useRouter();
+
+	// For now, mock all roles as available. In production, this would come from:
+	// const profile = useQuery(api.profile.getCurrentUserProfile);
+	// const userRoles = profile?.roles?.map(r => r.slug) || [];
+	const availableRoles = MOCK_AVAILABLE_ROLES;
+
+	// State for current active role - default to admin
+	const [activeRole, setActiveRole] = React.useState<UserRole>(
+		getPrimaryRole(availableRoles)
+	);
+
+	// Get navigation for current role
+	const navigation = getRoleNavigation(activeRole);
+
+	// Handle role change and navigate to the new role's dashboard
+	const handleRoleChange = React.useCallback(
+		(newRole: UserRole) => {
+			setActiveRole(newRole);
+			const dashboardUrl = getRoleDashboardUrl(newRole);
+			router.push(dashboardUrl);
+		},
+		[router]
+	);
+
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
-				<TeamSwitcher teams={data.teams} />
+				<TeamSwitcher
+					activeRole={activeRole}
+					availableRoles={availableRoles}
+					onRoleChange={handleRoleChange}
+				/>
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={data.navMain} />
-				<NavProjects projects={data.projects} />
+				<NavMain items={navigation} />
 			</SidebarContent>
 			<SidebarFooter>
-				<NavUser user={data.user} />
+				<NavUser user={userData} />
 			</SidebarFooter>
 			<SidebarRail />
 		</Sidebar>

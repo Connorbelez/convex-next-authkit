@@ -1,13 +1,12 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Bell, ChevronDown, Menu, Search, X } from "lucide-react";
+import { Bell, Menu, Search, X } from "lucide-react";
 import Link from "next/link";
 // import React from "react";
 import { useEffect, useState } from "react";
 import { UserAvatarMenu } from "@/components/auth/UserAvatarMenu";
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { isNavItemActive, navigationItems } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
@@ -59,7 +58,7 @@ export function TwoLevelNav({
 							</div>
 
 							{/* Project Selector - Hidden on mobile */}
-							<div className="hidden cursor-pointer items-center gap-2 rounded-md bg-secondary/50 px-3 py-1.5 transition-colors hover:bg-secondary md:flex">
+							{/* <div className="hidden cursor-pointer items-center gap-2 rounded-md bg-secondary/50 px-3 py-1.5 transition-colors hover:bg-secondary md:flex">
 								<div className="size-2 rounded-full bg-primary" />
 								<span className="text-foreground text-sm">Main Project</span>
 								<Badge
@@ -69,7 +68,7 @@ export function TwoLevelNav({
 									Pro
 								</Badge>
 								<ChevronDown className="size-3 text-muted-foreground" />
-							</div>
+							</div> */}
 						</div>
 
 						{/* Center - Tubelight Tabs (Desktop only) */}
@@ -197,7 +196,7 @@ export function TwoLevelNav({
 							{/* Backdrop */}
 							<motion.div
 								animate={{ opacity: 1 }}
-								className="fixed inset-0 z-40 bg-background/80 backdrop-blur-md lg:hidden"
+								className="fixed inset-0 top-28 z-40 bg-background/50 backdrop-blur-md lg:hidden"
 								exit={{ opacity: 0 }}
 								initial={{ opacity: 0 }}
 								onClick={() => setMobileMenuOpen(false)}
@@ -206,13 +205,13 @@ export function TwoLevelNav({
 
 							{/* Menu Content */}
 							<motion.div
-								animate={{ opacity: 1, y: 0 }}
-								className="fixed top-16 right-0 left-0 z-50 border-border border-b bg-background/95 shadow-2xl backdrop-blur-xl lg:hidden"
+								animate={{ opacity: 0.7, y: 0 }}
+								className="fixed top-28 right-0 left-0 z-50 rounded-lg border-border border-b bg-background/50 shadow-2xl backdrop-blur-xl lg:hidden"
 								exit={{ opacity: 0, y: -20 }}
 								initial={{ opacity: 0, y: -20 }}
 								transition={{ duration: 0.3, ease: "easeOut" }}
 							>
-								<div className="max-h-[calc(100vh-4rem)] space-y-1 overflow-y-auto px-4 py-6">
+								<div className="h-[calc(100vh-4rem)] space-y-1 overflow-y-auto rounded-lg bg-background/50 px-4 py-6">
 									{/* Navigation Items */}
 									{navigationItems.map((navItem) => {
 										const Icon = navItem.icon;
@@ -220,18 +219,20 @@ export function TwoLevelNav({
 
 										return (
 											<Link
+												className=""
 												href={navItem.href}
 												key={navItem.id}
 												prefetch={true}
 											>
 												<Button
 													className={cn(
-														"flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors",
+														"flex w-full items-center justify-start gap-3 rounded-lg px-4 py-3 text-left transition-colors",
 														isActive
 															? "bg-primary/10 font-semibold text-primary"
 															: "text-foreground/80 hover:bg-secondary hover:text-foreground"
 													)}
 													key={navItem.id}
+													onClick={() => setMobileMenuOpen(false)}
 													variant="ghost"
 												>
 													<Icon className="size-5" />

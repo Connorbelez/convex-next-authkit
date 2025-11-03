@@ -138,6 +138,13 @@ pnpm run build-storybook
 - Convex: Lightweight shim writing to stdout
 - Environment: `LOG_LEVEL`, `LOG_PRETTY`, `LOG_SERVICE_NAME`
 
+#### Toast Notifications
+- **Sonner** is used for all toast notifications (NOT `use-toast` hook)
+- Import from `sonner`: `import { toast } from "sonner"`
+- Usage: `toast.success("Message")`, `toast.error("Message")`, `toast.info("Message")`
+- Toaster component is already configured in the app layout with custom icons
+- Never create or import `@/hooks/use-toast` - use `sonner` directly
+
 ### Project Structure
 
 ```

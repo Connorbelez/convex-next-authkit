@@ -23,6 +23,7 @@ import {
 	FILTER_BOUNDS,
 	type FilterState,
 	type MortgageType,
+	type PropertyType,
 } from "./types/listing-filters";
 
 type FilterModalProps = {
@@ -165,6 +166,18 @@ export default function FilterModal({
 		});
 	};
 
+	const handlePropertyTypeToggle = (type: PropertyType) => {
+		const currentTypes = safeFilters.propertyTypes;
+		const newTypes = currentTypes.includes(type)
+			? currentTypes.filter((t) => t !== type)
+			: [...currentTypes, type];
+
+		onFiltersChange({
+			...safeFilters,
+			propertyTypes: newTypes,
+		});
+	};
+
 	const handleMaturityDateChange = (date?: Date) => {
 		onFiltersChange({
 			...safeFilters,
@@ -205,6 +218,74 @@ export default function FilterModal({
 		{ value: "First", label: "1st", displayLabel: "1st" },
 		{ value: "Second", label: "2nd", displayLabel: "2nd" },
 		{ value: "Other", label: "3+", displayLabel: "3+" },
+	];
+
+	const propertyTypeOptions: Array<{
+		value: PropertyType;
+		label: string;
+		displayLabel: string;
+		icon: string;
+	}> = [
+		{
+			value: "Detached Home",
+			label: "Detached",
+			displayLabel: "Detached",
+			icon: "lucide:home",
+		},
+		{
+			value: "Duplex",
+			label: "Duplex",
+			displayLabel: "Duplex",
+			icon: "lucide:building-2",
+		},
+		{
+			value: "Triplex",
+			label: "Triplex",
+			displayLabel: "Triplex",
+			icon: "lucide:building",
+		},
+		{
+			value: "Apartment",
+			label: "Apartment",
+			displayLabel: "Apartment",
+			icon: "lucide:landmark",
+		},
+		{
+			value: "Condo",
+			label: "Condo",
+			displayLabel: "Condo",
+			icon: "lucide:building-2",
+		},
+		{
+			value: "Cottage",
+			label: "Cottage",
+			displayLabel: "Cottage",
+			icon: "lucide:home",
+		},
+		{
+			value: "Townhouse",
+			label: "Townhouse",
+			displayLabel: "Townhouse",
+			icon: "lucide:home",
+		},
+		{
+			value: "Commercial",
+			label: "Commercial",
+			displayLabel: "Commercial",
+			icon: "lucide:briefcase",
+		},
+		{
+			value: "Mixed-Use",
+			label: "Mixed-Use",
+			displayLabel: "Mixed-Use",
+			icon: "lucide:layers",
+		},
+		{
+			value: "Other",
+			label: "Other",
+			displayLabel: "Other",
+			icon: "lucide:help-circle",
+		},
 	];
 
 	return (
@@ -326,6 +407,37 @@ export default function FilterModal({
 										</div>
 										<CheckboxIndicator className="absolute top-2 right-2">
 											<CircleCheck className="h-5 w-5 fill-primary text-primary-foreground" />
+										</CheckboxIndicator>
+									</CheckboxRoot>
+								))}
+							</div>
+						</div>
+
+						<Separator />
+
+						<div className="space-y-2">
+							<h2 className="flex items-center justify-center gap-2 text-center font-medium text-foreground/50 text-lg sm:text-xl">
+								<Icon className="h-5 w-5" icon="lucide:building" />
+								Property Type
+							</h2>
+							<div className="grid grid-cols-1 items-center justify-center gap-2 py-4 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
+								{propertyTypeOptions.map((option) => (
+									<CheckboxRoot
+										checked={safeFilters.propertyTypes.includes(option.value)}
+										className="relative h-16 rounded-lg px-4 py-3 text-center text-muted-foreground ring-[1px] ring-border transition-all data-[state=checked]:text-primary data-[state=checked]:ring-2 data-[state=checked]:ring-primary"
+										key={option.value}
+										onCheckedChange={() =>
+											handlePropertyTypeToggle(option.value)
+										}
+									>
+										<div className="flex h-full flex-col items-center justify-center gap-2">
+											<Icon className="h-5 w-5" icon={option.icon} />
+											<span className="font-semibold text-xs leading-tight sm:text-sm">
+												{option.label}
+											</span>
+										</div>
+										<CheckboxIndicator className="absolute top-2 right-2">
+											<CircleCheck className="h-4 w-4 fill-primary text-primary-foreground" />
 										</CheckboxIndicator>
 									</CheckboxRoot>
 								))}

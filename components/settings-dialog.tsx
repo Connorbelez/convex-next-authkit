@@ -324,7 +324,7 @@ export function SettingsDialog() {
 						<div className="flex items-center justify-between">
 							<DrawerTitle>{getCurrentSectionName()}</DrawerTitle>
 							<DrawerClose asChild>
-								<Button className="h-8 w-8" size="icon" variant="ghost">
+								<Button size="icon-sm" variant="ghost">
 									<X className="h-4 w-4" />
 								</Button>
 							</DrawerClose>
@@ -337,14 +337,14 @@ export function SettingsDialog() {
 								{messageSubTabs.map((tab) => (
 									<Button
 										className={cn(
-											"flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 font-medium text-xs transition-colors",
-											activeSubTab === tab.id
-												? "bg-secondary text-secondary-foreground"
-												: "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+											"flex items-center justify-start gap-2 whitespace-nowrap text-left",
+											activeSubTab !== tab.id && "text-muted-foreground"
 										)}
 										key={tab.id}
 										onClick={() => setActiveSubTab(tab.id)}
+										size="sm"
 										type="button"
+										variant={activeSubTab === tab.id ? "secondary" : "outline"}
 									>
 										<tab.icon className="h-4 w-4" />
 										<span>{tab.name}</span>
@@ -359,10 +359,8 @@ export function SettingsDialog() {
 							{sections.map((section) => (
 								<Button
 									className={cn(
-										"relative flex min-w-[80px] shrink-0 flex-col items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-6 py-3 font-medium text-xs transition-colors",
-										activeSection === section.id
-											? "bg-primary text-primary-foreground"
-											: "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+										"relative flex min-w-[88px] shrink-0 flex-col items-start gap-1.5 rounded-xl px-4 py-3 text-left text-xs",
+										activeSection !== section.id && "text-muted-foreground"
 									)}
 									key={section.id}
 									onClick={() => {
@@ -371,7 +369,9 @@ export function SettingsDialog() {
 											setActiveSubTab("messages-list");
 										}
 									}}
+									size="sm"
 									type="button"
+									variant={activeSection === section.id ? "default" : "outline"}
 								>
 									<div className="relative">
 										<section.icon className="h-5 w-5" />
@@ -400,7 +400,13 @@ export function SettingsDialog() {
 	return (
 		<Dialog onOpenChange={setOpen} open={open}>
 			<DialogTrigger asChild>
-				<Button size="sm">Open Dialog</Button>
+				<Button
+					className="justify-start text-left"
+					size="sm"
+					variant="secondary"
+				>
+					Open Dialog
+				</Button>
 			</DialogTrigger>
 			<DialogContent className="z-200 overflow-hidden p-0 md:max-h-[500px] md:max-w-[900px] lg:max-w-[1000px]">
 				<DialogTitle className="sr-only">Settings</DialogTitle>
@@ -419,11 +425,8 @@ export function SettingsDialog() {
 							{sections.map((section) => (
 								<Button
 									className={cn(
-										"relative mb-1 flex w-full items-center gap-3 rounded-md px-3 py-2 font-medium text-sm transition-colors",
-										activeSection === section.id
-											? "bg-primary text-primary-foreground"
-											: "text-muted-foreground hover:bg-muted hover:text-foreground",
-										sidebarCollapsed && "justify-center px-2"
+										"relative mb-1 w-full justify-start justify-items-start gap-3 px-3 py-2 text-left text-sm",
+										sidebarCollapsed && "px-2"
 									)}
 									key={section.id}
 									onClick={() => {
@@ -432,8 +435,9 @@ export function SettingsDialog() {
 											setActiveSubTab("messages-list");
 										}
 									}}
+									size="sm"
 									title={sidebarCollapsed ? section.name : undefined}
-									type="button"
+									variant={activeSection === section.id ? "secondary" : "ghost"}
 								>
 									<div className="relative">
 										<section.icon className="h-5 w-5 shrink-0" />
@@ -495,13 +499,15 @@ export function SettingsDialog() {
 									{messageSubTabs.map((tab) => (
 										<Button
 											className={cn(
-												"flex items-center gap-2 rounded-md px-3 py-1.5 font-medium text-sm transition-colors",
-												activeSubTab === tab.id
-													? "bg-secondary text-secondary-foreground"
-													: "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+												"flex items-center justify-start gap-2 text-left",
+												activeSubTab !== tab.id && "text-muted-foreground"
 											)}
 											key={tab.id}
 											onClick={() => setActiveSubTab(tab.id)}
+											size="sm"
+											variant={
+												activeSubTab === tab.id ? "secondary" : "outline"
+											}
 										>
 											<tab.icon className="h-4 w-4" />
 											<span>{tab.name}</span>

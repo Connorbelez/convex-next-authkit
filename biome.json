@@ -35,6 +35,7 @@
       "!.convex/",
       "!playwright-report/",
       "!playwright-report/*",
+      "!app/globals.css",
       "!.next/",
       "!convex/_generated",
       "!convex/tsconfig.json",
