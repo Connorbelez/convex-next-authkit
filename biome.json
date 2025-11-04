@@ -37,6 +37,8 @@
       "!playwright-report/*",
       "!app/globals.css",
       "!.next/",
+      "!components/__tests__/",
+      "!components/__tests__/*",
       "!convex/_generated",
       "!convex/tsconfig.json",
       "!convex",
