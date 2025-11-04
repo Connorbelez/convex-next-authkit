@@ -112,6 +112,9 @@ export const updateUserProfile = internalAction({
 	},
 });
 
+// Note: WorkOS does not support updating profile pictures via their API.
+// Profile pictures come from OAuth providers and cannot be modified programmatically.
+
 export const syncUserOrganizations = internalAction({
 	args: v.object({
 		userId: v.string(),

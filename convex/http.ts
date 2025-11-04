@@ -195,6 +195,16 @@ http.route({
 					break;
 				}
 
+				case "role.created": {
+					logger.info("Processing role.created event");
+					const res = await ctx.runMutation(internal.roles.createOrUpdateRole, {
+						slug: data.slug,
+						name: data.name || data.slug, // Use slug as name if not provided
+						permissions: data.permissions || [],
+						created_at: data.created_at,
+						updated_at: data.updated_at,
+					});
+				}
 				case "role.updated": {
 					logger.info("Processing role.updated event");
 					const res = await ctx.runMutation(internal.roles.createOrUpdateRole, {

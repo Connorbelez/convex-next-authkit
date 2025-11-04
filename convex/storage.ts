@@ -10,6 +10,9 @@ export const getTestDocumentUrl = query({
 	args: {},
 	returns: v.union(v.string(), v.null()),
 	handler: async (ctx) => {
+		//Enforce Authorization
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) throw new Error("Unauthorized");
 		// Use the test PDF file ID
 		// Note: This should be replaced with actual document IDs from your database
 		const storageId = "kg222733sz1pg4gp3qpy9ca5fd7tneqg" as Id<"_storage">;
@@ -24,6 +27,9 @@ export const getFileUrl = query({
 	args: { storageId: v.id("_storage") },
 	returns: v.union(v.string(), v.null()),
 	handler: async (ctx, args) => {
+		//Enforce Authorization
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) throw new Error("Unauthorized");
 		return await ctx.storage.getUrl(args.storageId);
 	},
 });

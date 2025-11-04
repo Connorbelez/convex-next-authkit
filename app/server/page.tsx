@@ -27,6 +27,9 @@ export default async function ServerPage() {
 					</code>
 				</div>
 				<Home preloaded={preloaded} />
+				<code>
+					<pre>{JSON.stringify(preloaded, null, 2)}</pre>
+				</code>
 			</main>
 		</ViewTransition>
 	);

@@ -45,17 +45,6 @@ export default defineSchema({
 		created_at: v.optional(v.string()),
 		updated_at: v.optional(v.string()),
 	}).index("by_slug", ["slug"]),
-	user_roles: defineTable({
-		// Reference to the user
-		userId: v.id("users"),
-		// Reference to the role
-		roleSlug: v.string(),
-		// When this role was assigned to the user
-		assignedAt: v.optional(v.string()),
-	})
-		.index("by_userId", ["userId"])
-		.index("by_roleSlug", ["roleSlug"])
-		.index("by_user_role", ["userId", "roleSlug"]),
 	organizations: defineTable({
 		// WorkOS organization ID - primary identifier
 		id: v.string(),
@@ -70,7 +59,8 @@ export default defineSchema({
 		updated_at: v.optional(v.string()),
 	})
 		.index("byWorkosId", ["id"])
-		.index("byExternalId", ["external_id"]),
+		.index("byExternalId", ["external_id"])
+		.index("byName", ["name"]),
 	organization_domains: defineTable({
 		// WorkOS domain ID - primary identifier
 		id: v.string(),

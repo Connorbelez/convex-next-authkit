@@ -145,6 +145,42 @@ pnpm run build-storybook
 - Toaster component is already configured in the app layout with custom icons
 - Never create or import `@/hooks/use-toast` - use `sonner` directly
 
+#### React Compiler Optimization
+- **This project uses React Compiler for automatic performance optimization**
+- **DO NOT manually use `useMemo` or `useCallback`** - React Compiler handles this automatically
+- Write plain functions and let the compiler optimize them
+- Remove dependency arrays - React Compiler tracks dependencies automatically
+- Benefits:
+  - ✅ Automatic memoization of expensive computations
+  - ✅ Automatic dead code elimination
+  - ✅ Automatic state transition tracking
+  - ✅ Cleaner, more readable code
+  - ✅ Better performance than manual optimization
+
+**Example - DON'T DO THIS (Manual Optimization):**
+```typescript
+// ❌ Manual optimization - NOT needed with React Compiler
+const derivedData = useMemo(() => {
+  return expensiveComputation(data);
+}, [data]);
+
+const handleClick = useCallback((id: string) => {
+  doSomething(id);
+}, [doSomething]);
+```
+
+**Example - DO THIS (React Compiler):**
+```typescript
+// ✅ Let React Compiler handle optimization automatically
+function getDerivedData(data: typeof userData) {
+  return expensiveComputation(data);
+}
+
+function handleClick(id: string) {
+  doSomething(id);
+}
+```
+
 ### Project Structure
 
 ```

@@ -22,7 +22,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-import { MOCK_MEMBERSHIPS, MOCK_ORGS } from "@/lib/mock-data/organizations";
 
 // Regex for splitting names by whitespace - defined at top level for performance
 const NAME_SPLIT_REGEX = /\s+/;
@@ -54,10 +53,9 @@ function getInitials(
 
 export default function ProfilePage() {
 	const { user: authUser } = useAuth();
-	const data = useQuery(
-		api.profile.getCurrentUserProfile,
-		authUser ? {} : undefined
-	);
+	const data = useQuery(api.profile.getCurrentUserProfile);
+	console.log("PROFILE DATA", { data });
+
 	const updateProfile = useMutation(api.profile.updateProfile);
 	const setActiveOrg = useMutation(api.profile.setActiveOrganization);
 	const generateUploadUrl = useAction(api.profile.generateUploadUrl);
@@ -75,20 +73,27 @@ export default function ProfilePage() {
 
 	const composed: ProfileData | undefined = useMemo(() => {
 		if (!data) return;
-		let organizations = data.organizations ?? [];
-		let memberships = data.memberships ?? [];
-		if (organizations.length === 0) {
-			organizations = [...MOCK_ORGS];
-			const uid = data.user?.idp_id ?? "mock-user";
-			memberships = MOCK_MEMBERSHIPS(uid);
-		}
+		const organizations =
+			data.memberships.map((m) => ({
+				id: m.organizationId,
+				name: m.organizationName,
+				created_at: m.organizationCreatedAt,
+			})) ?? [];
+		const memberships = data.memberships ?? [];
+		const roles = memberships.map((m) => ({
+			slug: m.membershipRole?.slug ?? "",
+			name: m.membershipRole?.slug ?? "",
+		}));
 		return {
 			...data,
 			organizations,
+			roles,
 			memberships,
 			activeOrganizationId: data.activeOrganizationId,
 		} as ProfileData;
 	}, [data]);
+
+	console.log("COMPOSED", { composed });
 
 	useEffect(() => {
 		if (!data) return;
@@ -96,7 +101,7 @@ export default function ProfilePage() {
 		setLastName(data.user?.last_name ?? "");
 		setPhone(data.user?.phone ?? "");
 		setActiveOrgLocal(data.activeOrganizationId ?? "");
-		setUsingMocks((data.organizations?.length ?? 0) === 0);
+		setUsingMocks((data.memberships?.length ?? 0) === 0);
 	}, [data]);
 
 	const dirty = useMemo(() => {
@@ -206,13 +211,24 @@ export default function ProfilePage() {
 		);
 	}
 
+	// Priority: WorkOS OAuth picture > Custom uploaded picture > Initials
+	// This matches the priority in profileForm.tsx and UserAvatarMenu.tsx
+	const workosImageUrl =
+		(data?.workOsIdentity as any)?.profile_picture_url ||
+		(authUser as any)?.profilePictureUrl ||
+		null;
+	const hasWorkOSPicture = !!workosImageUrl;
+
 	const imageUrl =
+		workosImageUrl ||
 		data?.user?.profile_picture_url ||
 		data?.user?.profile_picture ||
-		(authUser as any)?.profilePictureUrl ||
 		"";
 	const email = data?.user?.email ?? authUser?.email ?? "";
-	const roles = (data?.roles ?? []) as Array<{ slug: string; name?: string }>;
+	const roles = (composed?.roles ?? []) as Array<{
+		slug: string;
+		name?: string;
+	}>;
 
 	return (
 		<div className="mx-auto w-full max-w-[1180px] space-y-6 px-4 py-8">
@@ -221,36 +237,55 @@ export default function ProfilePage() {
 			{/* Hero Header */}
 			<Card className="relative overflow-hidden border bg-linear-to-br from-muted/40 via-background to-background p-6">
 				<div className="flex items-center gap-5">
-					<div className="relative">
-						<Avatar className="h-20 w-20 border">
-							{imageUrl ? (
-								<AvatarImage alt={displayName} src={imageUrl} />
-							) : (
-								<AvatarFallback className="text-lg">
-									{getInitials(firstName, lastName, email)}
-								</AvatarFallback>
-							)}
-						</Avatar>
-						<label
-							aria-label="Change profile picture"
-							className="-bottom-1 -right-1 absolute inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border bg-background shadow"
-						>
-							<input
-								accept="image/*"
-								className="hidden"
-								onChange={(e) => {
-									const f = e.target.files?.[0];
-									if (f) onPickAvatar(f);
-								}}
-								type="file"
-							/>
-							{uploading ? (
-								<Upload className="h-4 w-4" />
-							) : (
-								<Pencil className="h-4 w-4" />
-							)}
-						</label>
-					</div>
+					{hasWorkOSPicture ? (
+						// WorkOS OAuth picture - no edit button
+						<div className="flex flex-col items-center gap-2">
+							<Avatar className="h-20 w-20 border">
+								{imageUrl ? (
+									<AvatarImage alt={displayName} src={imageUrl} />
+								) : (
+									<AvatarFallback className="text-lg">
+										{getInitials(firstName, lastName, email)}
+									</AvatarFallback>
+								)}
+							</Avatar>
+							<p className="text-center text-muted-foreground text-xs">
+								Using OAuth provider picture
+							</p>
+						</div>
+					) : (
+						// Custom picture - show edit button
+						<div className="relative">
+							<Avatar className="h-20 w-20 border">
+								{imageUrl ? (
+									<AvatarImage alt={displayName} src={imageUrl} />
+								) : (
+									<AvatarFallback className="text-lg">
+										{getInitials(firstName, lastName, email)}
+									</AvatarFallback>
+								)}
+							</Avatar>
+							<label
+								aria-label="Change profile picture"
+								className="-bottom-1 -right-1 absolute inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border bg-background shadow"
+							>
+								<input
+									accept="image/*"
+									className="hidden"
+									onChange={(e) => {
+										const f = e.target.files?.[0];
+										if (f) onPickAvatar(f);
+									}}
+									type="file"
+								/>
+								{uploading ? (
+									<Upload className="h-4 w-4" />
+								) : (
+									<Pencil className="h-4 w-4" />
+								)}
+							</label>
+						</div>
+					)}
 					<div className="min-w-0">
 						<div className="truncate font-semibold text-xl tracking-tight">
 							{displayName}
