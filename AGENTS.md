@@ -256,3 +256,80 @@ Use Next.js `<Image>` comp vs `<img>` el
 Use Next.js `next/head` or App Router metadata API vs `<head>` el
 No importing `next/document` in page files
 No importing `next/head` in `_document.tsx`. Use `<Head>` from `next/document` instead
+
+## React Compiler Guidelines
+
+This project uses React Compiler for automatic performance optimization. When writing React code:
+
+### ✅ DO: Write React Compiler-Optimized Code
+- Use plain functions instead of wrapping in `useCallback`
+- Use plain derived data logic instead of `useMemo`
+- Let React Compiler handle memoization automatically
+- Write cleaner, more readable business logic
+- Trust the compiler to optimize state transitions
+
+### ❌ DON'T: Manual Performance Optimization
+- Avoid `useMemo` for computed values
+- Avoid `useCallback` for event handlers
+- Don't manually manage dependency arrays
+- Don't add unnecessary memoization hooks
+
+### Examples
+
+**✅ GOOD - React Compiler Style:**
+```typescript
+function Component({ data }: Props) {
+  // Plain function - React Compiler optimizes automatically
+  function getDisplayName(user: User) {
+    return user.firstName + ' ' + user.lastName;
+  }
+  
+  // Plain handler - React Compiler optimizes
+  function handleClick(id: string) {
+    console.log('Clicked:', id);
+  }
+  
+  return (
+    <div>
+      <span>{getDisplayName(data.user)}</span>
+      <button onClick={() => handleClick(data.id)}>Click</button>
+    </div>
+  );
+}
+```
+
+**❌ BAD - Manual Optimization:**
+```typescript
+function Component({ data }: Props) {
+  // Don't manually memoize - React Compiler does this better
+  const getDisplayName = useCallback((user: User) => {
+    return user.firstName + ' ' + user.lastName;
+  }, []);
+  
+  // Don't manually wrap handlers
+  const handleClick = useCallback((id: string) => {
+    console.log('Clicked:', id);
+  }, []);
+  
+  return (
+    <div>
+      <span>{getDisplayName(data.user)}</span>
+      <button onClick={() => handleClick(data.id)}>Click</button>
+    </div>
+  );
+}
+```
+
+### Key Benefits
+- **Less Boilerplate**: No dependency arrays to manage
+- **Better Performance**: React Compiler optimizes better than manual approaches
+- **Cleaner Code**: Business logic is more direct and readable
+- **Automatic**: Optimization happens without manual intervention
+- **Future-Proof**: As React Compiler improves, your code gets faster automatically
+
+### Migration Notes
+When refactoring existing code:
+1. Remove `useMemo` and `useCallback` where appropriate
+2. Replace wrapped functions with plain functions
+3. Let React Compiler handle the optimization
+4. Test performance to verify improvements

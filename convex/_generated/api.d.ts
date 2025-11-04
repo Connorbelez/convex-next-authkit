@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as logger from "../logger.js";
 import type * as myFunctions from "../myFunctions.js";
@@ -15,6 +16,8 @@ import type * as organizations from "../organizations.js";
 import type * as profile from "../profile.js";
 import type * as roles from "../roles.js";
 import type * as storage from "../storage.js";
+import type * as sync from "../sync.js";
+import type * as syncHelpers from "../syncHelpers.js";
 import type * as users from "../users.js";
 import type * as workos from "../workos.js";
 
@@ -33,6 +36,7 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  crons: typeof crons;
   http: typeof http;
   logger: typeof logger;
   myFunctions: typeof myFunctions;
@@ -40,6 +44,8 @@ declare const fullApi: ApiFromModules<{
   profile: typeof profile;
   roles: typeof roles;
   storage: typeof storage;
+  sync: typeof sync;
+  syncHelpers: typeof syncHelpers;
   users: typeof users;
   workos: typeof workos;
 }>;

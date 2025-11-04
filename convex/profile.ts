@@ -1,22 +1,25 @@
-import { v } from "convex/values";
-import { internal } from "./_generated/api";
+import { v, Infer } from "convex/values";
+import { internal, api } from "./_generated/api";
 import { action, mutation, query } from "./_generated/server";
+import { FunctionReturnType } from "convex/server";
+import schema from "./schema";
+type User = Infer<typeof schema.tables.users.validator>;
+type Organization = Infer<typeof schema.tables.organizations.validator>;
+type Membership = Infer<typeof schema.tables.organization_memberships.validator>;
+import logger from "../lib/logger";
+
 
 export const getCurrentUserProfile = query({
-	args: {},
-	returns: v.any(),
-	handler: async (ctx): Promise<any> => {
+	handler: async (ctx) => {
 		const identity = await ctx.auth.getUserIdentity();
 		if (!identity) {
 			return {
 				user: null,
-				roles: [],
-				organizations: [],
+				workOsIdentity: identity,
 				memberships: [],
 				activeOrganizationId: null,
 			};
 		}
-
 		const workosUserId = identity.subject;
 
 		const user = await ctx.db
@@ -27,8 +30,7 @@ export const getCurrentUserProfile = query({
 		if (!user) {
 			return {
 				user: null,
-				roles: [],
-				organizations: [],
+				workOsIdentity: identity,
 				memberships: [],
 				activeOrganizationId: null,
 			};
@@ -39,31 +41,77 @@ export const getCurrentUserProfile = query({
 			.withIndex("byUserId", (q) => q.eq("user_id", workosUserId))
 			.collect();
 
-		const orgIds = Array.from(
-			new Set(memberships.map((m) => m.organization_id))
-		);
-		const organizations = [] as Array<any>;
-		for (const orgId of orgIds) {
+
+	const orgMemberships = (await Promise.all(
+		memberships.map(async (membership) => {
 			const org = await ctx.db
 				.query("organizations")
-				.withIndex("byWorkosId", (q) => q.eq("id", orgId))
+				.withIndex("byWorkosId", (q) => q.eq("id", membership.organization_id))
 				.unique();
-			if (org) organizations.push(org);
-		}
+			
+			// Fetch role details with permissions
+			const roleDetails = await Promise.all(
+				(membership.roles || []).map(async (roleRef) => {
+					const role = await ctx.db
+						.query("roles")
+						.withIndex("by_slug", (q) => q.eq("slug", roleRef.slug))
+						.unique();
+					return {
+						slug: roleRef.slug,
+						name: role?.name ?? roleRef.slug,
+						permissions: role?.permissions ?? [],
+					};
+				})
+			);
 
-		const roles: any = await ctx.runQuery(internal.roles.getUserRoles, {
-			userId: user._id,
-		});
+			// Determine the active/primary role
+			const primaryRoleSlug = membership.role?.slug ?? roleDetails[0]?.slug ?? "";
+			
+			return {
+				organizationId: org?.id ?? "",
+				organizationName: org?.name ?? "",
+				organizationExternalId: org?.external_id ?? "",
+				organizationMetadata: org?.metadata ?? {},					
+				organizationCreatedAt: org?.created_at ?? "",
+				memberShipId: membership.id,
+				membershipOrgId: membership.organization_id,
+				membershipRole: membership.role,
+				membershipRoles: membership.roles,
+				roleDetails: roleDetails,
+				primaryRoleSlug: primaryRoleSlug,
+				membershipCreatedAt: membership.created_at ?? "",
+			}
+		})
+	))
+// rganizationId: string; organizationName: string; organizationExternalId: string; organizationMetadata: any; organizationCreatedAt: string; memberShipId: string; membershipOrgId: string;
+	// Extract WorkOS permissions from identity for the active organization
+	const workosPermissions = (identity as any)?.permissions ?? [];
+	const workosOrgId = (identity as any)?.org_id ?? null;
+	const workosRole = (identity as any)?.role ?? null;
 
-		return {
-			user,
-			roles,
-			organizations,
-			memberships,
-			activeOrganizationId: user.active_organization_id ?? null,
-		};
+	console.debug("PROFILE RETURN PAYLOAD", {
+		user: user,
+		workOsIdentity: identity,
+		memberships: orgMemberships,
+		activeOrganizationId: user.active_organization_id ?? null,
+		workosPermissions,
+		workosOrgId,
+	});
+
+	return {
+		user: user,
+		workOsIdentity: identity,
+		memberships: orgMemberships,
+		activeOrganizationId: user.active_organization_id ?? null,
+		workosPermissions,
+		workosOrgId,
+		workosRole,
+	};
 	},
 });
+
+// Export the inferred return type
+export type UserProfileReturnType = FunctionReturnType<typeof api.profile.getCurrentUserProfile>;
 
 export const updateProfile = mutation({
 	args: v.object({
@@ -173,6 +221,10 @@ export const saveProfilePicture = mutation({
 			profile_picture: url,
 			updated_at: new Date().toISOString(),
 		});
+
+		// Note: WorkOS does not support updating profile pictures via API.
+		// Profile pictures in WorkOS come from OAuth providers and cannot be modified.
+		// We only store the custom profile picture in our Convex database.
 
 		return null;
 	},

@@ -1,20 +1,25 @@
-import { expect, test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
-test("has title", async ({ page }) => {
-	await page.goto("https://playwright.dev/");
+test("homepage loads successfully", async ({ page }) => {
+	await page.goto("/");
 
-	// Expect a title "to contain" a substring.
-	await expect(page).toHaveTitle(/Playwright/);
+	await expect(page).toHaveTitle(/.*/);
+	await expect(page.getByText("Welcome to FairLend")).toBeVisible();
 });
 
-test("get started link", async ({ page }) => {
-	await page.goto("https://playwright.dev/");
+test("navigation renders", async ({ page }) => {
+	await page.goto("/");
 
-	// Click the get started link.
-	await page.getByRole("link", { name: "Get started" }).click();
+	await expect(page.getByRole("navigation")).toBeVisible();
+	await expect(page.getByText("Home")).toBeVisible();
+});
 
-	// Expects page to have a heading with the name of Installation.
-	await expect(
-		page.getByRole("heading", { name: "Installation" })
-	).toBeVisible();
+test("feature cards display", async ({ page }) => {
+	await page.goto("/");
+
+	const featureCards = page.getByRole("article");
+	await expect(featureCards).toHaveCount(6);
+
+	const firstCard = featureCards.first();
+	await expect(firstCard.getByText("Feature 1")).toBeVisible();
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { SettingsDialog } from "@/components/settings-dialog";
@@ -13,6 +14,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { api } from "@/convex/_generated/api";
 
 // Regex for splitting on whitespace (defined at module level for performance)
 const WHITESPACE_REGEX = /\s+/;
@@ -37,6 +39,9 @@ export function UserAvatarMenu() {
 	const [settingsKey, setSettingsKey] = useState(0);
 	const router = useRouter();
 
+	// Query user profile from Convex to get custom profile picture
+	const userProfile = useQuery(api.profile.getCurrentUserProfile);
+
 	const displayName = useMemo(() => {
 		if (!user) return "Guest User";
 		const name = [user.firstName, user.lastName].filter(Boolean).join(" ");
@@ -44,7 +49,26 @@ export function UserAvatarMenu() {
 	}, [user]);
 
 	const email = user?.email ?? null;
-	const imageUrl = (user as any)?.profilePictureUrl ?? null;
+
+	// Priority: WorkOS OAuth picture > Custom uploaded picture > null (shows initials)
+	// This matches the priority in profileForm.tsx to ensure consistency
+	const imageUrl = useMemo(() => {
+		// 1. WorkOS OAuth picture (highest priority)
+		const workosUrl = (user as any)?.profilePictureUrl;
+		if (workosUrl) return workosUrl;
+
+		// 2. Custom uploaded picture (fallback when no OAuth picture)
+		if (userProfile?.user?.profile_picture_url) {
+			return userProfile.user.profile_picture_url;
+		}
+		if (userProfile?.user?.profile_picture) {
+			return userProfile.user.profile_picture;
+		}
+
+		// 3. No picture - will show initials
+		return null;
+	}, [user, userProfile]);
+
 	const initials = getInitials(displayName, email);
 
 	if (loading) {

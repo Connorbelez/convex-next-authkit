@@ -39,13 +39,13 @@ export default async function proxy(req: NextRequest) {
 	// call the authkit middleware first
 	const headers = new Headers(req.headers);
 	headers.set("x-current-path", req.nextUrl.pathname);
-	console.info("HEADERS", { headers });
-	console.info("REQUEST", {
-		url: req.url,
-		pathname: req.nextUrl.pathname,
-		search: req.nextUrl.search,
-	});
-	console.info("PATHNAME", { pathname: req.nextUrl.pathname });
+	// console.info("HEADERS", { headers });
+	// console.info("REQUEST", {
+	// 	url: req.url,
+	// 	pathname: req.nextUrl.pathname,
+	// 	search: req.nextUrl.search,
+	// });
+	// console.info("PATHNAME", { pathname: req.nextUrl.pathname });
 	const res = (await base(req as any, {} as any)) as NextResponse;
 	res.headers.set("x-current-path", req.nextUrl.pathname);
 	// try {
