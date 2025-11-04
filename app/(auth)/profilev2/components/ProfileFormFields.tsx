@@ -20,7 +20,11 @@ export function ProfileFormFields({
 			<Card.Header className="border-b bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
 				<div className="flex items-center gap-3">
 					<div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-600 to-purple-600">
-						<Icon className="h-5 w-5 text-white" icon="gravity-ui:user" />
+						<Icon
+							className="h-5 w-5 text-white"
+							data-testid="profile-icon"
+							icon="gravity-ui:user"
+						/>
 					</div>
 					<div>
 						<Card.Title className="text-xl">Profile Information</Card.Title>

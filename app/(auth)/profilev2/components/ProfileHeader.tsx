@@ -29,7 +29,10 @@ export function ProfileHeader({
 								{imageUrl ? (
 									<AvatarImage alt={displayName} src={imageUrl} />
 								) : (
-									<AvatarFallback className="bg-linear-to-br from-blue-100 to-purple-100 font-bold text-3xl text-purple-900">
+									<AvatarFallback
+										className="bg-linear-to-br from-blue-100 to-purple-100 font-bold text-3xl text-purple-900"
+										data-testid="avatar-fallback"
+									>
 										{getInitials(
 											userData.user?.first_name || "",
 											userData.user?.last_name || "",
@@ -74,6 +77,11 @@ export function ProfileHeader({
 								{displayName}
 							</h1>
 							<p className="mt-2 text-lg text-muted-foreground">{email}</p>
+							{hasWorkOSPicture && (
+								<p className="mt-1 text-muted-foreground text-sm">
+									Using OAuth provider picture
+								</p>
+							)}
 						</div>
 
 						<div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
